@@ -32,9 +32,9 @@ const trade = (percent) => {
 }
 
 exports.bear = (percent) => {
-  return trade(percent)
+  return trade(-percent)
 }
 
 exports.bull = (percent) => {
-  return trade(-percent)
+  return trade(percent)
 }
