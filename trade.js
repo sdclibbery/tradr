@@ -13,20 +13,19 @@ const trade = (percent) => {
       entry = price
       entry_time = time
       stop_loss = new_stop_loss
-      console.log(`* ${type} ${percent}% starting trade; stop loss: ${stop_loss}`)
       state = 'running'
+      return `* ${type} ${percent}% starting trade; stop loss: ${stop_loss}`
     } else if (state === 'running') {
       if ((type === 'bear' && new_stop_loss < stop_loss) || (type === 'bull' && new_stop_loss > stop_loss)) {
-        console.log(`* ${type} ${percent}% moving stop loss to: ${stop_loss}`)
         stop_loss = new_stop_loss
+        return `* ${type} ${percent}% moving stop loss to: ${stop_loss}`
       }
       if ((type === 'bear' && price >= stop_loss) || (type === 'bull' && price <= stop_loss)) {
         exit = price
         exit_time = time
-        const profit = entry - exit
-        console.log(`* ${type} ${percent}% trade complete: profit ${profit} ${100*profit/entry}%`)
-        console.log(`* ${type} ${percent}% trade complete: ${entry_time}-${exit_time}`)
         state = 'done'
+        const profit = entry - exit
+        return `* ${type} ${percent}% trade complete: profit ${profit} ${100*profit/entry}% ${entry_time}-${exit_time}`
       }
     }
   }

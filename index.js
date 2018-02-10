@@ -5,16 +5,21 @@ const websocket = new Gdax.WebsocketClient(['BTC-EUR']);
 
 let trades = [
   Trade.bear(0.1),
+  Trade.bear(0.5),
   Trade.bear(1),
   Trade.bull(0.1),
+  Trade.bull(0.5),
   Trade.bull(1),
 ]
 
 websocket.on('message', data => {
   const {type, side, price, time} = data
   if (type === 'match') {
-    console.log(`match: ${price} ${side}`)
-    trades.map((trade) => trade(price, time))
+//    console.log(`match: ${price} ${side}`)
+    trades.map((trade) => {
+      const msg = trade(price, time)
+      if (msg) { console.log(msg) }
+    })
   }
 });
 
