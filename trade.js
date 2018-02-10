@@ -24,8 +24,8 @@ const trade = (percent) => {
         exit = price
         exit_time = time
         state = 'done'
-        const profit = entry - exit
-        return `* ${type} ${percent}% trade complete: profit ${profit} ${100*profit/entry}% ${entry_time}-${exit_time}`
+        const profit = exit - entry
+        return `* ${type} ${percent}% trade complete: ${entry}->${exit} profit ${100*profit/entry}% ${entry_time}-${exit_time}`
       }
     }
   }
