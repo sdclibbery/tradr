@@ -8,15 +8,15 @@ websocket.on('message', data => {
   const {type, side, reason, price, time} = data
   if (type === 'match') {
     console.log(`match: ${price} ${side}`)
+    const new_stop_loss = price*1.01
     if (!trade) {
       trade = {
         sell_in: price,
         sell_in_time: time,
-        stop_loss: price*1.01
+        stop_loss: new_stop_loss
       }
       console.log(`* starting trade; stop loss: ${trade.stop_loss}`)
     } else {
-      const new_stop_loss = price*1.01
       if (new_stop_loss < trade.stop_loss) {
         console.log(`* moving stop loss to: ${trade.stop_loss}`)
         trade.stop_loss = new_stop_loss
