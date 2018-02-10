@@ -30,11 +30,17 @@ test('bull raises stoploss again if price moves up further', () => {
   expect(trade(110, 't')).toContain('moving stop loss to: 99')
 })
 
-test('bull raises stoploss again if price moves up further', () => {
+test('bull reports correct profit after completing', () => {
   const trade = Trade.bull(10)
   trade(100, 't')
   trade(105, 't')
   trade(110, 't')
   trade(115, 't')
   expect(trade(101, 't')).toContain('profit 1%')
+})
+
+test('bear reports correct profit after completing', () => {
+  const trade = Trade.bear(10)
+  trade(100, 't')
+  expect(trade(111, 't')).toContain('profit -11%')
 })

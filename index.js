@@ -5,11 +5,11 @@ const websocket = new Gdax.WebsocketClient(['BTC-EUR']);
 
 let trades = [
   Trade.bear(1),
+  Trade.bear(1.5),
   Trade.bear(2),
-  Trade.bear(3),
   Trade.bull(1),
+  Trade.bull(1.5),
   Trade.bull(2),
-  Trade.bull(3),
 ]
 
 websocket.on('message', data => {

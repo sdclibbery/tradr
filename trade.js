@@ -14,7 +14,7 @@ const trade = (percent) => {
       entry_time = time
       stop_loss = new_stop_loss
       state = 'running'
-      return `* ${type} ${percent}% starting trade; stop loss: ${stop_loss}`
+      return `* ${type} ${percent}% starting trade at ${entry}; stop loss: ${stop_loss}`
     } else if (state === 'running') {
       if ((type === 'bear' && new_stop_loss < stop_loss) || (type === 'bull' && new_stop_loss > stop_loss)) {
         stop_loss = new_stop_loss
@@ -24,7 +24,7 @@ const trade = (percent) => {
         exit = price
         exit_time = time
         state = 'done'
-        const profit = exit - entry
+        const profit = type === 'bull' ? exit - entry : -(exit - entry)
         return `* ${type} ${percent}% trade complete: ${entry}->${exit} profit ${100*profit/entry}% ${entry_time}-${exit_time}`
       }
     }
