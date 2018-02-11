@@ -1,6 +1,6 @@
 const Gdax = require('gdax');
 const Trade = require('./trade');
-const Credentials = require('./gdax-account-credentials');
+const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 const type = process.argv[2] || 'bull'
 const percent = process.argv[3] || 1
