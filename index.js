@@ -1,16 +1,14 @@
 const Gdax = require('gdax');
 const Trade = require('./trade');
 
-const websocket = new Gdax.WebsocketClient(['BTC-EUR']);
+const type = process.argv[2] || 'bull'
+const percent = process.argv[3] || 1
 
 let trades = [
-  Trade.bear(1),
-  Trade.bear(1.5),
-  Trade.bear(2),
-  Trade.bull(1),
-  Trade.bull(1.5),
-  Trade.bull(2),
+  Trade[type](percent),
 ]
+
+const websocket = new Gdax.WebsocketClient(['BTC-EUR']);
 
 websocket.on('message', data => {
   const {type, side, price, time} = data
