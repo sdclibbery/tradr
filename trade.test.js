@@ -17,6 +17,13 @@ test('bull exits if price falls below stop loss', () => {
   expect(trade(89, 't')).toContain('trade complete')
 })
 
+test('bull exits if price falls below stop loss', () => {
+  const trade = Trade.bull(10)
+  trade(100, 't')
+  trade(89, 't')
+  expect(trade.done()).toBe(true)
+})
+
 test('bull raises stoploss if price moves up', () => {
   const trade = Trade.bull(10)
   trade(100, 't')

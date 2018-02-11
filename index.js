@@ -72,6 +72,10 @@ websocket.on('message', data => {
       const msg = trade(price, time)
       if (msg) { console.log(msg) }
     })
+    if (trades.every(trade => trade.done())) {
+      console.log('all trades complete; exiting')
+      process.exit()
+    }
   }
 });
 

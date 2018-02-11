@@ -7,7 +7,7 @@ const trade = (percent) => {
   let exit
   let exit_time
 
-  return (price, time) => {
+  const newTrade = (price, time) => {
     const new_stop_loss = price*(1 - percent/100)
     if (state === 'empty') {
       entry = price
@@ -29,6 +29,8 @@ const trade = (percent) => {
       }
     }
   }
+  newTrade.done = () => state == 'done'
+  return newTrade
 }
 
 exports.bear = (percent) => {
