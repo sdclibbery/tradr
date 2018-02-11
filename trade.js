@@ -1,42 +1,34 @@
-const trade = (percent) => {
+exports.trade = (options) => {
+  const percent = options.type === 'bull' ? options.stoploss : -options.stoploss
   let state = 'empty'
-  let type = percent<0 ? 'bear' : 'bull'
   let entry
   let entry_time
-  let stop_loss
+  let stoploss
   let exit
   let exit_time
 
   const newTrade = (price, time) => {
-    const new_stop_loss = price*(1 - percent/100)
+    const new_stoploss = price*(1 - percent/100)
     if (state === 'empty') {
       entry = price
       entry_time = time
-      stop_loss = new_stop_loss
+      stoploss = new_stoploss
       state = 'running'
-      return `* ${type} ${percent}% starting trade at ${time} from ${entry}; initial stop loss: ${stop_loss}`
+      return `* ${options.type} ${percent}% starting trade at ${time} from ${entry}; initial stop loss: ${stoploss}`
     } else if (state === 'running') {
-      if ((type === 'bear' && new_stop_loss < stop_loss) || (type === 'bull' && new_stop_loss > stop_loss)) {
-        stop_loss = new_stop_loss
-        return `* ${type} ${percent}% moving stop loss to: ${stop_loss}`
+      if ((options.type === 'bear' && new_stoploss < stoploss) || (options.type === 'bull' && new_stoploss > stoploss)) {
+        stoploss = new_stoploss
+        return `* ${options.type} ${percent}% moving stop loss to: ${stoploss}`
       }
-      if ((type === 'bear' && price >= stop_loss) || (type === 'bull' && price <= stop_loss)) {
+      if ((options.type === 'bear' && price >= stoploss) || (options.type === 'bull' && price <= stoploss)) {
         exit = price
         exit_time = time
         state = 'done'
-        const profit = type === 'bull' ? exit - entry : -(exit - entry)
-        return `* ${type} ${percent}% trade complete: ${entry}->${exit} profit ${100*profit/entry}% ${entry_time}-${exit_time}`
+        const profit = options.type === 'bull' ? exit - entry : -(exit - entry)
+        return `* ${options.type} ${percent}% trade complete: ${entry}->${exit} profit ${100*profit/entry}% ${entry_time}-${exit_time}`
       }
     }
   }
   newTrade.done = () => state == 'done'
   return newTrade
-}
-
-exports.bear = (percent) => {
-  return trade(-percent)
-}
-
-exports.bull = (percent) => {
-  return trade(percent)
 }
