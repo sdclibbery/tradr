@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "command-line-args": "^5.0.2",
     "gdax": "^0.5.1"
   },
   "devDependencies": {
