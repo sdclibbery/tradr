@@ -66,11 +66,11 @@ test('bull reports correct profit after completing', () => {
   trade(105, 't')
   trade(110, 't')
   trade(115, 't')
-  expect(trade(101, 't')).toContain('profit 1%')
+  expect(trade(101, 't')).toContain('profit 1.00%')
 })
 
 test('bear reports correct profit after completing', () => {
   const trade = Trade.trade(defaultBearOptions)
   trade(100, 't')
-  expect(trade(111, 't')).toContain('profit -11%')
+  expect(trade(111, 't')).toContain('profit -11.00%')
 })
