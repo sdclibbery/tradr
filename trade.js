@@ -21,8 +21,7 @@ exports.trade = (options) => {
     const bearShouldMoveStoploss = options.type === 'bear' && calcStoploss(price) < stoploss
     const bullShouldMoveStoploss = options.type === 'bull' && calcStoploss(price) > stoploss
     if (bearShouldMoveStoploss || bullShouldMoveStoploss) {
-      stoploss = calcStoploss(price)
-      return `${time} ${options.type} ${dp2(percent)}% moving stop loss to: ${dp2(stoploss)}`
+      return `${time} ${moveStoploss(calcStoploss(price))}`
     }
 
     const bearComplete = options.type === 'bear' && price >= stoploss
@@ -38,6 +37,11 @@ exports.trade = (options) => {
 
   const done = (price, time) => {}
   let state = initial
+
+  const moveStoploss = (newStoploss) => {
+    stoploss = newStoploss
+    return `${options.type} ${dp2(percent)}% moving stop loss to: ${dp2(stoploss)}`
+  }
 
   const newTrade = (price, time) => {
     return state(price, time.substring(11, 19))
