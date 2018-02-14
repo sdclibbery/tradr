@@ -84,7 +84,7 @@ x Verify we can cancel an order:
  { message: 'order not found' }
 x Command line args for type, percent, productId etc
 x Refactor out a proper state machine
-o Simulate amount
+x Simulate amount
 o Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
 o Expect operations to be async
 o Pass buy/sell/cancel closures to trade

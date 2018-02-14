@@ -1,20 +1,20 @@
 exports.trade = (options) => {
   const percent = options.type === 'bull' ? options.stoploss : -options.stoploss
-  let entry
-  let entry_time
+  let entryPrice
+  let entryTime
   let stoploss
-  let exit
-  let exit_time
+  let exitPrice
+  let exitTime
 
   const calcStoploss = (price) => price*(1 - percent/100)
   const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 
   const initial = (price, time) => {
-    entry = price
-    entry_time = time
+    entryPrice = price
+    entryTime = time
     stoploss = calcStoploss(price)
     state = running
-    return `${time} ${options.type} ${dp2(percent)}% starting trade from ${dp2(entry)}; initial stop loss: ${dp2(stoploss)}`
+    return `${time} ${options.type} ${dp2(percent)}% starting ${options.amount} ${options.product} trade from ${dp2(entryPrice)}; initial stop loss: ${dp2(stoploss)}`
   }
 
   const running = (price, time) => {
@@ -27,11 +27,11 @@ exports.trade = (options) => {
     const bearComplete = options.type === 'bear' && price >= stoploss
     const bullComplete = options.type === 'bull' && price <= stoploss
     if (bearComplete || bullComplete) {
-      exit = price
-      exit_time = time
+      exitPrice = price
+      exitTime = time
       state = done
-      const profit = options.type === 'bull' ? exit - entry : -(exit - entry)
-      return `${time} ${options.type} ${dp2(percent)}% trade complete: ${dp2(entry)}->${dp2(exit)} profit ${dp2(100*profit/entry)}% ${entry_time}-${exit_time}`
+      const profitPercent = (options.type === 'bull' ? 1 : -1) * 100 * (exitPrice - entryPrice) / entryPrice
+      return `${time} ${options.type} ${dp2(percent)}% trade complete: ${dp2(entryPrice)}->${dp2(exitPrice)} profit ${dp2(profitPercent)}% ${entryTime}-${exitTime}`
     }
   }
 

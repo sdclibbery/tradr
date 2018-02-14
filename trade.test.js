@@ -2,14 +2,14 @@ const Trade = require('./trade');
 
 const defaultBullOptions = {
   product: 'BTC-EUR',
-  amount: 1,
+  amount: 10,
   stoploss: 10,
   type: 'bull',
 }
 
 const defaultBearOptions = {
   product: 'BTC-EUR',
-  amount: 1,
+  amount: 10,
   stoploss: 10,
   type: 'bear',
 }
@@ -25,7 +25,7 @@ test('bull buys in on first update', () => {
 
 test('bull starts a trade on first update', () => {
   const trade = Trade.trade(defaultBullOptions)
-  expect(trade(100, 't')).toContain('starting trade')
+  expect(trade(100, 't')).toContain('starting 10 BTC-EUR trade')
 })
 
 test('bull does nothing if price moves down a bit', () => {
