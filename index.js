@@ -26,24 +26,22 @@ console.log(
 //const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
 const websocket = new Gdax.WebsocketClient([options.product]);
 
-const buy = (price, size) => {}
-const sell = (price, size) => {}
-const cancel = (id) => {}
+const exchange = {
+  buy: (price, size, cb) => {},
+  sell: (price, size, cb) => {},
+  cancel: (id, cb) => {},
+}
 
-let trades = [
-  Trade.trade(options),
-]
+let trade = Trade.trade(options, exchange)
 
 websocket.on('message', data => {
   const {type, side, price, time} = data
   if (type === 'match') {
 //    console.log(`match: ${price} ${side}`)
-    trades.map((trade) => {
-      const msg = trade(price, time)
-      if (msg) { console.log(msg) }
-    })
-    if (trades.every(trade => trade.done())) {
-      console.log('all trades complete; exiting')
+    const msg = trade(price, time)
+    if (msg) { console.log(msg) }
+    if (trade.done()) {
+      console.log('Trade complete; exiting')
       process.exit()
     }
   }
