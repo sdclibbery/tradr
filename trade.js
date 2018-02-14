@@ -12,8 +12,8 @@ exports.trade = (options) => {
   const initial = (price, time) => {
     entryPrice = price
     entryTime = time
-    stoploss = calcStoploss(price)
-    state = running
+    enterTheMarket(entryPrice)
+    setStoploss(entryPrice)
     return `${time} ${options.type} ${dp2(percent)}% starting ${options.amount} ${options.product} trade from ${dp2(entryPrice)}; initial stop loss: ${dp2(stoploss)}`
   }
 
@@ -21,7 +21,9 @@ exports.trade = (options) => {
     const bearShouldMoveStoploss = options.type === 'bear' && calcStoploss(price) < stoploss
     const bullShouldMoveStoploss = options.type === 'bull' && calcStoploss(price) > stoploss
     if (bearShouldMoveStoploss || bullShouldMoveStoploss) {
-      return `${time} ${moveStoploss(calcStoploss(price))}`
+      clearStoploss()
+      setStoploss(price)
+      return `${time} ${options.type} ${dp2(percent)}% moving stop loss to: ${dp2(stoploss)}`
     }
 
     const bearComplete = options.type === 'bear' && price >= stoploss
@@ -38,9 +40,15 @@ exports.trade = (options) => {
   const done = (price, time) => {}
   let state = initial
 
-  const moveStoploss = (newStoploss) => {
-    stoploss = newStoploss
-    return `${options.type} ${dp2(percent)}% moving stop loss to: ${dp2(stoploss)}`
+  const enterTheMarket = (price) => {
+    state = running
+  }
+
+  const clearStoploss = () => {
+  }
+
+  const setStoploss = (price) => {
+    stoploss = calcStoploss(price)
   }
 
   const newTrade = (price, time) => {
