@@ -85,8 +85,7 @@ x Verify we can cancel an order:
 x Command line args for type, percent, productId etc
 x Refactor out a proper state machine
 x Simulate amount
-o Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
-o Expect operations to be async
+x Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
 o Pass buy/sell/cancel closures to trade
 o Trade makes initial transaction
 o Trade cancels operations if an authenticated request fails

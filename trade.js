@@ -1,5 +1,7 @@
-exports.trade = (options) => {
-  const percent = options.type === 'bull' ? options.stoploss : -options.stoploss
+exports.trade = (options, exchange) => {
+  const isBull = options.type === 'bull'
+  const isBear = options.type === 'bear'
+  const percent = isBull ? options.stoploss : -options.stoploss
   let entryPrice
   let entryTime
   let stoploss
@@ -17,25 +19,26 @@ exports.trade = (options) => {
   state = stateBegin
 
   const stateRunning = (price, time) => {
-    const bearShouldMoveStoploss = options.type === 'bear' && calcStoploss(price) < stoploss
-    const bullShouldMoveStoploss = options.type === 'bull' && calcStoploss(price) > stoploss
+    const bearShouldMoveStoploss = isBear && calcStoploss(price) < stoploss
+    const bullShouldMoveStoploss = isBull && calcStoploss(price) > stoploss
     if (bearShouldMoveStoploss || bullShouldMoveStoploss) {
       clearStoploss()
       setStoploss(price)
       return `${time} ${options.type} ${dp2(percent)}% moving stop loss to: ${dp2(stoploss)}`
     }
 
-    const bearComplete = options.type === 'bear' && price >= stoploss
-    const bullComplete = options.type === 'bull' && price <= stoploss
+    const bearComplete = isBear && price >= stoploss
+    const bullComplete = isBull && price <= stoploss
     if (bearComplete || bullComplete) {
       exitPrice = price
       exitTime = time
       state = stateDone
-      const profitPercent = (options.type === 'bull' ? 1 : -1) * 100 * (exitPrice - entryPrice) / entryPrice
+      const profitPercent = (isBull ? 1 : -1) * 100 * (exitPrice - entryPrice) / entryPrice
       return `${time} ${options.type} ${dp2(percent)}% trade complete: ${dp2(entryPrice)}->${dp2(exitPrice)} profit ${dp2(profitPercent)}% ${entryTime}-${exitTime}`
     }
   }
 
+  const stateWaiting = (price, time) => {}
   const stateDone = (price, time) => {}
 
   const calcStoploss = (price) => price*(1 - percent/100)
@@ -43,14 +46,17 @@ exports.trade = (options) => {
   const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 
   const enterTheMarket = (price) => {
-    state = stateRunning
-  }
-
-  const clearStoploss = () => {
+    state = stateWaiting
+    exchange[isBull?'buy':'sell'](price, () => {
+      state = stateRunning
+    })
   }
 
   const setStoploss = (price) => {
     stoploss = calcStoploss(price)
+  }
+
+  const clearStoploss = () => {
   }
 
   const newTrade = (price, time) => {
