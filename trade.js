@@ -17,11 +17,16 @@ exports.trade = (options) => {
   }
 
   const running = (price, time) => {
-    if ((options.type === 'bear' && calcStoploss(price) < stoploss) || (options.type === 'bull' && calcStoploss(price) > stoploss)) {
+    const bearShouldMoveStoploss = options.type === 'bear' && calcStoploss(price) < stoploss
+    const bullShouldMoveStoploss = options.type === 'bull' && calcStoploss(price) > stoploss
+    if (bearShouldMoveStoploss || bullShouldMoveStoploss) {
       stoploss = calcStoploss(price)
       return `* ${options.type} ${percent}% moving stop loss to: ${stoploss}`
     }
-    if ((options.type === 'bear' && price >= stoploss) || (options.type === 'bull' && price <= stoploss)) {
+
+    const bearComplete = options.type === 'bear' && price >= stoploss
+    const bullComplete = options.type === 'bull' && price <= stoploss
+    if (bearComplete || bullComplete) {
       exit = price
       exit_time = time
       state = done

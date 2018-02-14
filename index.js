@@ -83,9 +83,10 @@ x Verify we can cancel an order:
  [ '6f08fca6-df79-4ae0-a5fc-5a2198c6c8e3' ]
  { message: 'order not found' }
 x Command line args for type, percent, productId etc
-!! Consider: writing a bot will be different to the simulation; maybe extend simulation and write bot from scratch..?
- EG should model buy-in fee, amount being traded, taking profit
- Refactor anyway; pull out a proper state machine
+x Refactor out a proper state machine
+o Separate state for moving stoploss
+o Separate state for entry trade
+o Expect operations to be async
 o Pass buy/sell/cancel closures to trade
 o Trade makes initial transaction
 o Trade cancels operations if an authenticated request fails
