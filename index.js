@@ -84,15 +84,15 @@ x Command line args for type, percent, productId etc
 x Refactor out a proper state machine
 x Simulate amount
 x Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
-o Pass buy/sell/cancel closures to trade
-o Trade makes initial transaction
-o Trade cancels operations if an authenticated request fails
- o Note, failures may not come through as errors! Eg { message: 'Insufficient funds' } came through .then
-  o Guess errors are only for actual comms errors etc; should retry these..??
- o Successfull (limit) buy looks like:
-o Trade does not execute further orders until the last has succcessfully cleared
-o Trade cancels last stoploss and places new one when required
+x Pass buy/sell/cancel closures to trade
+x Trade makes initial transaction
 o Support for simulation-only mode (with cmd line arg)
+o Trade places stoploss order
+o Trade cancels stoploss order when moving it
+o Implement exchange adaptor in index.js
+ o Cancel operations if an authenticated request fails
+  o Note, failures may not come through as errors! Eg { message: 'Insufficient funds' } came through .then
+   o Guess errors are only for actual comms errors etc; should retry these..??
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
  o This would probably be uselful for bots on automatic triggers...

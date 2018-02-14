@@ -47,7 +47,8 @@ exports.trade = (options, exchange) => {
 
   const enterTheMarket = (price) => {
     state = stateWaiting
-    exchange[isBull?'buy':'sell'](price, options.amount, () => {
+    const marketPrice = undefined
+    exchange[isBull?'buy':'sell'](marketPrice, options.amount, () => {
       state = stateRunning
     })
   }

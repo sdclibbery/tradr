@@ -17,7 +17,8 @@ const defaultBearOptions = {
 test('bull buys in on first update', () => {
   const trade = Trade.trade(defaultBullOptions, mockExchange)
   trade(100, 't')
-  expect(mockExchange.buy).toBeCalledWith(100, 10, expect.any(Function))
+  const marketPrice = undefined
+  expect(mockExchange.buy).toBeCalledWith(marketPrice, 10, expect.any(Function))
 })
 
 test('bull starts a trade on first update', () => {
