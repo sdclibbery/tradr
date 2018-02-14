@@ -40,7 +40,7 @@ test('bull exits if price falls below stop loss', () => {
   expect(trade(89, 't')).toContain('trade complete')
 })
 
-test('bull exits if price falls below stop loss', () => {
+test('done function indicates completion', () => {
   const trade = Trade.trade(defaultBullOptions)
   trade(100, 't')
   trade(89, 't')
