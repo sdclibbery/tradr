@@ -21,11 +21,6 @@ test('bull buys in on first update', () => {
   expect(mockExchange.buy).toBeCalledWith(marketPrice, 10, expect.any(Function))
 })
 
-test('bull starts a trade on first update', () => {
-  const trade = Trade.trade(defaultBullOptions, mockExchange)
-  expect(trade(100, 't')).toContain('starting 10 BTC-EUR trade')
-})
-
 test('bull does nothing if price moves down a bit', () => {
   const trade = startedBullTrade()
   expect(trade(95, 't')).toBe(undefined)
@@ -63,8 +58,8 @@ test('bull reports correct profit after completing', () => {
 
 test('bear reports correct profit after completing', () => {
   const trade = Trade.trade(defaultBearOptions, mockExchange)
-  trade(100, 't')
-  mockExchange.sell.mock.calls[0][2]()
+  trade(99, 't')
+  mockExchange.sell.mock.calls[0][2](100)
   expect(trade(111, 't')).toContain('profit -11.00%')
 })
 
@@ -79,8 +74,8 @@ beforeEach(() => {
 
 const startedBullTrade = () => {
   const trade = Trade.trade(defaultBullOptions, mockExchange)
-  trade(100, 't')
+  trade(99, 't')
   const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
-  buyCompleteCallback()
+  buyCompleteCallback(100)
   return trade
 }

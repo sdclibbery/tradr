@@ -26,13 +26,13 @@ console.log(
 //const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
 const websocket = new Gdax.WebsocketClient([options.product]);
 
-const exchange = {
-  buy: (price, size, cb) => {},
-  sell: (price, size, cb) => {},
-  cancel: (id, cb) => {},
+const fakeExchange = {
+  buy: (price, size, cb) => { cb(7000); },
+  sell: (price, size, cb) => { cb(7000); },
+  cancel: (id, cb) => { cb(); },
 }
 
-let trade = Trade.trade(options, exchange)
+let trade = Trade.trade(options, fakeExchange)
 
 websocket.on('message', data => {
   const {type, side, price, time} = data
@@ -86,6 +86,8 @@ x Simulate amount
 x Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
 x Pass buy/sell/cancel closures to trade
 x Trade makes initial transaction
+o Entry price should be RETURNED from the exchange entry transaction: its determined by market price
+o Account for fees...
 o Support for simulation-only mode (with cmd line arg)
 o Trade places stoploss order
 o Trade cancels stoploss order when moving it
@@ -93,6 +95,7 @@ o Implement exchange adaptor in index.js
  o Cancel operations if an authenticated request fails
   o Note, failures may not come through as errors! Eg { message: 'Insufficient funds' } came through .then
    o Guess errors are only for actual comms errors etc; should retry these..??
+o Support for entering the market with a (feeless) limit order not a market order
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
  o This would probably be uselful for bots on automatic triggers...

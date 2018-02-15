@@ -8,13 +8,11 @@ exports.trade = (options, exchange) => {
   let exitPrice
   let exitTime
   let state
+  const marketOrderPrice = undefined
 
   const stateBegin = (price, time) => {
-    entryPrice = price
-    entryTime = time
-    enterTheMarket(entryPrice)
-    setStoploss(entryPrice)
-    return `${time} ${options.type} ${dp2(percent)}% starting ${options.amount} ${options.product} trade from ${dp2(entryPrice)}; initial stop loss: ${dp2(stoploss)}`
+    enterTheMarket(time)
+    return `${time} ${options.type} ${dp2(percent)}% starting ${options.amount} ${options.product} trade`
   }
   state = stateBegin
 
@@ -45,11 +43,13 @@ exports.trade = (options, exchange) => {
 
   const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 
-  const enterTheMarket = (price) => {
+  const enterTheMarket = (time) => {
+    entryTime = time
     state = stateWaiting
-    const marketPrice = undefined
-    exchange[isBull?'buy':'sell'](marketPrice, options.amount, () => {
+    exchange[isBull?'buy':'sell'](marketOrderPrice, options.amount, (price) => {
+      entryPrice = price
       state = stateRunning
+      setStoploss(entryPrice)
     })
   }
 
