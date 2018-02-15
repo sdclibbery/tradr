@@ -6,7 +6,6 @@ const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR' },
   { name: 'amount', alias: 'a', type: Number },
-  { name: 'type', alias: 't', type: String, defaultValue: 'bull' },
   { name: 'stoploss', alias: 's', type: Number, defaultValue: 1 },
 ]
 const commandLineArgs = require('command-line-args')
@@ -16,8 +15,7 @@ console.log(
 `GDAX bot. Usage:
  --help: -h: Show this help
  --product: -p: GDAX product; defaults to BTC-EUR
- --amount: -a: amount to trade with; *must* be specified
- --type: -t: Set the bot type: 'bear' for a bear market, or 'bull'; defaults to bull
+ --amount: -a: amount to trade with in quote currency, eg in EUR for BTC-EUR; *must* be specified
  --stoploss: -s: percentage offset for stoploss exit order; defaults to 1
 `)
   process.exit()
@@ -27,8 +25,8 @@ console.log(
 const websocket = new Gdax.WebsocketClient([options.product]);
 
 const fakeExchange = {
-  buy: (price, size, cb) => { cb(7000); },
-  sell: (price, size, cb) => { cb(7000); },
+  buy: (price, sizeInQuoteCurrency, cb) => { cb(7000, sizeInQuoteCurrency/7000); },
+  sell: (price, sizeInQuoteCurrency, cb) => { cb(7000, sizeInQuoteCurrency/7000); },
   cancel: (id, cb) => { cb(); },
 }
 
@@ -86,11 +84,13 @@ x Simulate amount
 x Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
 x Pass buy/sell/cancel closures to trade
 x Trade makes initial transaction
-o Entry price should be RETURNED from the exchange entry transaction: its determined by market price
-o Account for fees...
+x Entry price should be RETURNED from the exchange entry transaction: its determined by market price
+x Drop bear support for now
+x Account for fees...
 o Support for simulation-only mode (with cmd line arg)
 o Trade places stoploss order
 o Trade cancels stoploss order when moving it
+o Exit should be determined by stoploss actually filling, not by assumption...
 o Implement exchange adaptor in index.js
  o Cancel operations if an authenticated request fails
   o Note, failures may not come through as errors! Eg { message: 'Insufficient funds' } came through .then

@@ -1,66 +1,52 @@
 const Trade = require('./trade');
 
-const defaultBullOptions = {
+const defaultOptions = {
   product: 'BTC-EUR',
   amount: 10,
   stoploss: 10,
   type: 'bull',
 }
 
-const defaultBearOptions = {
-  product: 'BTC-EUR',
-  amount: 10,
-  stoploss: 10,
-  type: 'bear',
-}
-
-test('bull buys in on first update', () => {
-  const trade = Trade.trade(defaultBullOptions, mockExchange)
+test('buys in on first update', () => {
+  const trade = Trade.trade(defaultOptions, mockExchange)
   trade(100, 't')
   const marketPrice = undefined
   expect(mockExchange.buy).toBeCalledWith(marketPrice, 10, expect.any(Function))
 })
 
-test('bull does nothing if price moves down a bit', () => {
-  const trade = startedBullTrade()
+test('does nothing if price moves down a bit', () => {
+  const trade = initiatedTrade()
   expect(trade(95, 't')).toBe(undefined)
 })
 
-test('bull exits if price falls below stop loss', () => {
-  const trade = startedBullTrade()
+test('exits if price falls below stop loss', () => {
+  const trade = initiatedTrade()
   expect(trade(89, 't')).toContain('trade complete')
 })
 
 test('done function indicates completion', () => {
-  const trade = startedBullTrade()
+  const trade = initiatedTrade()
   trade(89, 't')
   expect(trade.done()).toBe(true)
 })
 
-test('bull raises stoploss if price moves up', () => {
-  const trade = startedBullTrade()
+test('raises stoploss if price moves up', () => {
+  const trade = initiatedTrade()
   expect(trade(105, 't')).toContain('moving stop loss to: 94.5')
 })
 
-test('bull raises stoploss again if price moves up further', () => {
-  const trade = startedBullTrade()
+test('raises stoploss again if price moves up further', () => {
+  const trade = initiatedTrade()
   trade(105, 't')
   expect(trade(110, 't')).toContain('moving stop loss to: 99')
 })
 
-test('bull reports correct profit after completing', () => {
-  const trade = startedBullTrade()
+test('reports correct profit after completing', () => {
+  const trade = initiatedTrade()
   trade(105, 't')
   trade(110, 't')
   trade(115, 't')
-  expect(trade(101, 't')).toContain('profit 1.00%')
-})
-
-test('bear reports correct profit after completing', () => {
-  const trade = Trade.trade(defaultBearOptions, mockExchange)
-  trade(99, 't')
-  mockExchange.sell.mock.calls[0][2](100)
-  expect(trade(111, 't')).toContain('profit -11.00%')
+  expect(trade(101, 't')).toContain('profit 0.25')
 })
 
 let mockExchange = undefined
@@ -72,10 +58,10 @@ beforeEach(() => {
   }
 });
 
-const startedBullTrade = () => {
-  const trade = Trade.trade(defaultBullOptions, mockExchange)
-  trade(99, 't')
+const initiatedTrade = () => {
+  const trade = Trade.trade(defaultOptions, mockExchange)
+  trade(101, 't')
   const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
-  buyCompleteCallback(100)
+  buyCompleteCallback(100, 0.099) // amount assumes a fee taken
   return trade
 }
