@@ -14,6 +14,13 @@ test('buys in on first update', () => {
   expect(mockExchange.buy).toBeCalledWith(marketPrice, 10, expect.any(Function))
 })
 
+test('places stoploss order', () => {
+  const bot = Bot.bot(defaultOptions, mockExchange)
+  bot(100, 't')
+  doBuyCompleteCallback()
+  expect(mockExchange.sell).toBeCalledWith(90, 0.099, expect.any(Function))
+})
+
 test('does nothing if price moves down a bit', () => {
   const bot = initiatedBot()
   expect(bot(95, 't')).toBe(undefined)
@@ -61,7 +68,11 @@ beforeEach(() => {
 const initiatedBot = () => {
   const bot = Bot.bot(defaultOptions, mockExchange)
   bot(101, 't')
-  const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
-  buyCompleteCallback(100, 0.099) // amount assumes a fee taken
+  doBuyCompleteCallback()
   return bot
+}
+const doBuyCompleteCallback = () => {
+  const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
+  const amountOfBtcBought = 0.099 // amount assumes a fee taken
+  buyCompleteCallback(100, amountOfBtcBought)
 }

@@ -32,6 +32,7 @@ exports.bot = (options, exchange) => {
 
   const setStoploss = (price) => {
     stoplossPrice = calcStoploss(price)
+    exchange.sell(stoplossPrice, balanceInBaseCurrency, (price, amountOfBaseCurrencyBought) => { })
   }
 
   const calcStoploss = (price) => price*(1 - percent/100)

@@ -1,5 +1,5 @@
 const Gdax = require('gdax');
-const Bot = require('./bot-stoploss-tracker-bull');
+const BotStoplossTrackerBull = require('./bot-stoploss-tracker-bull');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 const optionDefinitions = [
@@ -30,7 +30,7 @@ const fakeExchange = {
   cancel: (id, cb) => { cb(); },
 }
 
-let bot = Bot.bot(options, fakeExchange)
+let bot = BotStoplossTrackerBull.bot(options, fakeExchange)
 
 websocket.on('message', data => {
   const {type, side, price, time} = data
@@ -39,7 +39,7 @@ websocket.on('message', data => {
     const msg = bot(price, time)
     if (msg) { console.log(msg) }
     if (bot.done()) {
-      console.log('Bot complete; exiting')
+      console.log('BotStoplossTrackerBull complete; exiting')
       process.exit()
     }
   }
@@ -83,12 +83,12 @@ x Refactor out a proper state machine
 x Simulate amount
 x Abstract out actual operations that a bot will perform: moving the stoploss, and the initial buy in
 x Pass buy/sell/cancel closures to bot
-x Bot makes initial transaction
+x BotStoplossTrackerBull makes initial transaction
 x Entry price should be RETURNED from the exchange entry transaction: its determined by market price
 x Drop bear support for now
 x Account for fees...
-o Bot places stoploss order
-o Bot cancels stoploss order when moving it
+x BotStoplossTrackerBull places stoploss order
+o BotStoplossTrackerBull cancels stoploss order when moving it
 o Exit should be determined by stoploss actually filling, not by assumption...
 o Support for real trading mode (with cmd line arg)
 o Implement exchange adaptor in index.js
