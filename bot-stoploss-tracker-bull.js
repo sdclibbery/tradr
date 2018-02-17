@@ -8,6 +8,7 @@ exports.bot = (options, exchange) => {
   let entryTime
   let balanceInBaseCurrency
   let stoplossPrice
+  let stoplossOrderId
   let exitPrice
   let exitTime
   let state
@@ -22,7 +23,7 @@ exports.bot = (options, exchange) => {
 
   const buyIn = () => {
     state = stateWaiting
-    exchange.buy(marketOrderPrice, entryAmountInQuoteCurrency, (price, amountOfBaseCurrencyBought) => {
+    exchange.buy(marketOrderPrice, entryAmountInQuoteCurrency, (orderId, price, amountOfBaseCurrencyBought) => {
       entryPrice = price
       balanceInBaseCurrency = amountOfBaseCurrencyBought
       state = stateRunning
@@ -32,7 +33,9 @@ exports.bot = (options, exchange) => {
 
   const setStoploss = (price) => {
     stoplossPrice = calcStoploss(price)
-    exchange.sell(stoplossPrice, balanceInBaseCurrency, (price, amountOfBaseCurrencyBought) => { })
+    exchange.sell(stoplossPrice, balanceInBaseCurrency, (orderId, price, amountOfBaseCurrencyBought) => {
+      stoplossOrderId = orderId
+    })
   }
 
   const calcStoploss = (price) => price*(1 - percent/100)
@@ -57,6 +60,7 @@ exports.bot = (options, exchange) => {
   }
 
   const clearStoploss = () => {
+    exchange.cancel(stoplossOrderId, () => { })
   }
 
   const stateWaiting = (price, time) => {}

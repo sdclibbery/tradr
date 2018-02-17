@@ -37,6 +37,16 @@ test('done function indicates completion', () => {
   expect(bot.done()).toBe(true)
 })
 
+test('cancels previous stoploss if price moves up', () => {
+  const bot = initiatedBot()
+
+  const stoplossPlacedCallback = mockExchange.sell.mock.calls[0][2]
+  stoplossPlacedCallback(12345, 90, 0.099)
+
+  expect(bot(105, 't')).toContain('moving stop loss to: 94.5')
+  expect(mockExchange.cancel).toBeCalledWith(12345, expect.any(Function))
+})
+
 test('raises stoploss if price moves up', () => {
   const bot = initiatedBot()
   expect(bot(105, 't')).toContain('moving stop loss to: 94.5')
@@ -71,8 +81,9 @@ const initiatedBot = () => {
   doBuyCompleteCallback()
   return bot
 }
+
 const doBuyCompleteCallback = () => {
   const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
   const amountOfBtcBought = 0.099 // amount assumes a fee taken
-  buyCompleteCallback(100, amountOfBtcBought)
+  buyCompleteCallback(12345, 100, amountOfBtcBought)
 }

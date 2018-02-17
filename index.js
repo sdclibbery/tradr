@@ -24,9 +24,11 @@ console.log(
 //const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
 const websocket = new Gdax.WebsocketClient([options.product]);
 
+const fakePrice = 7000
+const fakeOrderId = 12345
 const fakeExchange = {
-  buy: (price, sizeInQuoteCurrency, cb) => { cb(7000, sizeInQuoteCurrency/7000); },
-  sell: (price, sizeInQuoteCurrency, cb) => { cb(7000, sizeInQuoteCurrency/7000); },
+  buy: (price, sizeInQuoteCurrency, cb) => { cb(fakeOrderId, fakePrice, sizeInQuoteCurrency/fakePrice); },
+  sell: (price, sizeInQuoteCurrency, cb) => { cb(fakeOrderId, fakePrice, sizeInQuoteCurrency/fakePrice); },
   cancel: (id, cb) => { cb(); },
 }
 
@@ -88,7 +90,9 @@ x Entry price should be RETURNED from the exchange entry transaction: its determ
 x Drop bear support for now
 x Account for fees...
 x BotStoplossTrackerBull places stoploss order
-o BotStoplossTrackerBull cancels stoploss order when moving it
+x BotStoplossTrackerBull cancels stoploss order when moving it
+o Buy complete callback will not know the price; the bot will have to watch the order stream!
+o Place new stoploss when moving it
 o Exit should be determined by stoploss actually filling, not by assumption...
 o Support for real trading mode (with cmd line arg)
 o Implement exchange adaptor in index.js
