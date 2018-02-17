@@ -17,7 +17,7 @@ test('buys in on first update', () => {
 test('places stoploss order', () => {
   const bot = Bot.bot(defaultOptions, mockExchange)
   bot(100, 't')
-  doBuyCompleteCallback()
+  callbackAfterBuy()
   expect(mockExchange.sell).toBeCalledWith(90, 0.099, expect.any(Function))
 })
 
@@ -39,10 +39,7 @@ test('done function indicates completion', () => {
 
 test('cancels previous stoploss if price moves up', () => {
   const bot = initiatedBot()
-
-  const stoplossPlacedCallback = mockExchange.sell.mock.calls[0][2]
-  stoplossPlacedCallback(12345, 90, 0.099)
-
+  callbackAfterSell()
   expect(bot(105, 't')).toContain('moving stop loss to: 94.5')
   expect(mockExchange.cancel).toBeCalledWith(12345, expect.any(Function))
 })
@@ -78,12 +75,21 @@ beforeEach(() => {
 const initiatedBot = () => {
   const bot = Bot.bot(defaultOptions, mockExchange)
   bot(101, 't')
-  doBuyCompleteCallback()
+  callbackAfterBuy()
   return bot
 }
 
-const doBuyCompleteCallback = () => {
-  const buyCompleteCallback = mockExchange.buy.mock.calls[0][2]
-  const amountOfBtcBought = 0.099 // amount assumes a fee taken
-  buyCompleteCallback(12345, 100, amountOfBtcBought)
+const callbackAfterBuy = () => {
+  const buyCallback = mockExchange.buy.mock.calls[0][2]
+  buyCallback(12345, 100, 0.099)
+}
+
+const callbackAfterSell = () => {
+  const sellCallback = mockExchange.sell.mock.calls[0][2]
+  sellCallback(12345)
+}
+
+const callbackAfterSCancel = () => {
+  const cancelCallback = mockExchange.cancel.mock.calls[0][1]
+  cancelCallback()
 }
