@@ -1,4 +1,4 @@
-exports.trade = (options, exchange) => {
+exports.bot = (options, exchange) => {
   const percent = options.stoploss
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
@@ -20,6 +20,22 @@ exports.trade = (options, exchange) => {
   }
   state = stateBegin
 
+  const buyIn = () => {
+    state = stateWaiting
+    exchange.buy(marketOrderPrice, entryAmountInQuoteCurrency, (price, amountOfBaseCurrencyBought) => {
+      entryPrice = price
+      balanceInBaseCurrency = amountOfBaseCurrencyBought
+      state = stateRunning
+      setStoploss(entryPrice)
+    })
+  }
+
+  const setStoploss = (price) => {
+    stoplossPrice = calcStoploss(price)
+  }
+
+  const calcStoploss = (price) => price*(1 - percent/100)
+
   const stateRunning = (price, time) => {
     const shouldMoveStoploss = calcStoploss(price) > stoplossPrice
     if (shouldMoveStoploss) {
@@ -39,33 +55,17 @@ exports.trade = (options, exchange) => {
     }
   }
 
-  const stateWaiting = (price, time) => {}
-  const stateDone = (price, time) => {}
-
-  const calcStoploss = (price) => price*(1 - percent/100)
-
-  const dp2 = (x) => Number.parseFloat(x).toFixed(2)
-
-  const buyIn = () => {
-    state = stateWaiting
-    exchange.buy(marketOrderPrice, entryAmountInQuoteCurrency, (price, amountOfBaseCurrencyBought) => {
-      entryPrice = price
-      balanceInBaseCurrency = amountOfBaseCurrencyBought
-      state = stateRunning
-      setStoploss(entryPrice)
-    })
-  }
-
-  const setStoploss = (price) => {
-    stoplossPrice = calcStoploss(price)
-  }
-
   const clearStoploss = () => {
   }
 
-  const newTrade = (price, time) => {
+  const stateWaiting = (price, time) => {}
+  const stateDone = (price, time) => {}
+
+  const dp2 = (x) => Number.parseFloat(x).toFixed(2)
+
+  const newBot = (price, time) => {
     return state(price, time.substring(11, 19))
   }
-  newTrade.done = () => state === stateDone
-  return newTrade
+  newBot.done = () => state === stateDone
+  return newBot
 }
