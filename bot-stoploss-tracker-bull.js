@@ -1,76 +1,38 @@
-exports.bot = (options, exchange) => {
+exports.bot = async (options, exchange) => {
   const percent = options.stoploss
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
   const entryAmountInQuoteCurrency = options.amount
-  let exitAmountInQuoteCurrency
-  let entryPrice
-  let entryTime
-  let balanceInBaseCurrency
-  let stoplossPrice
-  let stoplossOrderId
-  let exitPrice
-  let exitTime
-  let state
-  const marketOrderPrice = undefined
-
-  const stateBegin = (price, time) => {
-    entryTime = time
-    buyIn(time)
-    return `${time} ${dp2(percent)}% starting ${entryAmountInQuoteCurrency}${quoteCurrency} ${options.product} trade`
-  }
-  state = stateBegin
-
-  const buyIn = () => {
-    state = stateWaiting
-    exchange.buy(marketOrderPrice, entryAmountInQuoteCurrency, (orderId, price, amountOfBaseCurrencyBought) => {
-      entryPrice = price
-      balanceInBaseCurrency = amountOfBaseCurrencyBought
-      state = stateRunning
-      setStoploss(entryPrice)
-    })
-  }
-
-  const setStoploss = (price) => {
-    stoplossPrice = calcStoploss(price)
-    exchange.sell(stoplossPrice, balanceInBaseCurrency, (orderId, price, amountOfBaseCurrencyBought) => {
-      stoplossOrderId = orderId
-    })
-  }
 
   const calcStoploss = (price) => price*(1 - percent/100)
-
-  const stateRunning = (price, time) => {
-    const shouldMoveStoploss = calcStoploss(price) > stoplossPrice
-    if (shouldMoveStoploss) {
-      clearStoploss()
-      setStoploss(price)
-      return `${time} ${dp2(percent)}% moving stop loss to: ${dp2(stoplossPrice)}`
-    }
-
-    const complete = price <= stoplossPrice
-    if (complete) {
-      exitPrice = stoplossPrice
-      exitTime = time
-      state = stateDone
-      const exitAmountInQuoteCurrency = balanceInBaseCurrency*exitPrice
-      const profit = exitAmountInQuoteCurrency - entryAmountInQuoteCurrency
-      return `${time} ${dp2(percent)}% trade complete: ${dp2(entryPrice)}->${dp2(exitPrice)} profit ${dp2(profit)} ${entryTime}-${exitTime}`
-    }
-  }
-
-  const clearStoploss = () => {
-    exchange.cancel(stoplossOrderId, () => { })
-  }
-
-  const stateWaiting = (price, time) => {}
-  const stateDone = (price, time) => {}
-
   const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 
-  const newBot = (price, time) => {
-    return state(price, time.substring(11, 19))
+  console.log(`starting ${entryAmountInQuoteCurrency}${quoteCurrency} ${options.product} trade`)
+  const {price: buyInPrice, amountOfBaseCurrencyBought} = await exchange.buyNow(entryAmountInQuoteCurrency)
+
+  let stoplossPrice = calcStoploss(buyInPrice)
+  console.log(`setting stop loss to: ${dp2(stoplossPrice)}`)
+  let {id: stoplossId} = await exchange.sell(stoplossPrice, amountOfBaseCurrencyBought)
+
+  while (true) {
+    const {filled: stoplossFilled, price: newPrice} = await Promise.race([
+      exchange.waitForPriceChange(),
+      exchange.waitForOrderFill(stoplossId),
+    ])
+    console.log(stoplossFilled, newPrice)
+
+    if (stoplossFilled) {
+      const exitAmountInQuoteCurrency = amountOfBaseCurrencyBought * stoplossPrice
+      console.log(`trade complete: ${dp2(buyInPrice)}->${dp2(stoplossPrice)} ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
+      break;
+    }
+
+    const shouldMoveStoploss = calcStoploss(newPrice) > stoplossPrice
+    if (shouldMoveStoploss) {
+      await exchange.cancelOrder(stoplossId)
+      stoplossPrice = calcStoploss(newPrice)
+      console.log(`moving stop loss to: ${dp2(stoplossPrice)}`)
+      stoplossId = await exchange.sell(stoplossPrice, amountOfBaseCurrencyBought)
+    }
   }
-  newBot.done = () => state === stateDone
-  return newBot
 }
