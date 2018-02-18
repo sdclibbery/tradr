@@ -47,7 +47,6 @@ x Move rounding to the exchange and do it for every appropriate value
 x Have an event emitter leak
  x Ask for order status, dont wait for it to fill
 o Move logging to the exchange
-o Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 o Get rounding values from the product info, dont hardcode
 o Work out buyInPrice properly

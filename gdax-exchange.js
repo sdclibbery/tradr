@@ -2,27 +2,30 @@ const Gdax = require('gdax');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options) => {
+  const baseCurrency = options.product.split('-')[0]
+  const quoteCurrency = options.product.split('-')[1]
+
   const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
   const websocket = new Gdax.WebsocketClient([options.product]);
   websocket.on('error', console.log);
 
   const catchApiError = ({message, status, reject_reason, ...data}) => {
     if (message !== undefined || status === 'rejected') { throw new Error(message || reject_reason) }
-    //console.log(data)
     return data
   }
 
-  const format = (x, dp) => Number.parseFloat(x).toFixed(dp)
+  const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
   const priceDp = 2
   const baseDp = 8
 
   const exchange = {
     buy: async (price, amountOfBaseCurrency) => {
+      console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
         type: 'limit',
         side: 'buy',
-        price: format(price, priceDp),
-        size: format(amountOfBaseCurrency, baseDp),
+        price: dp(price, priceDp),
+        size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
         post_only: true,
       })
@@ -33,15 +36,18 @@ exports.createExchange = (options) => {
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
+      console.log(`GDAX: setting stoploss for ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
         type: 'limit',
         side: 'sell',
         stop: 'loss',
-        price: format(price, priceDp),
-        stop_price: format(price, priceDp),
-        size: format(amountOfBaseCurrency, baseDp),
+        price: dp(price, priceDp),
+        stop_price: dp(price, priceDp),
+        size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
-      }).then(catchApiError)
+      })
+      .then(catchApiError)
+      .then(({id}) => id)
     },
 
     waitForPriceChange: async () => {
@@ -62,6 +68,7 @@ exports.createExchange = (options) => {
     },
 
     cancelOrder: async (id) => {
+      console.log(`GDAX: cancelling stoploss`)
       return authedClient.cancelOrder(id).then(catchApiError)
     },
   }
