@@ -11,8 +11,10 @@ exports.bot = async (options, exchange) => {
   const entryAmountInBaseCurrency = (options.amount / buyInPrice).toFixed(8) // Get from data feed smallest unit
   console.log(`starting ${entryAmountInBaseCurrency}${quoteCurrency} ${options.product} trade from ${buyInPrice}`)
 
-  await exchange.buy(buyInPrice, entryAmountInBaseCurrency)
-  console.log(`bought in ${entryAmountInBaseCurrency} at ${buyInPrice}`)
+  if (options.buyin) {
+    await exchange.buy(buyInPrice, entryAmountInBaseCurrency)
+    console.log(`bought in ${entryAmountInBaseCurrency} at ${buyInPrice}`)
+  }
 
   let stoplossPrice = calcStoploss(buyInPrice)
   console.log(`setting stop loss to: ${dp2(stoplossPrice)}`)

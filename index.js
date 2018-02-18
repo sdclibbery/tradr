@@ -5,6 +5,7 @@ const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR' },
   { name: 'amount', alias: 'a', type: Number },
+  { name: 'buyin', alias: 'b', type: Boolean, defaultValue: false },
   { name: 'stoploss', alias: 's', type: Number, defaultValue: 1 },
 ]
 const commandLineArgs = require('command-line-args')
@@ -15,6 +16,7 @@ console.log(
  --help: -h: Show this help
  --product: -p: GDAX product; defaults to BTC-EUR
  --amount: -a: amount to bot with in quote currency, eg in EUR for BTC-EUR; *must* be specified
+ --buyin: -b: whether to start the bot run by purchasing the currency
  --stoploss: -s: percentage offset for stoploss exit order; defaults to 1
 `)
   process.exit()
@@ -37,12 +39,14 @@ x cancelOrder
 x buy in
  x Use a (feeless) limit order not a market order
  x wait for order to fill before returning
-x waitForOrderFill
+ x waitForOrderFill
+! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
+   Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
+ x Add an arg to choose whether to buy in
+o Move logging to the exchange
 o Use proper rounding and conversion based on the product data feed
    And, do it in the exchange, NOT the bot...
    And, do it for everything including stoploss etc; they should all call gdax with valid string values
-! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
-   Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 o Work out buyInPrice properly
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
