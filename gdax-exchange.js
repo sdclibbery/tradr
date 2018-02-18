@@ -2,19 +2,35 @@ const Gdax = require('gdax');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options) => {
-  //const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
+  const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
   const websocket = new Gdax.WebsocketClient([options.product]);
   websocket.on('error', console.log);
+
+  const catchApiError = ({message, ...data}) => {
+    if (message) { throw new Error(message) }
+    return data
+  }
+
   return {
     buyNow: async (entryAmountInQuoteCurrency) => {entryAmountInQuoteCurrency
       return Promise.resolve({
         price: 100,
-        amountOfBaseCurrencyBought: 0.1,
+        amountOfBaseCurrencyBought: 0.001,
       })
     },
-    sell: async (price, amountOfBaseCurrency) => {
-      return Promise.resolve({ id: 12345 })
+
+    stopLoss: async (price, amountOfBaseCurrency) => {
+      return authedClient.placeOrder({
+        type: 'limit',
+        side: 'sell',
+        stop: 'loss',
+        price: price,
+        stop_price: price,
+        size: amountOfBaseCurrency,
+        product_id: options.product,
+      }).then(catchApiError)
     },
+
     waitForPriceChange: async () => {
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {
@@ -25,9 +41,11 @@ exports.createExchange = (options) => {
         })
       })
     },
+
     waitForOrderFill: async (id) => {
       return new Promise(() => {})
     },
+
     cancelOrder: async (id) => {
       return Promise.resolve({ cancelled: true })
     },

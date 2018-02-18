@@ -10,16 +10,17 @@ exports.bot = async (options, exchange) => {
   console.log(`starting ${entryAmountInQuoteCurrency}${quoteCurrency} ${options.product} trade`)
   const {price: buyInPrice, amountOfBaseCurrencyBought} = await exchange.buyNow(entryAmountInQuoteCurrency)
 
+process.exit()
+
   let stoplossPrice = calcStoploss(buyInPrice)
   console.log(`setting stop loss to: ${dp2(stoplossPrice)}`)
-  let {id: stoplossId} = await exchange.sell(stoplossPrice, amountOfBaseCurrencyBought)
+  let {id: stoplossId} = await exchange.stopLoss(stoplossPrice, amountOfBaseCurrencyBought)
 
   while (true) {
     const {filled: stoplossFilled, price: newPrice} = await Promise.race([
       exchange.waitForPriceChange(),
       exchange.waitForOrderFill(stoplossId),
     ])
-    console.log(stoplossFilled, newPrice)
 
     if (stoplossFilled) {
       const exitAmountInQuoteCurrency = amountOfBaseCurrencyBought * stoplossPrice
@@ -32,7 +33,7 @@ exports.bot = async (options, exchange) => {
       await exchange.cancelOrder(stoplossId)
       stoplossPrice = calcStoploss(newPrice)
       console.log(`moving stop loss to: ${dp2(stoplossPrice)}`)
-      stoplossId = await exchange.sell(stoplossPrice, amountOfBaseCurrencyBought)
+      stoplossId = await exchange.stopLoss(stoplossPrice, amountOfBaseCurrencyBought)
     }
   }
 }

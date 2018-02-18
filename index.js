@@ -20,16 +20,22 @@ console.log(
   process.exit()
 }
 
-BotStoplossTrackerBull.bot(options, GdaxExchange.createExchange(options)).then(() => { console.log('done :-)') })
+BotStoplossTrackerBull
+  .bot(options, GdaxExchange.createExchange(options))
+  .then(() => { console.log('done :-)') })
+  .catch((e) => {
+    console.error(e)
+    process.exit()
+  })
 
 /*
 ToDo
 x Write algorithm
 x waitForPriceChange
-o buyNow
-o sell
-o waitForOrderFill
+x stopLoss
 o cancelOrder
+o buyNow
+o waitForOrderFill
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
  o This would probably be uselful for bots on automatic triggers...
