@@ -43,10 +43,9 @@ x buy in
 ! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
    Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
  x Add an arg to choose whether to buy in
+o Move rounding to the exchange and do it for every appropriate value
+o Get rounding values from the product info, dont hardcode
 o Move logging to the exchange
-o Use proper rounding and conversion based on the product data feed
-   And, do it in the exchange, NOT the bot...
-   And, do it for everything including stoploss etc; they should all call gdax with valid string values
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 o Work out buyInPrice properly
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
