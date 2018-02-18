@@ -34,10 +34,18 @@ x Write algorithm
 x waitForPriceChange
 x stopLoss
 x cancelOrder
-o buyNow
-o waitForOrderFill
+x buy in
+ x Use a (feeless) limit order not a market order
+ x wait for order to fill before returning
+x waitForOrderFill
+o Use proper rounding and conversion based on the product data feed
+   And, do it in the exchange, NOT the bot...
+   And, do it for everything including stoploss etc; they should all call gdax with valid string values
+! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
+   Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
+o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
+o Work out buyInPrice properly
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
  o This would probably be uselful for bots on automatic triggers...
-o Enter the market with a (feeless) limit order not a market order
 */

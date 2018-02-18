@@ -6,16 +6,25 @@ exports.createExchange = (options) => {
   const websocket = new Gdax.WebsocketClient([options.product]);
   websocket.on('error', console.log);
 
-  const catchApiError = ({message, ...data}) => {
-    if (message) { throw new Error(message) }
+  const catchApiError = ({message, status, reject_reason, ...data}) => {
+    if (message !== undefined || status === 'rejected') { throw new Error(message || reject_reason) }
+    //console.log(data)
     return data
   }
 
-  return {
-    buyNow: async (entryAmountInQuoteCurrency) => {entryAmountInQuoteCurrency
-      return Promise.resolve({
-        price: 100,
-        amountOfBaseCurrencyBought: 0.001,
+  const exchange = {
+    buy: async (price, amountOfBaseCurrency) => {
+      return authedClient.placeOrder({
+        type: 'limit',
+        side: 'buy',
+        price: price,
+        size: amountOfBaseCurrency,
+        product_id: options.product,
+        post_only: true,
+      })
+      .then(catchApiError)
+      .then(({id}) => {
+        return exchange.waitForOrderFill(id)
       })
     },
 
@@ -43,13 +52,21 @@ exports.createExchange = (options) => {
     },
 
     waitForOrderFill: async (id) => {
-      return new Promise(() => {})
+      return new Promise((resolve, reject) => {
+        websocket.on('message', function listener (data) {
+          if (data.type === 'done' && data.order_id === id) {
+            websocket.removeListener('message', listener)
+            resolve(data)
+          }
+        })
+      })
     },
 
     cancelOrder: async (id) => {
       return authedClient.cancelOrder(id).then(catchApiError)
     },
   }
+  return exchange
 }
 
 
