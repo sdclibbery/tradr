@@ -12,13 +12,17 @@ exports.createExchange = (options) => {
     return data
   }
 
+  const format = (x, dp) => Number.parseFloat(x).toFixed(dp)
+  const priceDp = 2
+  const baseDp = 8
+
   const exchange = {
     buy: async (price, amountOfBaseCurrency) => {
       return authedClient.placeOrder({
         type: 'limit',
         side: 'buy',
-        price: price,
-        size: amountOfBaseCurrency,
+        price: format(price, priceDp),
+        size: format(amountOfBaseCurrency, baseDp),
         product_id: options.product,
         post_only: true,
       })
@@ -33,9 +37,9 @@ exports.createExchange = (options) => {
         type: 'limit',
         side: 'sell',
         stop: 'loss',
-        price: price,
-        stop_price: price,
-        size: amountOfBaseCurrency,
+        price: format(price, priceDp),
+        stop_price: format(price, priceDp),
+        size: format(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       }).then(catchApiError)
     },

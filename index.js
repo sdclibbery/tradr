@@ -43,7 +43,8 @@ x buy in
 ! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
    Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
  x Add an arg to choose whether to buy in
-o Move rounding to the exchange and do it for every appropriate value
+x Move rounding to the exchange and do it for every appropriate value
+o Have an event emitter leak
 o Get rounding values from the product info, dont hardcode
 o Move logging to the exchange
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
