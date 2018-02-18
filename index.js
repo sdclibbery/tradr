@@ -46,9 +46,10 @@ x buy in
 x Move rounding to the exchange and do it for every appropriate value
 x Have an event emitter leak
  x Ask for order status, dont wait for it to fill
-o Move logging to the exchange
-o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
+x Move logging to the exchange
+x Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
 o Get rounding values from the product info, dont hardcode
+o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 o Work out buyInPrice properly
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc

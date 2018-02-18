@@ -61,6 +61,17 @@ exports.createExchange = (options) => {
       })
     },
 
+    waitForOrderFill: async (id) => {
+      return new Promise((resolve, reject) => {
+        websocket.on('message', function listener (data) {
+          if (data.type === 'done' && data.order_id === id) {
+            websocket.removeListener('message', listener)
+            resolve(data)
+          }
+        })
+      })
+    },
+
     orderFilled: async (id) => {
       return authedClient.getOrder(id)
         .then(catchApiError)
