@@ -21,12 +21,9 @@ exports.bot = async (options, exchange) => {
   let {id: stoplossId} = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
 
   while (true) {
-    const {filled: stoplossFilled, price: newPrice} = await Promise.race([
-      exchange.waitForPriceChange(),
-      exchange.waitForOrderFill(stoplossId),
-    ])
+    const {price: newPrice} = await exchange.waitForPriceChange()
 
-    if (stoplossFilled) {
+    if (await exchange.orderFilled(stoplossId)) {
       const exitAmountInQuoteCurrency = entryAmountInBaseCurrency * stoplossPrice
       console.log(`trade complete: ${dp2(buyInPrice)}->${dp2(stoplossPrice)} ${dp2(entryAmountInBaseCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
       break;

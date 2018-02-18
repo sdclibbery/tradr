@@ -44,10 +44,12 @@ x buy in
    Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
  x Add an arg to choose whether to buy in
 x Move rounding to the exchange and do it for every appropriate value
-o Have an event emitter leak
-o Get rounding values from the product info, dont hardcode
+x Have an event emitter leak
+ x Ask for order status, dont wait for it to fill
 o Move logging to the exchange
+o Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
+o Get rounding values from the product info, dont hardcode
 o Work out buyInPrice properly
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
