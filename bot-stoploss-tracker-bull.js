@@ -10,8 +10,6 @@ exports.bot = async (options, exchange) => {
   console.log(`starting ${entryAmountInQuoteCurrency}${quoteCurrency} ${options.product} trade`)
   const {price: buyInPrice, amountOfBaseCurrencyBought} = await exchange.buyNow(entryAmountInQuoteCurrency)
 
-process.exit()
-
   let stoplossPrice = calcStoploss(buyInPrice)
   console.log(`setting stop loss to: ${dp2(stoplossPrice)}`)
   let {id: stoplossId} = await exchange.stopLoss(stoplossPrice, amountOfBaseCurrencyBought)

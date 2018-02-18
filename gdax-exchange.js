@@ -47,7 +47,7 @@ exports.createExchange = (options) => {
     },
 
     cancelOrder: async (id) => {
-      return Promise.resolve({ cancelled: true })
+      return authedClient.cancelOrder(id).then(catchApiError)
     },
   }
 }

@@ -33,7 +33,7 @@ ToDo
 x Write algorithm
 x waitForPriceChange
 x stopLoss
-o cancelOrder
+x cancelOrder
 o buyNow
 o waitForOrderFill
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
