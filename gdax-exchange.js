@@ -1,5 +1,11 @@
 const Gdax = require('gdax');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
+const logger = require('./logger').createLogger('gdax-api.log')
+
+const log = id => response => {
+  logger.info(id, response)
+  return response
+}
 
 exports.createExchange = (options) => {
   const baseCurrency = options.product.split('-')[0]
@@ -7,10 +13,13 @@ exports.createExchange = (options) => {
 
   const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com');
   const websocket = new Gdax.WebsocketClient([options.product]);
-  websocket.on('error', console.log);
+  websocket.on('error', log('websocket error'));
 
   const catchApiError = ({message, status, reject_reason, ...data}) => {
-    if (message !== undefined || status === 'rejected') { throw new Error(message || reject_reason) }
+    if (message !== undefined || status === 'rejected') {
+      logger.info('catchApiError', message, reject_reason, status, data)
+      throw new Error(message || reject_reason)
+    }
     return data
   }
 
@@ -29,6 +38,7 @@ exports.createExchange = (options) => {
         product_id: options.product,
         post_only: true,
       })
+      .then(log('buy'))
       .then(catchApiError)
       .then(({id}) => {
         return exchange.waitForOrderFill(id)
@@ -45,6 +55,7 @@ exports.createExchange = (options) => {
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
+      .then(log('stopLoss'))
       .then(catchApiError)
       .then(({id}) => id)
     },
@@ -54,6 +65,7 @@ exports.createExchange = (options) => {
         websocket.on('message', function listener (data) {
           if (data.type === 'match') {
             websocket.removeListener('message', listener)
+            logger.info('waitForPriceChange', data)
             resolve(data)
           }
         })
@@ -65,25 +77,28 @@ exports.createExchange = (options) => {
         websocket.on('message', function listener (data) {
           if (data.type === 'done' && data.order_id === id) {
             websocket.removeListener('message', listener)
+            logger.info('waitForOrderFill', data)
             resolve(data)
           }
         })
       })
     },
 
-    orderstatus: async (id) => {
+    orderStatus: async (id) => {
       return authedClient.getOrder(id)
+        .then(log('orderStatus'))
         .then(catchApiError)
         .then(({done_reason, filled_size, price}) => ({
           filled: (done_reason === 'filled'),
-          filledAmountInBaseCurrency: filled_size,
-          price: price,
+          filledAmountInQuoteCurrency: executed_value,
         }))
     },
 
     cancelOrder: async (id) => {
       console.log(`GDAX: cancelling stoploss`)
-      return authedClient.cancelOrder(id).then(catchApiError)
+      return authedClient.cancelOrder(id)
+        .then(log('cancelOrder'))
+        .then(catchApiError)
     },
   }
   return exchange
