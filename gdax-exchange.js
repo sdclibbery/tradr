@@ -68,7 +68,7 @@ exports.createExchange = (options) => {
           if (data.type === 'match') {
             websocket.removeListener('message', listener)
             logger.info('waitForPriceChange', data)
-            resolve(data)
+            resolve({ price: data.price })
           }
         })
       })
@@ -80,7 +80,7 @@ exports.createExchange = (options) => {
           if (data.type === 'done' && data.order_id === id) {
             websocket.removeListener('message', listener)
             logger.info('waitForOrderFill', data)
-            resolve(data)
+            resolve({ })
           }
         })
       })
