@@ -12,10 +12,6 @@ exports.bot = async (options, exchange) => {
   const entryAmountInBaseCurrency = options.amount / buyInPrice
   console.log(`BOT: starting ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency} ${options.product} trade from ${dp2(buyInPrice)}`)
 
-  if (options.buyin) {
-    await exchange.buy(buyInPrice, entryAmountInBaseCurrency)
-  }
-
   let stoplossPrice = calcStoploss(buyInPrice)
   let stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
 

@@ -5,7 +5,6 @@ const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR' },
   { name: 'amount', alias: 'a', type: Number },
-  { name: 'buyin', alias: 'b', type: Boolean, defaultValue: false },
   { name: 'stoploss', alias: 's', type: Number, defaultValue: 1 },
 ]
 const commandLineArgs = require('command-line-args')
@@ -16,7 +15,6 @@ console.log(
  --help: -h: Show this help
  --product: -p: GDAX product; defaults to BTC-EUR
  --amount: -a: amount to bot with in quote currency, eg in EUR for BTC-EUR; *must* be specified
- --buyin: -b: whether to start the bot run by purchasing the currency
  --stoploss: -s: percentage offset for stoploss exit order; defaults to 1
 `)
   process.exit()
@@ -52,7 +50,7 @@ x Failed to detect the stoploss filling
 x Price keeps falling PAST the stoploss without triggering it! Is that because its a limit stoploss?
  x Fix by changing stoploss to a market order, even though that'll incur a fee
 x Profit should be calculated using ACTUAL stoploss amount including fees
-o Remove buyin option from this bot
+x Remove buyin option from this bot
 o Add the time into the logging
 ? Log all API call data to a log file?
 o Get rounding values from the product info, dont hardcode
