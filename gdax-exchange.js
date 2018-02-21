@@ -75,7 +75,7 @@ exports.createExchange = (options) => {
     orderFilled: async (id) => {
       return authedClient.getOrder(id)
         .then(catchApiError)
-        .then(({status, done_reason}) => (status === 'done' && done_reason === 'filled'))
+        .then(({status, done_reason}) => (done_reason === 'filled'))
     },
 
     cancelOrder: async (id) => {
@@ -85,30 +85,3 @@ exports.createExchange = (options) => {
   }
   return exchange
 }
-
-
-/*
-x Verify we can place a limit order:
- authedClient.buy({ price: '4000.00', size: '0.001', product_id: productId })
- { id: '6f08fca6-df79-4ae0-a5fc-5a2198c6c8e3',
-  price: '4000.00000000',
-  size: '0.00100000',
-  product_id: 'BTC-EUR',
-  side: 'buy',
-  stp: 'dc',
-  type: 'limit',
-  time_in_force: 'GTC',
-  post_only: false,
-  created_at: '2018-02-11T08:56:22.439806Z',
-  fill_fees: '0.0000000000000000',
-  filled_size: '0.00000000',
-  executed_value: '0.0000000000000000',
-  status: 'pending',
-  settled: false }
-  { message: 'Insufficient funds' }
-  { message: 'Invalid API Key' }
-x Verify we can cancel an order:
- authedClient.cancelOrder('6f08fca6-df79-4ae0-a5fc-5a2198c6c8e3')
- [ '6f08fca6-df79-4ae0-a5fc-5a2198c6c8e3' ]
- { message: 'order not found' }
-*/

@@ -48,9 +48,23 @@ x Have an event emitter leak
  x Ask for order status, dont wait for it to fill
 x Move logging to the exchange
 x Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
+x Failed to detect the stoploss filling
+o Price keeps falling PAST the stoploss without triggering it! Is that because its a limit stoploss?
+o Add the time into the logging
 o Get rounding values from the product info, dont hardcode
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
-o Work out buyInPrice properly
+o Split the purchase into a separate bot and allow composition
+o Write a bot to exploit spread on markets with a high spread
+ o Monitor the spread; if its large, eg >0.5% of value
+ o Then place buy AND sell orders at the edges of the spread
+ o And re-place them as they fill
+ o Cancel/move any as the spread moves
+ o Have limits and stop if only one side keeps filling?
+o Add a readme: API key / credentials, command line usage, writing bot algos
+o Buyin improvements
+ o Work out buyInPrice properly as minimum increment over current price
+ o Buy in should retry if the order cant be placed
+  o And possibly if the price moves away from it? Or it should nope out somehow?
 o Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
  o Could even do this graduated; so exit 25% at 1% profit etc
  o This would probably be uselful for bots on automatic triggers...
