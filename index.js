@@ -51,9 +51,9 @@ x Price keeps falling PAST the stoploss without triggering it! Is that because i
  x Fix by changing stoploss to a market order, even though that'll incur a fee
 x Profit should be calculated using ACTUAL stoploss amount including fees
 x Remove buyin option from this bot
-o Log all API call data to a log file, with timings
-o Get rounding values from the product info, dont hardcode
+x Log all API call data to a log file, with timings
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
+o Get rounding values from the product info, dont hardcode
 o Encourage multiple bots and bot composition
 o Make a simple, patient bot, that just uses limit orders to buy low and sell high...
 o Write a bot to exploit spread on markets with a high spread

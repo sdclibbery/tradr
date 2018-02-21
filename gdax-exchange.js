@@ -15,6 +15,8 @@ exports.createExchange = (options) => {
   const websocket = new Gdax.WebsocketClient([options.product]);
   websocket.on('error', log('websocket error'));
 
+  logger.info(options)
+
   const catchApiError = ({message, status, reject_reason, ...data}) => {
     if (message !== undefined || status === 'rejected') {
       logger.info('catchApiError', message, reject_reason, status, data)
@@ -88,7 +90,7 @@ exports.createExchange = (options) => {
       return authedClient.getOrder(id)
         .then(log('orderStatus'))
         .then(catchApiError)
-        .then(({done_reason, filled_size, price}) => ({
+        .then(({done_reason, executed_value}) => ({
           filled: (done_reason === 'filled'),
           filledAmountInQuoteCurrency: executed_value,
         }))
