@@ -22,9 +22,10 @@ exports.bot = async (options, exchange) => {
   while (true) {
     const {price: newPrice} = await exchange.waitForPriceChange()
 
-    if (await exchange.orderFilled(stoplossId)) {
-      const exitAmountInQuoteCurrency = entryAmountInBaseCurrency * stoplossPrice
-      console.log(`BOT: trade complete: ${dp2(buyInPrice)}->${dp2(stoplossPrice)} ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
+    const stoplossStatus = await exchange.orderstatus(stoplossId)
+    if (stoplossStatus.filled) {
+      const exitAmountInQuoteCurrency = stoplossStatus.filledAmountInBaseCurrency * stoplossStatus.price
+      console.log(`BOT: trade complete: ${dp2(buyInPrice)}->${dp2(stoplossStatus.price)} ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
       break;
     }
 

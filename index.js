@@ -49,11 +49,16 @@ x Have an event emitter leak
 x Move logging to the exchange
 x Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
 x Failed to detect the stoploss filling
-o Price keeps falling PAST the stoploss without triggering it! Is that because its a limit stoploss?
+x Price keeps falling PAST the stoploss without triggering it! Is that because its a limit stoploss?
+ x Fix by changing stoploss to a market order, even though that'll incur a fee
+x Profit should be calculated using ACTUAL stoploss amount including fees
+o Remove buyin option from this bot
 o Add the time into the logging
+? Log all API call data to a log file?
 o Get rounding values from the product info, dont hardcode
 o Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
-o Split the purchase into a separate bot and allow composition
+o Encourage multiple bots and bot composition
+o Make a simple, patient bot, that just uses limit orders to buy low and sell high...
 o Write a bot to exploit spread on markets with a high spread
  o Monitor the spread; if its large, eg >0.5% of value
  o Then place buy AND sell orders at the edges of the spread

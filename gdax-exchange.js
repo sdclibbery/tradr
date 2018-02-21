@@ -38,10 +38,9 @@ exports.createExchange = (options) => {
     stopLoss: async (price, amountOfBaseCurrency) => {
       console.log(`GDAX: setting stoploss for ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
-        type: 'limit',
+        type: 'market',
         side: 'sell',
         stop: 'loss',
-        price: dp(price, priceDp),
         stop_price: dp(price, priceDp),
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
@@ -72,10 +71,14 @@ exports.createExchange = (options) => {
       })
     },
 
-    orderFilled: async (id) => {
+    orderstatus: async (id) => {
       return authedClient.getOrder(id)
         .then(catchApiError)
-        .then(({status, done_reason}) => (done_reason === 'filled'))
+        .then(({done_reason, filled_size, price}) => ({
+          filled: (done_reason === 'filled'),
+          filledAmountInBaseCurrency: filled_size,
+          price: price,
+        }))
     },
 
     cancelOrder: async (id) => {
