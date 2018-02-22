@@ -33,8 +33,9 @@ x Log all API call data to a log file, with timings
 x Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 x Add a readme: API key / credentials, todo
 * Encourage multiple bots and bot composition
-  * Give each bot its own 'main' file complete with cmd line args?
-  * Update readme
+  x Give each bot its own 'main' file complete with cmd line args?
+  * Automatic command line help
+  * Update readme with cmd line instructions
 * Get rounding values from the product info, dont hardcode
 * Make a simple, patient bot, that just uses limit orders to buy low and sell high...
 * Write a bot to exploit spread on markets with a high spread
