@@ -1,9 +1,9 @@
 const framework = require('./framework');
 
 const { options, logger, exchange } = framework.initBot([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product; defaults to BTC-EUR' },
-  { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in quote currency, eg in EUR for BTC-EUR; *must* be specified' },
-  { name: 'stoploss', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stoploss exit order; defaults to 1' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
+  { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in quote currency, eg in EUR for BTC-EUR' },
+  { name: 'stoploss', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stoploss exit order' },
 ])
 
 const bot = async () => {

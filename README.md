@@ -34,12 +34,12 @@ x Pull a proper clean return value interface out into gdax exchange, dont just p
 x Add a readme: API key / credentials, todo
 x Simple observer bot that watches and reports prices
 x Log output to file
-* Extract bot boilerplate
+x Extract bot boilerplate
  x basic
  x create help text
  x if any args without defaultValue are missing, show help instead of running
  x help option auto add by framework
- * add defaultValue and 'required' info to description
+ x add defaultValue and 'required' info to description
 * Log output to stdio as well as file
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
