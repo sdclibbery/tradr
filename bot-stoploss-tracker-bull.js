@@ -1,4 +1,5 @@
 const GdaxExchange = require('./gdax-exchange');
+const LoggerFactory = require('./logger')
 
 const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
@@ -20,7 +21,8 @@ if (options.help || !options.amount) {
   process.exit()
 }
 
-const exchange = GdaxExchange.createExchange(options)
+const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
+const exchange = GdaxExchange.createExchange(options, logger)
 
 const bot = async () => {
   const percent = options.stoploss
@@ -34,7 +36,7 @@ const bot = async () => {
   const buyInPrice = startPrice - 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / buyInPrice
-  console.log(`BOT: starting ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency} ${options.product} trade from ${dp2(buyInPrice)}`)
+  logger.warn(`BOT: starting ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency} ${options.product} trade from ${dp2(buyInPrice)}`)
 
   let stoplossPrice = calcStoploss(buyInPrice)
   let stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
@@ -45,7 +47,7 @@ const bot = async () => {
     const stoplossStatus = await exchange.orderStatus(stoplossId)
     if (stoplossStatus.filled) {
       const exitAmountInQuoteCurrency = stoplossStatus.filledAmountInQuoteCurrency
-      console.log(`BOT: trade complete: ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
+      logger.warn(`BOT: trade complete: ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
       break;
     }
 

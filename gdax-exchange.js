@@ -1,12 +1,9 @@
 const Gdax = require('gdax');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
-const LoggerFactory = require('./logger')
 
-exports.createExchange = (options) => {
+exports.createExchange = (options, logger) => {
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
-
-  const logger = LoggerFactory.createLogger('gdax-api.log')
 
   const log = id => response => {
     logger.info(id, response)
