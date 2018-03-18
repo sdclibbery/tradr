@@ -1,24 +1,8 @@
-const GdaxExchange = require('./gdax-exchange');
-const LoggerFactory = require('./logger')
+const framework = require('./framework');
 
-const optionDefinitions = [
-  { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR' },
-]
-const commandLineArgs = require('command-line-args')
-const options = commandLineArgs(optionDefinitions)
-
-if (options.help) {
-  console.log(
-  `GDAX bot. Usage:
-   --help: -h: Show this help
-   --product: -p: GDAX product; defaults to BTC-EUR
-  `)
-  process.exit()
-}
-
-const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
-const exchange = GdaxExchange.createExchange(options, logger)
+const { options, logger, exchange } = framework.initBot([
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product; defaults to BTC-EUR' },
+])
 
 const bot = async () => {
   const baseCurrency = options.product.split('-')[0]

@@ -1,28 +1,10 @@
-const GdaxExchange = require('./gdax-exchange');
-const LoggerFactory = require('./logger')
+const framework = require('./framework');
 
-const optionDefinitions = [
-  { name: 'help', alias: 'h', type: Boolean, defaultValue: false },
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR' },
-  { name: 'amount', alias: 'a', type: Number },
-  { name: 'stoploss', alias: 's', type: Number, defaultValue: 1 },
-]
-const commandLineArgs = require('command-line-args')
-const options = commandLineArgs(optionDefinitions)
-
-if (options.help || !options.amount) {
-  console.log(
-  `GDAX bot. Usage:
-   --help: -h: Show this help
-   --product: -p: GDAX product; defaults to BTC-EUR
-   --amount: -a: amount to bot with in quote currency, eg in EUR for BTC-EUR; *must* be specified
-   --stoploss: -s: percentage offset for stoploss exit order; defaults to 1
-  `)
-  process.exit()
-}
-
-const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
-const exchange = GdaxExchange.createExchange(options, logger)
+const { options, logger, exchange } = framework.initBot([
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product; defaults to BTC-EUR' },
+  { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in quote currency, eg in EUR for BTC-EUR; *must* be specified' },
+  { name: 'stoploss', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stoploss exit order; defaults to 1' },
+])
 
 const bot = async () => {
   const percent = options.stoploss

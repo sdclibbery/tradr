@@ -33,7 +33,14 @@ x Log all API call data to a log file, with timings
 x Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
 x Add a readme: API key / credentials, todo
 x Simple observer bot that watches and reports prices
-* Log output to file
+x Log output to file
+* Extract bot boilerplate
+ x basic
+ x create help text
+ x if any args without defaultValue are missing, show help instead of running
+ x help option auto add by framework
+ * add defaultValue and 'required' info to description
+* Log output to stdio as well as file
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
 * Make a bot that transacts whenever 2 moving averages cross
