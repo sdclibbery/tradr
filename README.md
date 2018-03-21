@@ -36,6 +36,9 @@ x Simple observer bot that watches and reports prices
 x Log output to file
 x Extract bot boilerplate
 x create help text
+* Bots for making simple transactions with exit orders
+* Bots for making simple, single transactions
+* Get rounding values from the product info, dont hardcode
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
 * Make a bot that transacts whenever 2 moving averages cross
@@ -45,15 +48,11 @@ x create help text
   * And re-place them as they fill
   * Cancel/move any as the spread moves; cancel altogether if spread closes
   * Have limits and stop if only one side keeps filling?
-* Make a bot that evaluates slowly against the *log*!! BTC channel
- pt on centre of channel: (2017-01-10, 776.06)
- pt on bottom of channel: (2017-03-25, 895.25)
- pt on top of channel: (2017-01-23, 1176.08)
+  * Make a bot that evaluates slowly against the *log*!! BTC channel
 * Encourage multiple bots and bot composition
   x Give each bot its own 'main' file complete with cmd line args?
   * Automatic command line help
   * Update readme with cmd line instructions
-* Get rounding values from the product info, dont hardcode
-* Possible tweak to the bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
+* Possible tweak to the stoploss bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
   * Could even do this graduated; so exit 25% at 1% profit etc
   * This would probably be uselful for bots on automatic triggers...

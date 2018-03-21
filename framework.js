@@ -17,7 +17,9 @@ exports.initBot = (optionDefinitions) => {
       return `--${o.name} -${o.alias} : ${o.description}${showRequirements ? '. '+requirements : ''}`
     }
     let usage = optionDefinitions.reduce((u,o) => `${u}\n${usageForOption(o)}.`, '')
-    console.log(`GDAX bot. Usage:${usage}`)
+    const msg = `${new Date()} GDAX bot.\nCalled with: ${JSON.stringify(options)}\nUsage: ${usage}`
+    console.log(msg)
+    require('fs').writeFileSync(`${process.argv[1]}.log`, msg, {flag:'a'})
     process.exit()
   }
 
