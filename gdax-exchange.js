@@ -6,7 +6,7 @@ exports.createExchange = (options, logger) => {
   const quoteCurrency = options.product.split('-')[1]
 
   const log = id => response => {
-    logger.info(id, response)
+    logger.debug(id, response)
     return response
   }
 
@@ -14,11 +14,11 @@ exports.createExchange = (options, logger) => {
   const websocket = new Gdax.WebsocketClient([options.product]);
   websocket.on('error', log('websocket error'));
 
-  logger.info(options)
+  logger.debug(options)
 
   const catchApiError = ({message, status, reject_reason, ...data}) => {
     if (message !== undefined || status === 'rejected') {
-      logger.info('catchApiError', message, reject_reason, status, data)
+      logger.debug('catchApiError', message, reject_reason, status, data)
       throw new Error(message || reject_reason)
     }
     return data
@@ -66,7 +66,7 @@ exports.createExchange = (options, logger) => {
         websocket.on('message', function listener (data) {
           if (data.type === 'match') {
             websocket.removeListener('message', listener)
-            logger.info('waitForPriceChange', data)
+            logger.debug('waitForPriceChange', data)
             resolve({ price: data.price })
           }
         })
@@ -78,7 +78,7 @@ exports.createExchange = (options, logger) => {
         websocket.on('message', function listener (data) {
           if (data.type === 'done' && data.order_id === id) {
             websocket.removeListener('message', listener)
-            logger.info('waitForOrderFill', data)
+            logger.debug('waitForOrderFill', data)
             resolve({ })
           }
         })

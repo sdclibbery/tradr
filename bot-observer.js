@@ -9,7 +9,7 @@ const bot = async () => {
   const quoteCurrency = options.product.split('-')[1]
   while (true) {
     const {price: newPrice} = await exchange.waitForPriceChange()
-    logger.warn(`BOT: New price: ${newPrice} ${quoteCurrency} per ${baseCurrency}`)
+    logger.info(`BOT: New price: ${newPrice} ${quoteCurrency} per ${baseCurrency}`)
   }
 }
 bot().then(() => { process.exit() })

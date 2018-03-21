@@ -18,7 +18,7 @@ const bot = async () => {
   const buyInPrice = startPrice - 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / buyInPrice
-  logger.warn(`BOT: starting ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency} ${options.product} trade from ${dp2(buyInPrice)}`)
+  logger.info(`BOT: starting ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency} ${options.product} trade from ${dp2(buyInPrice)}`)
 
   let stoplossPrice = calcStoploss(buyInPrice)
   let stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
@@ -29,7 +29,7 @@ const bot = async () => {
     const stoplossStatus = await exchange.orderStatus(stoplossId)
     if (stoplossStatus.filled) {
       const exitAmountInQuoteCurrency = stoplossStatus.filledAmountInQuoteCurrency
-      logger.warn(`BOT: trade complete: ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
+      logger.info(`BOT: trade complete: ${dp2(entryAmountInQuoteCurrency)}${quoteCurrency}->${dp2(exitAmountInQuoteCurrency)}${quoteCurrency}`)
       break;
     }
 
