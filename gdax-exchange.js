@@ -17,7 +17,7 @@ exports.createExchange = (options, logger) => {
   logger.debug(options)
 
   const handleError = ({message, status, reject_reason, ...data}) => {
-    logger.debug('catchApiError', message, status, reject_reason, data)
+    logger.debug('GDAX API Error', message, status, reject_reason, data)
     throw new Error(message || reject_reason)
   }
   const catchApiError = (data) => {
