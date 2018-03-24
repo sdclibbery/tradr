@@ -36,6 +36,8 @@ x Simple observer bot that watches and reports prices
 x Log output to file
 x Extract bot boilerplate
 x create help text
+x Bot for reporting account balances
+* Bot for reporting and open orders
 * Bots for making simple transactions with exit orders
 * Bots for making simple, single transactions
 * Get rounding values from the product info, dont hardcode

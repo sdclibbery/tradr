@@ -2,8 +2,8 @@ const Gdax = require('gdax');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options, logger) => {
-  const baseCurrency = options.product.split('-')[0]
-  const quoteCurrency = options.product.split('-')[1]
+  const baseCurrency = options.product && options.product.split('-')[0]
+  const quoteCurrency = options.product && options.product.split('-')[1]
 
   const log = id => response => {
     logger.debug(id, response)
@@ -16,10 +16,13 @@ exports.createExchange = (options, logger) => {
 
   logger.debug(options)
 
-  const catchApiError = ({message, status, reject_reason, ...data}) => {
-    if (message !== undefined || status === 'rejected') {
-      logger.debug('catchApiError', message, reject_reason, status, data)
-      throw new Error(message || reject_reason)
+  const handleError = ({message, status, reject_reason, ...data}) => {
+    logger.debug('catchApiError', message, status, reject_reason, data)
+    throw new Error(message || reject_reason)
+  }
+  const catchApiError = (data) => {
+    if (data.message !== undefined || data.status === 'rejected') {
+      handleError(data)
     }
     return data
   }
@@ -29,6 +32,18 @@ exports.createExchange = (options, logger) => {
   const baseDp = 8
 
   const exchange = {
+
+    accounts: async (id) => {
+      return authedClient.getAccounts()
+        .then(log('getAccounts'))
+        .then(catchApiError)
+        .then(as => as.reduce((res, a) => {
+          res[a.currency] = {balance: a.balance, available: a.available}
+          return res
+        }, {}))
+        .catch(handleError)
+    },
+
     buy: async (price, amountOfBaseCurrency) => {
       console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
@@ -44,6 +59,7 @@ exports.createExchange = (options, logger) => {
       .then(({id}) => {
         return exchange.waitForOrderFill(id)
       })
+      .catch(handleError)
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
@@ -59,6 +75,7 @@ exports.createExchange = (options, logger) => {
       .then(log('stopLoss'))
       .then(catchApiError)
       .then(({id}) => id)
+      .catch(handleError)
     },
 
     waitForPriceChange: async () => {
@@ -93,6 +110,7 @@ exports.createExchange = (options, logger) => {
           filled: (done_reason === 'filled'),
           filledAmountInQuoteCurrency: executed_value,
         }))
+        .catch(handleError)
     },
 
     cancelOrder: async (id) => {
@@ -100,6 +118,7 @@ exports.createExchange = (options, logger) => {
       return authedClient.cancelOrder(id)
         .then(log('cancelOrder'))
         .then(catchApiError)
+        .catch(handleError)
     },
   }
   return exchange
