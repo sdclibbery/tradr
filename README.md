@@ -38,6 +38,8 @@ x Extract bot boilerplate
 x create help text
 x Bot for reporting account balances
 * Need to tidy up log-then-exit pattern by adding that functionality to the Logger
+* All log lines NOT logged by logger still need to start with 'warn' 'error' etc
+ ! Swap these to sync logger..?
 * Also have standard functions like dp2 available without redefinition
 * Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
 * Bot for reporting open orders
