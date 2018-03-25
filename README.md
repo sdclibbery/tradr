@@ -37,7 +37,7 @@ x Log output to file
 x Extract bot boilerplate
 x create help text
 x Bot for reporting account balances
-* Need to tidy up log then exit pattern by adding that functionality to the Logger
+* Need to tidy up log-then-exit pattern by adding that functionality to the Logger
 * Also have standard functions like dp2 available without redefinition
 * Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
 * Bot for reporting open orders

@@ -5,7 +5,12 @@ const commandLineArgs = require('command-line-args')
 exports.initBot = (optionDefinitions) => {
   optionDefinitions.unshift({ name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' })
 
-  const options = commandLineArgs(optionDefinitions)
+  let options
+  try {
+    options = commandLineArgs(optionDefinitions)
+  } catch (e) {
+    require('fs').writeFileSync(`${process.argv[1]}.log`, `Options error: ${e.toString()}\nOptionDefs: ${JSON.stringify(optionDefinitions)}\nCmd Line: ${process.argv}\n`, {flag:'a'})
+  }
 
   const missingButRequiredOptions = optionDefinitions
           .filter((o) => o.defaultValue == undefined)
