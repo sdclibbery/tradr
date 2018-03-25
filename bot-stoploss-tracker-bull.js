@@ -6,7 +6,7 @@ const { options, logger, exchange } = framework.initBot([
   { name: 'stoploss', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stoploss exit order' },
 ])
 
-const bot = async () => {
+framework.runBot(async () => {
   const percent = options.stoploss
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
@@ -40,5 +40,4 @@ const bot = async () => {
       stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
     }
   }
-}
-bot().then(() => { process.exit() })
+}, logger)

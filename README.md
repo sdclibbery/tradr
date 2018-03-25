@@ -40,7 +40,6 @@ x Bot for reporting account balances
 x Need to tidy up log-then-exit pattern by adding that functionality to the Logger
 x All log lines NOT logged by logger still need to start with 'warn' 'error' etc
  x Swap these to sync logger..?
-* Also have standard functions like dp2 available without redefinition
 * Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
 * Bot for reporting open orders
 * Bots for making simple transactions with exit orders

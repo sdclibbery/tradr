@@ -36,3 +36,12 @@ exports.initBot = (optionDefinitions) => {
     exchange: exchange,
   }
 }
+
+exports.runBot = (bot, logger) => {
+  bot()
+  .then(process.exit)
+  .catch(e => {
+    logger.sync.error(e)
+    process.exit()
+  })
+}
