@@ -9,13 +9,11 @@ const bot = async () => {
   Object.keys(accounts).map(cur => {
     accountInfo = `${accountInfo}\n${cur}: balance ${dp2(accounts[cur].balance)} ${cur}; available: ${dp2(accounts[cur].available)} ${cur}`
   })
-  logger.info(`BOT: Account balances: ${accountInfo}`)
-  await (new Promise(r => setTimeout(r, 1000)))
+  logger.sync.info(`BOT: Account balances: ${accountInfo}`)
 }
 bot()
 .then(process.exit)
 .catch(e => {
-  logger.error(e)
-  await (new Promise(r => setTimeout(r, 1000)))
+  logger.sync.error(e)
   process.exit()
 })

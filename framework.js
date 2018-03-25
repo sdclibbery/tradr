@@ -3,13 +3,14 @@ const LoggerFactory = require('./logger')
 const commandLineArgs = require('command-line-args')
 
 exports.initBot = (optionDefinitions) => {
-  optionDefinitions.unshift({ name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' })
+  const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
 
+  optionDefinitions.unshift({ name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' })
   let options
   try {
     options = commandLineArgs(optionDefinitions)
   } catch (e) {
-    require('fs').writeFileSync(`${process.argv[1]}.log`, `Options error: ${e.toString()}\nOptionDefs: ${JSON.stringify(optionDefinitions)}\nCmd Line: ${process.argv}\n`, {flag:'a'})
+    logger.sync.error(`Options error: ${e.toString()}\nOptionDefs: ${JSON.stringify(optionDefinitions)}\nCmd Line: ${process.argv}\n`)
   }
 
   const missingButRequiredOptions = optionDefinitions
@@ -24,11 +25,10 @@ exports.initBot = (optionDefinitions) => {
     let usage = optionDefinitions.reduce((u,o) => `${u}\n${usageForOption(o)}.`, '')
     const msg = `${new Date()} GDAX bot.\nCalled with: ${JSON.stringify(options)}\nUsage: ${usage}`
     console.log(msg)
-    require('fs').writeFileSync(`${process.argv[1]}.log`, msg, {flag:'a'})
+    logger.sync.info(msg)
     process.exit()
   }
 
-  const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
   const exchange = GdaxExchange.createExchange(options, logger)
   return {
     options: options,

@@ -2,17 +2,13 @@ var path = require('path'),
     util  = require('util'),
     fs   = require('fs');
 
-var Logger = function (logFilePath) {
+var Logger = function (logFilePath, writer) {
   logFilePath = path.normalize(logFilePath)
   this.stream = fs.createWriteStream(logFilePath, {flags: 'a', encoding: 'utf8', mode: 0666})
   this.stream.write("\n")
   this.write = (text) => {
-    this.stream.write(text)
     console.log(text)
-  }
-  this.writeSync = (text) => {
-    console.log(text)
-    fs.writeFileSync(logFilePath, text)
+    writer(this.stream, text)
   }
 }
 
@@ -34,6 +30,8 @@ Logger.prototype.warn = function (...args) { this.write(this.format('warn', args
 Logger.prototype.error = function (...args) { this.write(this.format('error', args) + "\n") }
 
 exports.Logger = Logger
-exports.createLogger = (log_file_path) => {
-  return new Logger(log_file_path)
+exports.createLogger = (logFilePath) => {
+  let logger = new Logger(logFilePath, (stream, text) => { stream.write(text) })
+  logger.sync = new Logger(logFilePath, (stream, text) => { fs.writeFileSync(logFilePath, text, {flag: 'a'}) })
+  return logger
 }
