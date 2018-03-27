@@ -44,6 +44,16 @@ exports.createExchange = (options, logger) => {
         .catch(handleError)
     },
 
+    orders: async (id) => {
+      return authedClient.getOrders()
+        .then(log('getOrders'))
+        .then(catchApiError)
+        .then(os => os.map(o => {
+          return {product: o.product_id, price:o.price, amount:o.size, side: o.side, type: o.type, created: o.created_at}
+        }))
+        .catch(handleError)
+    },
+
     buy: async (price, amountOfBaseCurrency) => {
       console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
