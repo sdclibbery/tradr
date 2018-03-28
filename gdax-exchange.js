@@ -49,7 +49,7 @@ exports.createExchange = (options, logger) => {
         .then(log('getOrders'))
         .then(catchApiError)
         .then(os => os.map(o => {
-          return {product: o.product_id, price:o.price, amount:o.size, side: o.side, type: o.type, created: o.created_at}
+          return {id: o.id, product: o.product_id, price:o.price, stopPrice:o.stop_price, amount:o.size, side: o.side, type: o.type, stop: o.stop, created: o.created_at}
         }))
         .catch(handleError)
     },
@@ -65,6 +65,22 @@ exports.createExchange = (options, logger) => {
         post_only: true,
       })
       .then(log('buy'))
+      .then(catchApiError)
+      .then(({id}) => {
+        return exchange.waitForOrderFill(id)
+      })
+      .catch(handleError)
+    },
+
+    buyNow: async (amountOfBaseCurrency) => {
+      console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} now at market price`)
+      return authedClient.placeOrder({
+        type: 'market',
+        side: 'buy',
+        size: dp(amountOfBaseCurrency, baseDp),
+        product_id: options.product,
+      })
+      .then(log('buyNow'))
       .then(catchApiError)
       .then(({id}) => {
         return exchange.waitForOrderFill(id)

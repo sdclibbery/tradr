@@ -44,7 +44,7 @@ x Catch promise rejections on all the actual bot functions - move more boilerpla
 x Bot for reporting open orders
 * Bots for making simple, single transactions
 * Bots for making simple transactions with exit orders
-* Observer should only report price *changes*, not just every filled order
+* GDAX waitForPriceChange should only report price *changes*, not just every filled order
 * Get rounding values from the product info, dont hardcode
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
