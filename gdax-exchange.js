@@ -54,17 +54,16 @@ exports.createExchange = (options, logger) => {
         .catch(handleError)
     },
 
-    buy: async (price, amountOfBaseCurrency) => {
-      console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
+    order: async (side, amountOfBaseCurrency, price) => {
+      console.log(`GDAX: ${side}ing ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${price?dp(price, 2):'market price'}`)
       return authedClient.placeOrder({
-        type: 'limit',
-        side: 'buy',
-        price: dp(price, priceDp),
+        type: price?'limit':'market',
+        side: side,
+        price: price,
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
-        post_only: true,
       })
-      .then(log('buy'))
+      .then(log(side))
       .then(catchApiError)
       .then(({id}) => {
         return exchange.waitForOrderFill(id)
@@ -72,20 +71,20 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
+    buy: async (amountOfBaseCurrency, price) => {
+      return exchange.order('buy', amountOfBaseCurrency, price)
+    },
+
     buyNow: async (amountOfBaseCurrency) => {
-      console.log(`GDAX: buying ${dp(amountOfBaseCurrency, 8)}${baseCurrency} now at market price`)
-      return authedClient.placeOrder({
-        type: 'market',
-        side: 'buy',
-        size: dp(amountOfBaseCurrency, baseDp),
-        product_id: options.product,
-      })
-      .then(log('buyNow'))
-      .then(catchApiError)
-      .then(({id}) => {
-        return exchange.waitForOrderFill(id)
-      })
-      .catch(handleError)
+      return exchange.order('buy', amountOfBaseCurrency)
+    },
+
+    sell: async (amountOfBaseCurrency, price) => {
+      return exchange.order('sell', amountOfBaseCurrency, price)
+    },
+
+    sellNow: async (amountOfBaseCurrency) => {
+      return exchange.order('sell', amountOfBaseCurrency)
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
