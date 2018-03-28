@@ -42,8 +42,9 @@ x All log lines NOT logged by logger still need to start with 'warn' 'error' etc
  x Swap these to sync logger..?
 x Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
 x Bot for reporting open orders
-* Bots for making simple transactions with exit orders
 * Bots for making simple, single transactions
+* Bots for making simple transactions with exit orders
+* Observer should only report price *changes*, not just every filled order
 * Get rounding values from the product info, dont hardcode
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
