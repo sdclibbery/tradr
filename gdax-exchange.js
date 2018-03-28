@@ -28,7 +28,7 @@ exports.createExchange = (options, logger) => {
   }
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-  const priceDp = 2
+  const quoteDp = 2
   const baseDp = 8
 
   const exchange = {
@@ -55,15 +55,15 @@ exports.createExchange = (options, logger) => {
     },
 
     order: async (side, amountOfBaseCurrency, price) => {
-      console.log(`GDAX: ${side}ing ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${price?dp(price, 2):'market price'}`)
+      logger.debug(`GDAX: ${side}ing ${dp(amountOfBaseCurrency, baseDp)}${baseCurrency} at ${dp(price, quoteDp)}`)
       return authedClient.placeOrder({
-        type: price?'limit':'market',
+        type: 'limit',
         side: side,
         price: price,
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
-      .then(log(side))
+      .then(log('placeOrder'))
       .then(catchApiError)
       .then(({id}) => {
         return exchange.waitForOrderFill(id)
@@ -75,25 +75,42 @@ exports.createExchange = (options, logger) => {
       return exchange.order('buy', amountOfBaseCurrency, price)
     },
 
-    buyNow: async (amountOfBaseCurrency) => {
-      return exchange.order('buy', amountOfBaseCurrency)
-    },
-
     sell: async (amountOfBaseCurrency, price) => {
       return exchange.order('sell', amountOfBaseCurrency, price)
     },
 
-    sellNow: async (amountOfBaseCurrency) => {
-      return exchange.order('sell', amountOfBaseCurrency)
+    orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency) => {
+      const baseInfo = amountOfBaseCurrency ? `${dp(amountOfBaseCurrency, baseDp)}${baseCurrency}` : ''
+      const quoteInfo = amountOfQuoteCurrency ? `${dp(amountOfQuoteCurrency, quoteDp)}${quoteCurrency}` : ''
+      logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
+      return authedClient.placeOrder({
+        type: 'market',
+        side: side,
+        size: amountOfBaseCurrency && dp(amountOfBaseCurrency, baseDp),
+        funds: amountOfQuoteCurrency && dp(amountOfQuoteCurrency, quoteDp),
+        product_id: options.product,
+      })
+      .then(log('placeOrder'))
+      .then(catchApiError)
+      .then(({price, size, id}) => { return {id:id, price:price, size:size}})
+      .catch(handleError)
+    },
+
+    buyNow: async (amountOfBase, amountOfQuote) => {
+      return exchange.orderNow('buy', amountOfBase, amountOfQuote)
+    },
+
+    sellNow: async (amountOfBase, amountOfQuote) => {
+      return exchange.orderNow('sell', amountOfBase, amountOfQuote)
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
-      console.log(`GDAX: setting stoploss for ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
+      logger.debug(`GDAX: setting stoploss for ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
       return authedClient.placeOrder({
         type: 'market',
         side: 'sell',
         stop: 'loss',
-        stop_price: dp(price, priceDp),
+        stop_price: dp(price, quoteDp),
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
@@ -116,12 +133,16 @@ exports.createExchange = (options, logger) => {
     },
 
     waitForOrderFill: async (id) => {
+      logger.debug(`GDAX: waitForOrderFill ${id}`)
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {
-          if (data.type === 'done' && data.order_id === id) {
-            websocket.removeListener('message', listener)
-            logger.debug('waitForOrderFill', data)
-            resolve({ })
+          if (data.order_id === id) {
+            logger.debug(`GDAX: waitForOrderFill: `, data)
+            if (data.type === 'done') {
+              websocket.removeListener('message', listener)
+              logger.debug('waitForOrderFill - DONE: ', data)
+              resolve({price:data.price, size:data.size})
+            }
           }
         })
       })
@@ -139,7 +160,7 @@ exports.createExchange = (options, logger) => {
     },
 
     cancelOrder: async (id) => {
-      console.log(`GDAX: cancelling stoploss`)
+      logger.debug(`GDAX: cancelling order ${id}`)
       return authedClient.cancelOrder(id)
         .then(log('cancelOrder'))
         .then(catchApiError)
