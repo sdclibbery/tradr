@@ -29,9 +29,12 @@ exports.createExchange = (options, logger) => {
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
   const quoteDp = 2
-  const baseDp = 8
+  const baseDp = 4
 
   const exchange = {
+
+    formatBase: (x) => `${dp(x, baseDp)} ${baseCurrency}`,
+    formatQuote: (x) => `${dp(x, quoteDp)} ${quoteCurrency}`,
 
     accounts: async (id) => {
       return authedClient.getAccounts()
@@ -55,7 +58,7 @@ exports.createExchange = (options, logger) => {
     },
 
     order: async (side, amountOfBaseCurrency, price) => {
-      logger.debug(`GDAX: ${side}ing ${dp(amountOfBaseCurrency, baseDp)}${baseCurrency} at ${dp(price, quoteDp)}`)
+      logger.debug(`GDAX: ${side}ing ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
         side: side,
@@ -80,8 +83,8 @@ exports.createExchange = (options, logger) => {
     },
 
     orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency) => {
-      const baseInfo = amountOfBaseCurrency ? `${dp(amountOfBaseCurrency, baseDp)}${baseCurrency}` : ''
-      const quoteInfo = amountOfQuoteCurrency ? `${dp(amountOfQuoteCurrency, quoteDp)}${quoteCurrency}` : ''
+      const baseInfo = amountOfBaseCurrency ? `${formatBase(amountOfBaseCurrency)}` : ''
+      const quoteInfo = amountOfQuoteCurrency ? `${formatQuote(amountOfQuoteCurrency)}` : ''
       logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
       return authedClient.placeOrder({
         type: 'market',
@@ -105,7 +108,7 @@ exports.createExchange = (options, logger) => {
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
-      logger.debug(`GDAX: setting stoploss for ${dp(amountOfBaseCurrency, 8)}${baseCurrency} at ${dp(price, 2)}`)
+      logger.debug(`GDAX: setting stoploss for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
         side: 'sell',

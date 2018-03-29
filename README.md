@@ -43,8 +43,7 @@ x All log lines NOT logged by logger still need to start with 'warn' 'error' etc
 x Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
 x Bot for reporting open orders
 x Bots for making simple, single transactions
-* buy and sell now could give rise to many transactions; need to wait for them all..??
-* Pull out common functions: dp2 etc parsing product into base/quote etc ! These should live in exchange: shouldnt be dp2, should be formatBase, formatQuote etc
+x Pull out common functions: dp2 etc parsing product into base/quote etc ! These should live in exchange: shouldnt be dp2, should be formatBase, formatQuote etc
 * Get rounding values from the product info, dont hardcode
 * Bots for making simple transactions with exit orders
 * GDAX waitForPriceChange should only report price *changes*, not just every filled order

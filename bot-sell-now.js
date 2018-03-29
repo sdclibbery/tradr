@@ -14,8 +14,6 @@ framework.runBot(async () => {
   const amountOfBase = currency == baseCurrency ? amount : undefined
   const amountOfQuote = currency == quoteCurrency ? amount : undefined
 
-  const dp4 = (x) => Number.parseFloat(x).toFixed(2)
-
   const {size, price} = await exchange.sellNow(amountOfBase, amountOfQuote)
-  logger.sync.info(`BOT: sold ${dp4(size)} ${baseCurrency} at ${dp4(price)} ${quoteCurrency}`)
+  logger.sync.info(`BOT: sold ${exchange.formatBase(size)} at ${exchange.formatQuote(price)}`)
 }, logger)
