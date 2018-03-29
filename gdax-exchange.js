@@ -30,11 +30,13 @@ exports.createExchange = (options, logger) => {
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
   const quoteDp = 2
   const baseDp = 4
+  const formatBase = (x) => `${dp(x, baseDp)} ${baseCurrency}`
+  const formatQuote = (x) => `${dp(x, quoteDp)} ${quoteCurrency}`
 
   const exchange = {
 
-    formatBase: (x) => `${dp(x, baseDp)} ${baseCurrency}`,
-    formatQuote: (x) => `${dp(x, quoteDp)} ${quoteCurrency}`,
+    formatBase: formatBase,
+    formatQuote: formatQuote,
 
     accounts: async (id) => {
       return authedClient.getAccounts()
@@ -123,13 +125,29 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
+    stopEntry: async (price, amountOfBaseCurrency) => {
+      logger.debug(`GDAX: setting stopentry for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
+      return authedClient.placeOrder({
+        type: 'market',
+        side: 'buy',
+        stop: 'entry',
+        stop_price: dp(price, quoteDp),
+        size: dp(amountOfBaseCurrency, baseDp),
+        product_id: options.product,
+      })
+      .then(log('stopEntry'))
+      .then(catchApiError)
+      .then(({id}) => id)
+      .catch(handleError)
+    },
+
     waitForPriceChange: async () => {
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {
           if (data.type === 'match') {
             websocket.removeListener('message', listener)
             logger.debug('waitForPriceChange', data)
-            resolve({ price: data.price })
+            resolve({ price: Number.parseFloat(data.price) })
           }
         })
       })
