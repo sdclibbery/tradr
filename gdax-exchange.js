@@ -149,13 +149,16 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
+    _lastPrice: null,
     waitForPriceChange: async () => {
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {
-          if (data.type === 'match') {
+          const price = Number.parseFloat(data.price)
+          if (data.type === 'match' && exchange._lastPrice != price) {
             websocket.removeListener('message', listener)
             logger.debug('waitForPriceChange', data)
-            resolve({ price: Number.parseFloat(data.price) })
+            exchange._lastPrice = price
+            resolve({ price: price })
           }
         })
       })
