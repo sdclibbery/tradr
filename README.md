@@ -44,8 +44,8 @@ x Catch promise rejections on all the actual bot functions - move more boilerpla
 x Bot for reporting open orders
 x Bots for making simple, single transactions
 x Pull out common functions: dp2 etc parsing product into base/quote etc ! These should live in exchange: shouldnt be dp2, should be formatBase, formatQuote etc
+x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 * GDAX waitForPriceChange should only report price *changes*, not just every filled order
-* Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 * Get rounding values from the product info, dont hardcode
 * Bots for making simple transactions with exit orders
 * Persistant state to allow for process/box restart

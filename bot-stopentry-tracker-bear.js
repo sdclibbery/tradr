@@ -13,14 +13,13 @@ framework.runBot(async () => {
 
   const calcStopentry = (price) => price*(1 + percent/100)
 
-  const {price: startPrice} = await exchange.waitForPriceChange()
+  const startPrice = await exchange.latestPrice()
   const sellInPrice = startPrice + 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / sellInPrice
   logger.info(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(sellInPrice)}`)
 
   let stopentryPrice = calcStopentry(sellInPrice)
-console.log(sellInPrice, stopentryPrice, entryAmountInBaseCurrency)
   let stopentryId = await exchange.stopEntry(stopentryPrice, entryAmountInBaseCurrency)
 
   while (true) {

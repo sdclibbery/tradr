@@ -141,6 +141,14 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
+    latestPrice: async () => {
+      return authedClient.getProductTicker(options.product)
+      .then(log('getProductTicker'))
+      .then(catchApiError)
+      .then(({price}) => price)
+      .catch(handleError)
+    },
+
     waitForPriceChange: async () => {
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {

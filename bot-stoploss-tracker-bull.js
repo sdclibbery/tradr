@@ -13,7 +13,7 @@ framework.runBot(async () => {
 
   const calcStoploss = (price) => price*(1 - percent/100)
 
-  const {price: startPrice} = await exchange.waitForPriceChange()
+  const startPrice = await exchange.latestPrice()
   const buyInPrice = startPrice - 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / buyInPrice
