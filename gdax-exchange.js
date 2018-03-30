@@ -42,9 +42,8 @@ exports.createExchange = (options, logger) => {
       return authedClient.getAccounts()
         .then(log('getAccounts'))
         .then(catchApiError)
-        .then(as => as.reduce((res, a) => {
-          res[a.currency] = {balance: a.balance, available: a.available}
-          return res
+        .then(as => as.map(a => {
+          return { currency: a.currency, balance: a.balance, available: a.available }
         }, {}))
         .catch(handleError)
     },
@@ -142,8 +141,12 @@ exports.createExchange = (options, logger) => {
     },
 
     latestPrice: async () => {
-      return authedClient.getProductTicker(options.product)
-      .then(log('getProductTicker'))
+      return exchange.latestPriceOf(options.product)
+    },
+
+    latestPriceOf: async (product) => {
+      return authedClient.getProductTicker(product)
+      .then(log(`getProductTicker(${product})`))
       .then(catchApiError)
       .then(({price}) => price)
       .catch(handleError)

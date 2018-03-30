@@ -46,7 +46,12 @@ x Bots for making simple, single transactions
 x Pull out common functions: dp2 etc parsing product into base/quote etc ! These should live in exchange: shouldnt be dp2, should be formatBase, formatQuote etc
 x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
-* Get rounding values from the product info, dont hardcode
+x Report balance and portfolio values in EUR
+* Something that can be run IN monitor and will provide mechanism for watching price and volume
+* Get rounding values from the product info, don't hardcode
+* PumpnDump hanger-on bot
+ Bot that watches for sudden jumps in price, then sells, then waits for sudden price fall, then buy back in
+ Basically, take advantage of pump n dumps as they happen
 * Bots for making simple transactions with exit orders
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
