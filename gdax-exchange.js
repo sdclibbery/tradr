@@ -38,9 +38,9 @@ exports.createExchange = (options, logger) => {
     formatBase: formatBase,
     formatQuote: formatQuote,
 
-    accounts: async (id) => {
+    accounts: async () => {
       return authedClient.getAccounts()
-        .then(log('getAccounts'))
+        .then(log('GDAX: getAccounts'))
         .then(catchApiError)
         .then(as => as.map(a => {
           return { currency: a.currency, balance: a.balance, available: a.available }
@@ -48,9 +48,9 @@ exports.createExchange = (options, logger) => {
         .catch(handleError)
     },
 
-    orders: async (id) => {
+    orders: async () => {
       return authedClient.getOrders()
-        .then(log('getOrders'))
+        .then(log('GDAX: getOrders'))
         .then(catchApiError)
         .then(os => os.map(o => {
           return {id: o.id, product: o.product_id, price:o.price, stopPrice:o.stop_price, amount:o.size, side: o.side, type: o.type, stop: o.stop, created: o.created_at}
@@ -67,7 +67,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
-      .then(log('placeOrder'))
+      .then(log(`GDAX: order: placeOrder(${side}, ${amountOfBaseCurrency}, ${price})`))
       .then(catchApiError)
       .then(({id}) => {
         return exchange.waitForOrderFill(id)
@@ -94,7 +94,7 @@ exports.createExchange = (options, logger) => {
         funds: amountOfQuoteCurrency && dp(amountOfQuoteCurrency, quoteDp),
         product_id: options.product,
       })
-      .then(log('placeOrder'))
+      .then(log(`GDAX: orderNow: placeOrder(${side}, ${amountOfBaseCurrency}, ${amountOfQuoteCurrency})`))
       .then(catchApiError)
       .then(({price, size, id}) => { return {id:id, price:price, size:size}})
       .catch(handleError)
@@ -118,7 +118,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
-      .then(log('stopLoss'))
+      .then(log(`GDAX: stopLoss(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
       .catch(handleError)
@@ -134,7 +134,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: options.product,
       })
-      .then(log('stopEntry'))
+      .then(log(`GDAX: stopEntry(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
       .catch(handleError)
@@ -146,9 +146,9 @@ exports.createExchange = (options, logger) => {
 
     latestPriceOf: async (product) => {
       return authedClient.getProductTicker(product)
-      .then(log(`getProductTicker(${product})`))
+      .then(log(`GDAX: getProductTicker(${product})`))
       .then(catchApiError)
-      .then(({price}) => price)
+      .then(({price}) => Number.parseFloat(price))
       .catch(handleError)
     },
 
@@ -185,7 +185,7 @@ exports.createExchange = (options, logger) => {
 
     orderStatus: async (id) => {
       return authedClient.getOrder(id)
-        .then(log('orderStatus'))
+        .then(log('GDAX: orderStatus'))
         .then(catchApiError)
         .then(({done_reason, executed_value}) => ({
           filled: (done_reason === 'filled'),
@@ -197,7 +197,7 @@ exports.createExchange = (options, logger) => {
     cancelOrder: async (id) => {
       logger.debug(`GDAX: cancelling order ${id}`)
       return authedClient.cancelOrder(id)
-        .then(log('cancelOrder'))
+        .then(log(`GDAX: cancelOrder(${id})`))
         .then(catchApiError)
         .catch(handleError)
     },

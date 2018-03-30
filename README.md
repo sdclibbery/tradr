@@ -47,7 +47,7 @@ x Pull out common functions: dp2 etc parsing product into base/quote etc ! These
 x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
 x Report balance and portfolio values in EUR
-* Something that can be run IN monitor and will provide mechanism for watching price and volume
+* Something that can be run IN monitor and will provide mechanism for watching price and volume (getProductHistoricRates)
 * Get rounding values from the product info, don't hardcode
 * PumpnDump hanger-on bot
  Bot that watches for sudden jumps in price, then sells, then waits for sudden price fall, then buy back in

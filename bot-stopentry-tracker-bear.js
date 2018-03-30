@@ -20,6 +20,7 @@ framework.runBot(async () => {
   logger.info(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(sellInPrice)}`)
 
   let stopentryPrice = calcStopentry(sellInPrice)
+
   let stopentryId = await exchange.stopEntry(stopentryPrice, entryAmountInBaseCurrency)
 
   while (true) {
