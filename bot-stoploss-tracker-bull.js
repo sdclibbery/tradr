@@ -17,7 +17,7 @@ framework.runBot(async () => {
   const buyInPrice = startPrice - 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / buyInPrice
-  logger.info(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(buyInPrice)}`)
+  logger.warn(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(buyInPrice)}`)
 
   let stoplossPrice = calcStoploss(buyInPrice)
   let stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
@@ -28,15 +28,17 @@ framework.runBot(async () => {
     const stoplossStatus = await exchange.orderStatus(stoplossId)
     if (stoplossStatus.filled) {
       const exitAmountInQuoteCurrency = stoplossStatus.filledAmountInQuoteCurrency
-      logger.sync.info(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
+      logger.sync.warn(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
       break;
     }
 
-    const shouldMoveStoploss = exchange.roundQuote(calcStoploss(newPrice)) > exchange.roundQuote(stoplossPrice)
+    const newStoplossPrice = calcStoploss(newPrice)
+    const shouldMoveStoploss = exchange.roundQuote(newStoplossPrice) > exchange.roundQuote(stoplossPrice)
     if (shouldMoveStoploss) {
       await exchange.cancelOrder(stoplossId)
-      stoplossPrice = calcStoploss(newPrice)
+      stoplossPrice = newStoplossPrice
       stoplossId = await exchange.stopLoss(stoplossPrice, entryAmountInBaseCurrency)
+      logger.info(`BOT: Moved stoploss to ${exchange.formatQuote(stoplossPrice)}`)
     }
   }
 }, logger)

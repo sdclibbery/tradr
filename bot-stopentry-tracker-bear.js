@@ -17,7 +17,7 @@ framework.runBot(async () => {
   const sellInPrice = startPrice + 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / sellInPrice
-  logger.info(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(sellInPrice)}`)
+  logger.warn(`BOT: starting ${exchange.formatQuote(entryAmountInQuoteCurrency)} ${options.product} trade from ${exchange.formatQuote(sellInPrice)}`)
 
   let stopentryPrice = calcStopentry(sellInPrice)
 
@@ -29,15 +29,17 @@ framework.runBot(async () => {
     const stopentryStatus = await exchange.orderStatus(stopentryId)
     if (stopentryStatus.filled) {
       const exitAmountInQuoteCurrency = stopentryStatus.filledAmountInQuoteCurrency
-      logger.sync.info(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
+      logger.sync.warn(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
       break;
     }
 
-    const shouldMoveStopentry = exchange.roundQuote(calcStopentry(newPrice)) < exchange.roundQuote(stopentryPrice)
+    const newStopentryPrice = calcStopentry(newPrice)
+    const shouldMoveStopentry = exchange.roundQuote(newStopentryPrice) < exchange.roundQuote(stopentryPrice)
     if (shouldMoveStopentry) {
       await exchange.cancelOrder(stopentryId)
-      stopentryPrice = calcStopentry(newPrice)
+      stopentryPrice = newStopentryPrice
       stopentryId = await exchange.stopEntry(stopentryPrice, entryAmountInBaseCurrency)
+      logger.info(`BOT: Moved stopentry to ${exchange.formatQuote(stopentryPrice)}`)
     }
   }
 }, logger)
