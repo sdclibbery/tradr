@@ -47,7 +47,11 @@ x Pull out common functions: dp2 etc parsing product into base/quote etc ! These
 x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
 x Report balance and portfolio values in EUR
+* stop bots: final logging; dont move stop by tiny amounts
+* monitor page to show live cnadles
 * Something that can be run IN monitor and will provide mechanism for watching price and volume (getProductHistoricRates)
+* bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)
+* bot that tracks limit buy and sell 1% above and below price, updating every five minutes, to catch sudden HiVol swings
 * Get rounding values from the product info, don't hardcode
 * PumpnDump hanger-on bot
  Bot that watches for sudden jumps in price, then sells, then waits for sudden price fall, then buy back in

@@ -29,7 +29,7 @@ framework.runBot(async () => {
     const stopentryStatus = await exchange.orderStatus(stopentryId)
     if (stopentryStatus.filled) {
       const exitAmountInQuoteCurrency = stopentryStatus.filledAmountInQuoteCurrency
-      logger.info(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
+      logger.sync.info(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
       break;
     }
 
