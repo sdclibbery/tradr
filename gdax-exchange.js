@@ -37,6 +37,8 @@ exports.createExchange = (options, logger) => {
 
     formatBase: formatBase,
     formatQuote: formatQuote,
+    roundBase: x => Number.parseFloat(dp(x, baseDp)),
+    roundQuote: x => Number.parseFloat(dp(x, quoteDp)),
 
     accounts: async () => {
       return authedClient.getAccounts()

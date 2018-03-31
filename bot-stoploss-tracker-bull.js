@@ -32,7 +32,7 @@ framework.runBot(async () => {
       break;
     }
 
-    const shouldMoveStoploss = calcStoploss(newPrice) > stoplossPrice
+    const shouldMoveStoploss = exchange.roundQuote(calcStoploss(newPrice)) > exchange.roundQuote(stoplossPrice)
     if (shouldMoveStoploss) {
       await exchange.cancelOrder(stoplossId)
       stoplossPrice = calcStoploss(newPrice)
