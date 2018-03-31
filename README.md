@@ -34,7 +34,9 @@ x Pull a proper clean return value interface out into gdax exchange, dont just p
 x Add a readme: API key / credentials, todo
 x Simple observer bot that watches and reports prices
 x Log output to file
+x Give each bot its own 'main' file complete with cmd line args?
 x Extract bot boilerplate
+x Automatic command line help
 x create help text
 x Bot for reporting account balances
 x Need to tidy up log-then-exit pattern by adding that functionality to the Logger
@@ -47,16 +49,24 @@ x Pull out common functions: dp2 etc parsing product into base/quote etc ! These
 x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
 x Report balance and portfolio values in EUR
-* stop bots: final logging; dont move stop by tiny amounts
-* monitor page to show live cnadles
-* Something that can be run IN monitor and will provide mechanism for watching price and volume (getProductHistoricRates)
+x stop bots: final logging; also dont move stop by tiny amounts
+* New Bot:
+start: set limit sell above, and limit buy below, initial price
+every x minutes:
+ if either filled, remember last buy or sell fill price as appropriate
+ if current price is below last sell fill price, set buy limit below current price
+ if current price is above last buy fill price, set sell limit above current price
+Run this bot automatically from monitor?
+! Consider writing tests for bots that assert the behaviour and that they don't screw up in scenarios
+! Even a kind of soak/property based testing with random or historic data to see how much profit they make?
+* Bots for making simple transactions with exit orders
+* bot that sets both limit buy and sell 1,2,3,5,10% above and below price
 * bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)
-* bot that tracks limit buy and sell 1% above and below price, updating every five minutes, to catch sudden HiVol swings
+ Must alternate though; at least it mustnt sell everything during sustained price rise etc
 * Get rounding values from the product info, don't hardcode
 * PumpnDump hanger-on bot
  Bot that watches for sudden jumps in price, then sells, then waits for sudden price fall, then buy back in
  Basically, take advantage of pump n dumps as they happen
-* Bots for making simple transactions with exit orders
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
 * Make a bot that transacts whenever 2 moving averages cross
@@ -67,10 +77,7 @@ x Report balance and portfolio values in EUR
   * Cancel/move any as the spread moves; cancel altogether if spread closes
   * Have limits and stop if only one side keeps filling?
   * Make a bot that evaluates slowly against the *log*!! BTC channel
-* Encourage multiple bots and bot composition
-  x Give each bot its own 'main' file complete with cmd line args?
-  * Automatic command line help
-  * Update readme with cmd line instructions
+* Update readme with cmd line instructions
 * Possible tweak to the stoploss bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
   * Could even do this graduated; so exit 25% at 1% profit etc
   * This would probably be uselful for bots on automatic triggers...
