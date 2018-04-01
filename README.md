@@ -50,6 +50,10 @@ x Use getProductTicker to get current latest price instead of waitForPriceChange
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
 x Report balance and portfolio values in EUR
 x stop bots: final logging; also dont move stop by tiny amounts
+
+! Consider writing tests for bots that assert the behaviour and that they don't screw up in scenarios
+! Even a kind of soak/property based testing with random or historic data to see how much profit they make?
+
 * New Bot:
 start: set limit sell above, and limit buy below, initial price
 every x minutes:
@@ -59,8 +63,6 @@ every x minutes:
  if current price is above last buy fill price, set sell limit above current price
 so, the buy price tracks where we've sold, and the sell price tracks where we've bought...
 Run this bot automatically from monitor?
-! Consider writing tests for bots that assert the behaviour and that they don't screw up in scenarios
-! Even a kind of soak/property based testing with random or historic data to see how much profit they make?
 * Bots for making simple transactions with exit orders
 * bot that sets both limit buy and sell 1,2,3,5,10% above and below price
 * bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)

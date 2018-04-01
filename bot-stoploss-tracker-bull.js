@@ -1,4 +1,4 @@
-const framework = require('./framework');
+const framework = require('./framework')
 
 const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
