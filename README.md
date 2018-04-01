@@ -54,8 +54,10 @@ x stop bots: final logging; also dont move stop by tiny amounts
 start: set limit sell above, and limit buy below, initial price
 every x minutes:
  if either filled, remember last buy or sell fill price as appropriate
+ if there are no fill prices yet, track both buy and sell with current price
  if current price is below last sell fill price, set buy limit below current price
  if current price is above last buy fill price, set sell limit above current price
+so, the buy price tracks where we've sold, and the sell price tracks where we've bought...
 Run this bot automatically from monitor?
 ! Consider writing tests for bots that assert the behaviour and that they don't screw up in scenarios
 ! Even a kind of soak/property based testing with random or historic data to see how much profit they make?
@@ -81,3 +83,9 @@ Run this bot automatically from monitor?
 * Possible tweak to the stoploss bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
   * Could even do this graduated; so exit 25% at 1% profit etc
   * This would probably be uselful for bots on automatic triggers...
+
+---
+
+  Simple buy/sell tracker (ie buy/sell limits above and below; reset them at the new price when one fills) is great when the price trend is flat because it makes money every time the price changes direction, but it is not sustainable when the price keeps moving in one direction, because it will keep buying or selling, and eventually run out of capital. So a bot like that could exit if it sees a steady up or down trend in moving averages.
+
+  The discrete 15 minute bot is good for exploiting big candles, but it must be protected from making trades that are loss making in the overall picture. So it needs to track past trades and not make new ones if they would be loss making. This bot is most vulnerable to a sequence of eg red candles buried in a green trend, because it will keep buying at ever higher prices. It shouldn't place an order if is in same direction as last fill. Don't place order if it would make a loss against last fill. It also runs the risk of using up all the capital on one side, but that is not based on trend, but on the trend of large candles.
