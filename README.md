@@ -52,7 +52,10 @@ x Report balance and portfolio values in EUR
 x stop bots: final logging; also dont move stop by tiny amounts
 x Basic test harness for stoploss tracker bot
 x Record profit from the bot under test; run test 100x and check overall profit levels
+* Run test for bear stop bot and see if theres any difference
 * Get empirical price change distribution (coinmetrics??)
+* Would be nice to setup so you can run any bot against the test framework ?maybe have cmd line option to test bot instead of running profit-test.js file??
+* What about other kinds of tests? eg more specific property based tests for specific bots?
 * New Bot:
 start: set limit sell above, and limit buy below, initial price
 every x minutes:

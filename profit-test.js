@@ -8,8 +8,8 @@ const nextPrice = () => {
   }
   return price
 }
-const options = { product: 'BTC-EUR', amount: 100, stoploss: 1 }
-let stoplossOrderPrice, stoplossOrderAmountInBase
+const options = { product: 'BTC-EUR', amount: 100, stoploss: 1, stopentry: 1 }
+let stopOrderPrice, stopOrderAmountInBase
 const exchange = {
   roundQuote: (x) => x,
   roundBase: (x) => x,
@@ -17,25 +17,28 @@ const exchange = {
   formatBase: (x) => x + ' BTC',
   latestPrice: async () => await nextPrice(),
   stopLoss: async (stoplossPrice, amountOfBaseCurrency) => {
-    stoplossOrderPrice = stoplossPrice
-    stoplossOrderAmountInBase = amountOfBaseCurrency
-    return await 'stoplossOrderPrice-id'
+    stopOrderPrice = stoplossPrice
+    stopOrderAmountInBase = amountOfBaseCurrency
+    return await 'stopLossOrderPrice-id'
+  },
+  stopEntry: async (stopentryPrice, amountOfBaseCurrency) => {
+    stopOrderPrice = stopentryPrice
+    stopOrderAmountInBase = amountOfBaseCurrency
+    return await 'stopEntryOrderPrice-id'
   },
   waitForPriceChange: async () => await { price: nextPrice() },
   orderStatus: async (id) => {
-    if (id == 'stoplossOrderPrice-id') {
-      if (price < stoplossOrderPrice)  {
-        const stoplossOrderAmountInQuote = stoplossOrderAmountInBase * price
-        const marketOrderFeePercent = 0.25
-        const fees = stoplossOrderAmountInQuote * marketOrderFeePercent/100
-        return await { filled: true, filledAmountInQuoteCurrency: stoplossOrderAmountInQuote - fees }
-      } else {
-        return await { filled: false }
-      }
+    if ((id == 'stopLossOrderPrice-id' && price < stopOrderPrice) || (id == 'stopEntryOrderPrice-id' && price > stopOrderPrice))  {
+      const stopOrderAmountInQuote = stopOrderAmountInBase * price
+      const marketOrderFeePercent = 0.25
+      const fees = stopOrderAmountInQuote * marketOrderFeePercent/100
+      return await { filled: true, filledAmountInQuoteCurrency: stopOrderAmountInQuote - fees }
+    } else {
+      return await { filled: false }
     }
   },
   cancelOrder: async () => {
-    stoplossOrderPrice = null
+    stopOrderPrice = null
     return await undefined
   },
 }
@@ -61,4 +64,5 @@ const framework = {
 }
 process.framework = framework
 
-require('./bot-stoploss-tracker-bull')
+require('./bot-stopentry-tracker-bear')
+//require('./bot-stoploss-tracker-bull')
