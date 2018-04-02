@@ -30,7 +30,8 @@ framework.runBot(async () => {
     if (stopentryStatus.filled) {
       const exitAmountInQuoteCurrency = stopentryStatus.filledAmountInQuoteCurrency
       logger.sync.warn(`BOT: trade complete: ${exchange.formatQuote(entryAmountInQuoteCurrency)}->${exchange.formatQuote(exitAmountInQuoteCurrency)}`)
-      break;
+      const profitInQuoteCurrency = exitAmountInQuoteCurrency - entryAmountInQuoteCurrency
+      return profitInQuoteCurrency
     }
 
     const newStopentryPrice = calcStopentry(newPrice)

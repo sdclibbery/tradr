@@ -1,4 +1,4 @@
-const options = { product: 'BTC-EUR', amount: 100, stoploss: 1 }
+const numRuns = 1000
 let price
 const nextPrice = () => {
   if (price == undefined) {
@@ -8,6 +8,7 @@ const nextPrice = () => {
   }
   return price
 }
+const options = { product: 'BTC-EUR', amount: 100, stoploss: 1 }
 let stoplossOrderPrice, stoplossOrderAmountInBase
 const exchange = {
   roundQuote: (x) => x,
@@ -40,7 +41,7 @@ const exchange = {
 }
 
 const logger = {
-  info: console.log,
+  info: () => {},//console.log,
   warn: console.log,
   sync: {
     info: console.log,
@@ -50,7 +51,12 @@ const logger = {
 const framework = {
   initBot: () => { return { options, logger, exchange} },
   runBot: (bot) => {
-    bot().then(() => console.log('test complete'))
+    let totalProfit = 0
+    let p = Promise.resolve()
+    for (let i=0; i < numRuns; i++) {
+      p = p.then(() => bot().then(profit => totalProfit += profit))
+    }
+    p.then(() => console.log('Average profit on 100 EUR per run: ', totalProfit/numRuns, ' EUR') )
   },
 }
 process.framework = framework

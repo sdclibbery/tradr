@@ -51,9 +51,8 @@ x GDAX waitForPriceChange should only report price *changes*, not just every fil
 x Report balance and portfolio values in EUR
 x stop bots: final logging; also dont move stop by tiny amounts
 x Basic test harness for stoploss tracker bot
-* Record profit from the bot under test
-* Run test 100x and check overall profit levels
-* Should be taking profit metrics from the bots and storing off for analysis
+x Record profit from the bot under test; run test 100x and check overall profit levels
+* Get empirical price change distribution (coinmetrics??)
 * New Bot:
 start: set limit sell above, and limit buy below, initial price
 every x minutes:
@@ -63,7 +62,9 @@ every x minutes:
  if current price is above last buy fill price, set sell limit above current price
 so, the buy price tracks where we've sold, and the sell price tracks where we've bought...
 Run this bot automatically from monitor?
+* Consider dodging fees for stop bots
 * Bots for making simple transactions with exit orders
+* Should be taking profit metrics from the live bots and storing off for analysis
 * bot that sets both limit buy and sell 1,2,3,5,10% above and below price
 * bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)
  Must alternate though; at least it mustnt sell everything during sustained price rise etc
