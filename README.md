@@ -50,10 +50,10 @@ x Use getProductTicker to get current latest price instead of waitForPriceChange
 x GDAX waitForPriceChange should only report price *changes*, not just every filled order
 x Report balance and portfolio values in EUR
 x stop bots: final logging; also dont move stop by tiny amounts
-
-! Consider writing tests for bots that assert the behaviour and that they don't screw up in scenarios
-! Even a kind of soak/property based testing with random or historic data to see how much profit they make?
-
+x Basic test harness for stoploss tracker bot
+* Record profit from the bot under test
+* Run test 100x and check overall profit levels
+* Should be taking profit metrics from the bots and storing off for analysis
 * New Bot:
 start: set limit sell above, and limit buy below, initial price
 every x minutes:
