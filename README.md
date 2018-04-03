@@ -53,8 +53,9 @@ x stop bots: final logging; also dont move stop by tiny amounts
 x Basic test harness for stoploss tracker bot
 x Record profit from the bot under test; run test 100x and check overall profit levels
 x Run test for bear stop bot and see if theres any difference
+x Balances should report total in BTC too
 * Get empirical price change distribution
- x Will have to record from 'live' : modify observer bot
+ x Will have to record from 'live'
  * Determine distribution
   ! Can approximate with two normal distributions; one narrow and tall and one wide and low
    ! separate the samples and calc two separate variances in google sheets
@@ -97,6 +98,8 @@ Run this bot automatically from monitor?
   * This would probably be uselful for bots on automatic triggers...
 
 ---
+
+Consider taking NVT into account in bots: https://coinmetrics.io/nvt/#assets=btc_zoom=1491091200000,1522627200000
 
   Simple buy/sell tracker (ie buy/sell limits above and below; reset them at the new price when one fills) is great when the price trend is flat because it makes money every time the price changes direction, but it is not sustainable when the price keeps moving in one direction, because it will keep buying or selling, and eventually run out of capital. So a bot like that could exit if it sees a steady up or down trend in moving averages.
 

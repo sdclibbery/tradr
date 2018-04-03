@@ -11,10 +11,14 @@ framework.runBot(async () => {
     .map(a => {
       return `${a.currency}: balance ${dp4(a.balance)} ${a.currency}; available: ${dp4(a.available)} ${a.currency}; value: ${dp4(a.valueInEur)} EUR`
     }).join('\n')
-  const totalValue = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
-
   logger.sync.info(`BOT: Account balances:\n${accountInfo}`)
-  logger.sync.info(`BOT: Total Value:\n${dp4(totalValue)} EUR`)
+
+  const totalValueInEur = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
+  logger.sync.info(`BOT: Total Value:\n${dp4(totalValueInEur)} EUR`)
+
+  const btcEurPrice = await exchange.latestPriceOf('BTC-EUR')
+  const totalValueInBtc = totalValueInEur / btcEurPrice
+  logger.sync.info(`BOT: Total Value:\n${dp4(totalValueInBtc)} BTC`)
 }, logger)
 
 const decorateWithValue = async (accounts) => {
