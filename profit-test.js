@@ -1,13 +1,35 @@
+const fs = require('fs')
+
 const numRuns = 1000
-let price
-const nextPrice = () => {
-  if (price == undefined) {
-    price = 5000
+
+let price, fd, buffer, index
+const resetSampleData = () => {
+  fd = fs.openSync('data/BTC-EUR-price-deltas', 'r')
+  buffer = Buffer.alloc(1024, ' ')
+  index = 0
+  price = 5000
+}
+const nextLine = () => {
+  let lineEndIndex = buffer.indexOf('\n', index)
+  let line = buffer.toString(undefined, index)
+  if (lineEndIndex == -1) {
+    if (fs.readSync(fd, buffer, 0, buffer.length, null) < buffer.length) {
+      throw 'run out of sample data!'
+    }
+    index = 0
+    lineEndIndex = buffer.indexOf('\n', index)
+    line += buffer.toString(undefined, index, lineEndIndex)
   } else {
-    price *= Math.pow((0.995 + 0.01*Math.random()), 0.05)
+    line = buffer.toString(undefined, index, lineEndIndex)
   }
+  index = lineEndIndex+1
+  return line.trim()
+}
+const nextPrice = () => {
+  price += Number.parseFloat(nextLine())
   return price
 }
+
 const options = { product: 'BTC-EUR', amount: 100, stoploss: 1, stopentry: 1 }
 let stopOrderPrice, stopOrderAmountInBase
 const exchange = {
@@ -56,8 +78,9 @@ const framework = {
   runBot: (bot) => {
     let totalProfit = 0
     let p = Promise.resolve()
+    resetSampleData()
     for (let i=0; i < numRuns; i++) {
-      p = p.then(() => bot().then(profit => totalProfit += profit))
+      p = p.then(resetSampleData).then(bot).then(profit => totalProfit += profit)
     }
     p.then(() => console.log('Average profit on 100 EUR per run: ', totalProfit/numRuns, ' EUR') )
   },
