@@ -14,13 +14,14 @@ const exchange = GdaxExchange.createExchange(options, logger)
 const bot = async () => {
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
+  const filename = options.product+'-price-deltas'
   let lastPrice
   while (true) {
-    const {price: newPrice} = await exchange.waitForPriceChange()
+    const {price: newPrice, time: time} = await exchange.waitForPriceChange()
     const delta = newPrice - lastPrice
     lastPrice = newPrice
     if (delta) {
-      require('fs').writeFileSync(options.product+'-price-deltas', exchange.roundQuote(delta)+'\n', {flag: 'a'})
+      require('fs').writeFileSync(filename, `${time},${exchange.roundQuote(newPrice)},${exchange.roundQuote(delta)}\n`, {flag: 'a'})
     }
   }
 }

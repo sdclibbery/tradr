@@ -163,7 +163,7 @@ exports.createExchange = (options, logger) => {
             websocket.removeListener('message', listener)
             logger.debug('waitForPriceChange', data)
             exchange._lastPrice = price
-            resolve({ price: price })
+            resolve({ price: price, time: data.time })
           }
         })
       })
