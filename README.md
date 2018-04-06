@@ -54,6 +54,11 @@ x Basic test harness for stoploss tracker bot
 x Record profit from the bot under test; run test 100x and check overall profit levels
 x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
+* Hack up a moving average bots
+ x Basic tracking of averages from candles
+ * Pretend buy/sell and track Profit
+ * Test suite...
+ * Really buy/sell...
 * Use empirical data
  * Need to start from random point in first half of data...
 * Get empirical price change distribution

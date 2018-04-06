@@ -203,6 +203,24 @@ exports.createExchange = (options, logger) => {
         .then(catchApiError)
         .catch(handleError)
     },
+
+    candles: async () => {
+      return authedClient.getProductHistoricRates(options.product)
+        .then(log(`GDAX: getProductHistoricRates`))
+        .then(catchApiError)
+        .then(candles => {
+          const names = candles.shift()
+          return candles.map(candle => {
+            const toDate = (epochSeconds) => {
+              const date = new Date()
+              date.setTime(epochSeconds*1000)
+              return date
+            }
+            return { time: toDate(candle[0]), low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
+          })
+        })
+        .catch(handleError)
+    },
   }
   return exchange
 }
