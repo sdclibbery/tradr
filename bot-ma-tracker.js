@@ -2,8 +2,8 @@ const framework = require('./framework');
 
 const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
-  { name: 'close', alias: 'c', type: Number, defaultValue: 10, description: 'number of minutes to average together for the close moving average (up to 300)' },
-  { name: 'far', alias: 'f', type: Number, defaultValue: 15, description: 'number of minutes to average together for the far moving average (up to 300)' },
+  { name: 'close', alias: 'c', type: Number, defaultValue: 20, description: 'number of minutes to average together for the close moving average (up to 300)' },
+  { name: 'far', alias: 'f', type: Number, defaultValue: 30, description: 'number of minutes to average together for the far moving average (up to 300)' },
 ])
 
 framework.runBot(async () => {
@@ -37,10 +37,10 @@ framework.runBot(async () => {
       tempQuoteBalanceForTesting -= fees
       if (direction == 'Up') {
         tempQuoteBalanceForTesting -= price
-        logger.warn(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
+        logger.warn(`Buy at ${exchange.formatQuote(price)}! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       } else {
         tempQuoteBalanceForTesting += price
-        logger.warn(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
+        logger.warn(`Sell at ${exchange.formatQuote(price)}! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       }
     }
 

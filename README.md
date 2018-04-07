@@ -58,7 +58,9 @@ x Balances should report total in BTC too
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
  x Pretend buy/sell and track Profit
- * Consider fees
+ x Consider fees
+ * Run a spread of bots from the same data and compare profits on them...
+  * Also try ema
  * Really buy/sell...
   * Test suite...
 * Use empirical data
