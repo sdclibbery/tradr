@@ -15,7 +15,7 @@ framework.runBot(async () => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   let lastDirection
-  let tempBalanceForTesting = 0
+  let tempQuoteBalanceForTesting = 0
   let count = 0
   while (true) {
     const candles = await exchange.candles()
@@ -30,13 +30,15 @@ framework.runBot(async () => {
 
     if (lastDirection && direction !== lastDirection) {
       const price = await exchange.latestPrice()
-      logger.info(`Direction change to ${direction}! at price ${price}; close ma: ${closeMa}  far ma: ${farMa}`)
+      logger.info(`Direction change to ${direction}! at price ${exchange.formatQuote(price)}; close ma: ${exchange.formatQuote(closeMa)}  far ma: ${exchange.formatQuote(farMa)}`)
+      const fees = price * 0.25/100
+      tempQuoteBalanceForTesting -= fees
       if (direction == 'Up') {
-        tempBalanceForTesting -= price
-        logger.info(`Buy! tempBalanceForTesting: ${tempBalanceForTesting}`)
+        tempQuoteBalanceForTesting -= price
+        logger.info(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       } else {
-        tempBalanceForTesting += price
-        logger.info(`Buy! tempBalanceForTesting: ${tempBalanceForTesting}`)
+        tempQuoteBalanceForTesting += price
+        logger.info(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       }
     }
 
