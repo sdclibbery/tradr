@@ -59,8 +59,17 @@ x Balances should report total in BTC too
  x Set average counts from options and reduce logging
  x Pretend buy/sell and track Profit
  x Consider fees
+ * Default to ema 12/26
+ * Use open/close not low/high
+ * Extract logic
  * Run a spread of bots from the same data and compare profits on them...
-  * Also try ema
+ * Consider hysteresis or loss aversion
+  ? Hysteresis on direction changes
+  ? Pair up buy/sell trades to preclude loss; don't make the second trade in the pair until it will make a profit
+  ? Avoid acting on sudden changes; maybe incorporate variance
+ * Consider smarter buy/sell process
+  ? Exit orders??
+  ? Stop orders to hit peaks/troughs better??
  * Really buy/sell...
   * Test suite...
 * Use empirical data

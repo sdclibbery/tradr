@@ -12,8 +12,8 @@ framework.runBot(async () => {
 
   logger.warn(`starting ${options.product} with close: ${options.close} mins, far: ${options.far} mins`)
 
-  const candlePrice = c => (c.low+c.high)/2
-  const movingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+candlePrice(c), 0) / count
+  const candlePrice = c => (c.open+c.close)/2
+  const simpleMovingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+candlePrice(c), 0) / count
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   let lastDirection
@@ -21,8 +21,8 @@ framework.runBot(async () => {
   let count = 0
   while (true) {
     const candles = await exchange.candles()
-    const closeMa = movingAverage(candles, options.close)
-    const farMa = movingAverage(candles, options.far)
+    const closeMa = simpleMovingAverage(candles, options.close)
+    const farMa = simpleMovingAverage(candles, options.far)
     const direction = closeMa>farMa ? 'Up' : 'Down'
 
     if (count % 5 == 0) {
