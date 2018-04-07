@@ -1,4 +1,5 @@
-const framework = require('./framework');
+const framework = require('./framework')
+const {ema} = require('./exponential-moving-average')
 
 const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
@@ -11,17 +12,17 @@ framework.runBot(async () => {
   const quoteCurrency = options.product.split('-')[1]
 
   logger.warn(`starting ${options.product} with close: ${options.close} mins, far: ${options.far} mins`)
-
-  const simpleMovingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+c.close, 0) / count
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   let lastDirection
   let tempQuoteBalanceForTesting = 0
   let count = 0
+  const nextCloseEma = ema(options.close)
+  const nextFarEma = ema(options.far)
   while (true) {
     const candles = await exchange.candles()
-    const closeMa = simpleMovingAverage(candles, options.close)
-    const farMa = simpleMovingAverage(candles, options.far)
+    const closeMa = nextCloseEma(candles)
+    const farMa = nextFarEma(candles)
     const direction = closeMa>farMa ? 'Up' : 'Down'
 
     if (count % 5 == 0) {
