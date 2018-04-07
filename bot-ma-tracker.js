@@ -10,6 +10,8 @@ framework.runBot(async () => {
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
 
+  logger.warn(`starting ${options.product} with close: ${options.close} mins, far: ${options.far} mins`)
+
   const candlePrice = c => (c.low+c.high)/2
   const movingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+candlePrice(c), 0) / count
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -24,21 +26,21 @@ framework.runBot(async () => {
     const direction = closeMa>farMa ? 'Up' : 'Down'
 
     if (count % 5 == 0) {
-      logger.debug(`close ma: ${closeMa}  far ma: ${farMa} direction ${direction}`)
+      logger.info(`close ma: ${closeMa}  far ma: ${farMa} direction ${direction}`)
     }
     count++
 
     if (lastDirection && direction !== lastDirection) {
       const price = await exchange.latestPrice()
-      logger.info(`Direction change to ${direction}! at price ${exchange.formatQuote(price)}; close ma: ${exchange.formatQuote(closeMa)}  far ma: ${exchange.formatQuote(farMa)}`)
+      logger.warn(`Direction change to ${direction}! at price ${exchange.formatQuote(price)}; close ma: ${exchange.formatQuote(closeMa)}  far ma: ${exchange.formatQuote(farMa)}`)
       const fees = price * 0.25/100
       tempQuoteBalanceForTesting -= fees
       if (direction == 'Up') {
         tempQuoteBalanceForTesting -= price
-        logger.info(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
+        logger.warn(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       } else {
         tempQuoteBalanceForTesting += price
-        logger.info(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
+        logger.warn(`Buy! tempQuoteBalanceForTesting: ${exchange.formatQuote(tempQuoteBalanceForTesting)} (fees: ${fees})`)
       }
     }
 
