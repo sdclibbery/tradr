@@ -9,21 +9,27 @@ const { options, logger, exchange } = framework.initBot([
 framework.runBot(async () => {
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
+
   const candlePrice = c => (c.low+c.high)/2
   const movingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+candlePrice(c), 0) / count
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   let lastDirection
   let tempBalanceForTesting = 0
+  let count = 0
   while (true) {
     const candles = await exchange.candles()
     const closeMa = movingAverage(candles, options.close)
     const farMa = movingAverage(candles, options.far)
     const direction = closeMa>farMa ? 'Up' : 'Down'
-    logger.debug(`close ma: ${closeMa}  far ma: ${farMa} direction ${direction}`)
+
+    if (count % 5 == 0) {
+      logger.debug(`close ma: ${closeMa}  far ma: ${farMa} direction ${direction}`)
+    }
+    count++
 
     if (lastDirection && direction !== lastDirection) {
-      const price = candlePrice(candles[0])
+      const price = await exchange.latestPrice()
       logger.info(`Direction change to ${direction}! at price ${price}; close ma: ${closeMa}  far ma: ${farMa}`)
       if (direction == 'Up') {
         tempBalanceForTesting -= price
