@@ -12,8 +12,7 @@ framework.runBot(async () => {
 
   logger.warn(`starting ${options.product} with close: ${options.close} mins, far: ${options.far} mins`)
 
-  const candlePrice = c => (c.open+c.close)/2
-  const simpleMovingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+candlePrice(c), 0) / count
+  const simpleMovingAverage = (candles, count) => candles.slice(0, count).reduce((acc, c) => acc+c.close, 0) / count
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   let lastDirection
