@@ -206,7 +206,7 @@ exports.createExchange = (options, logger) => {
 
     candles: async () => {
       return authedClient.getProductHistoricRates(options.product)
-        .then(log(`GDAX: getProductHistoricRates`))
+//        .then(log(`GDAX: getProductHistoricRates`))
         .then(catchApiError)
         .then(candles => {
           const names = candles.shift()

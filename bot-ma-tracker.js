@@ -2,6 +2,8 @@ const framework = require('./framework');
 
 const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
+  { name: 'close', alias: 'c', type: Number, defaultValue: 10, description: 'number of minutes to average together for the close moving average' },
+  { name: 'far', alias: 'f', type: Number, defaultValue: 15, description: 'number of minutes to average together for the far moving average' },
 ])
 
 framework.runBot(async () => {
@@ -14,13 +16,15 @@ framework.runBot(async () => {
   let lastDirection
   while (true) {
     const candles = await exchange.candles()
-    const closeMa = movingAverage(candles, 5)
-    const farMa = movingAverage(candles, 15)
+    const closeMa = movingAverage(candles, options.close)
+    const farMa = movingAverage(candles, options.far)
     const direction = closeMa>farMa ? 'Up' : 'Down'
-    logger.info(`${candles[0].time}: close: ${closeMa}  far: ${farMa}  ${direction}`)
+    logger.debug(`close ma: ${closeMa}  far ma: ${farMa} direction ${direction}`)
+
     if (lastDirection && direction !== lastDirection) {
-      logger.info(`Direction change to ${direction}! at price ${candlePrice(candles[0])}`)
+      logger.info(`Direction change to ${direction}! at price ${candlePrice(candles[0])}; close ma: ${closeMa}  far ma: ${farMa}`)
     }
+    
     lastDirection = direction
     await sleep(60*1000)
   }

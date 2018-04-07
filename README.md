@@ -56,6 +56,7 @@ x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
 * Hack up a moving average bots
  x Basic tracking of averages from candles
+ x Set average counts from options and reduce logging
  * Pretend buy/sell and track Profit
  * Test suite...
  * Really buy/sell...
