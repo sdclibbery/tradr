@@ -6,7 +6,8 @@ const { options, logger, exchange } = framework.initBot([
 ])
 
 const makeEmaChangeBot = (ema) => {
-  let balance = 0
+  let quoteBalance = 0
+  let baseBalance = 0
   let lastValue
   let lastDirection
   let transactionCount = 0
@@ -17,19 +18,21 @@ const makeEmaChangeBot = (ema) => {
       const direction = (delta < 0) ? 'Down' : 'Up'
       if (lastDirection && lastDirection != direction) {
         if (direction == 'Up') {
-          balance -= price
+          quoteBalance -= price
+          baseBalance += 1
           transactionCount++
-          console.log(`BUY! makeEmaChangeBot(${ema.count}) at ${price}; balance ${balance}`)
+//          logger.debug(`BUY! makeEmaChangeBot(${ema.count}) at ${price}; quoteBalance ${quoteBalance}`)
         } else {
-          balance += price
+          quoteBalance += price
+          baseBalance -= 1
           transactionCount++
-          console.log(`SELL! makeEmaChangeBot(${ema.count}) at ${price}; balance ${balance}`)
+//          logger.debug(`SELL! makeEmaChangeBot(${ema.count}) at ${price}; quoteBalance ${quoteBalance}`)
         }
       }
       lastDirection = direction
     }
     lastValue = value
-    const equivalentBalance = balance<1000 ? balance : balance-price
+    const equivalentBalance = quoteBalance + baseBalance * price
     return `emaChangeBot-${ema.count}  \tbalance: ${exchange.formatQuote(equivalentBalance)}\ttransactionCount ${transactionCount}`
   }
   return update
