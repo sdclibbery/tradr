@@ -59,10 +59,14 @@ x Balances should report total in BTC too
  x Set average counts from options and reduce logging
  x Pretend buy/sell and track Profit
  x Consider fees
- * Default to ema 12/26
- * Use open/close not low/high
- * Extract logic
- * Run a spread of bots from the same data and compare profits on them...
+ x Default to ema 12/26
+ x Use open/close not low/high
+ * Testing
+  x Fill in gaps in candles returned from GDAX
+  x Pull 2 consecutive lots of data from a random time in history and join together
+  * Calculate a variety of emas against the data and iterate through the second half of the data
+  * Run a spread of bots from the emas and compare profits on them...
+   * Also try trading on direction change of individual ema, not on crossing of two emas...
  * Consider hysteresis or loss aversion
   ? Hysteresis on direction changes
   ? Pair up buy/sell trades to preclude loss; don't make the second trade in the pair until it will make a profit
@@ -70,6 +74,8 @@ x Balances should report total in BTC too
  * Consider smarter buy/sell process
   ? Exit orders??
   ? Stop orders to hit peaks/troughs better??
+ * Consider fee avoidance
+  ? Simulate using limit order instead of market; does the removal of fees make up for having to catch a price reversal?
  * Really buy/sell...
   * Test suite...
 * Use empirical data

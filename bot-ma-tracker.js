@@ -20,7 +20,7 @@ framework.runBot(async () => {
   const nextCloseEma = ema(options.close)
   const nextFarEma = ema(options.far)
   while (true) {
-    const candles = await exchange.candles()
+    const candles = await exchange.candles({})
     const closeMa = nextCloseEma(candles)
     const farMa = nextFarEma(candles)
     const direction = closeMa>farMa ? 'Up' : 'Down'
