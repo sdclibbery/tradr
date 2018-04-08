@@ -64,9 +64,13 @@ x Balances should report total in BTC too
  * Testing
   x Fill in gaps in candles returned from GDAX
   x Pull 2 consecutive lots of data from a random time in history and join together
-  * Calculate a variety of emas against the data and iterate through the second half of the data
-  * Run a spread of bots from the emas and compare profits on them...
-   * Also try trading on direction change of individual ema, not on crossing of two emas...
+  x Calculate a variety of emas against the data and iterate through the second half of the data
+  x Run a spread of bots looking for ema direction changes
+  * Try adding hysteresis on direction change
+  * Ema crossing bots
+  * Allow for fees etc
+  * Allow setting test time as option to allow repeatable tests
+  * Allow setting granularity as option to see how longer term bots do
  * Consider hysteresis or loss aversion
   ? Hysteresis on direction changes
   ? Pair up buy/sell trades to preclude loss; don't make the second trade in the pair until it will make a profit
