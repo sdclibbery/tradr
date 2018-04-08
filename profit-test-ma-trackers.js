@@ -5,29 +5,34 @@ const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
 ])
 
-const makeEmaChangeBot = (ema) => {
+const makeEmaChangeBot = (ema, transactionFilter) => {
   let quoteBalance = 0
   let baseBalance = 0
   let lastValue
   let lastDirection
+  let lastSide
+  let lastTransactionPrice
   let transactionCount = 0
   const update = (price) => {
     const value = ema.value
     if (lastValue) {
       const delta = value - lastValue
       const direction = (delta < 0) ? 'Down' : 'Up'
-      if (lastDirection && lastDirection != direction) {
-        if (direction == 'Up') {
+      const side = (delta < 0) ? 'Sell' : 'Buy'
+      const changedDirection = lastDirection && lastDirection != direction
+      if (changedDirection && transactionFilter(side, lastSide, price, lastTransactionPrice)) {
+        if (side == 'Buy') {
           quoteBalance -= price
           baseBalance += 1
-          transactionCount++
-//          logger.debug(`BUY! makeEmaChangeBot(${ema.count}) at ${price}; quoteBalance ${quoteBalance}`)
-        } else {
+        }
+        if (side == 'Sell'){
           quoteBalance += price
           baseBalance -= 1
-          transactionCount++
-//          logger.debug(`SELL! makeEmaChangeBot(${ema.count}) at ${price}; quoteBalance ${quoteBalance}`)
         }
+//        logger.debug(`${side}! makeEmaChangeBot(${ema.count}) at ${price}; quoteBalance ${quoteBalance}`)
+        transactionCount++
+        lastTransactionPrice = price
+        lastSide = side
       }
       lastDirection = direction
     }
@@ -38,11 +43,23 @@ const makeEmaChangeBot = (ema) => {
   return update
 }
 
+const noLossFilter = (side, lastSide, price, lastTransactionPrice) => {
+  if (!lastTransactionPrice) { return true }
+  if (lastSide && lastSide == side) { return false }
+  if (side == 'Buy') {
+    return price < lastTransactionPrice
+  }
+  if (side == 'Sell') {
+    return price > lastTransactionPrice
+  }
+}
+
 framework.runBot(async () => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   const emas = [5,10,15,20,30,40,60,90,150].map(count => { return { count:count, update:ema(count) } })
-  const bots = emas.map(makeEmaChangeBot)
+  const bots = emas.map(ema => makeEmaChangeBot(ema, () => true))
+    .concat(emas.map(ema => makeEmaChangeBot(ema, noLossFilter)))
 
   const startTimeEpoch = Date.now() - 300*60*1000
   const startTime = new Date(startTimeEpoch)
