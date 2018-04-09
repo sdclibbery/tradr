@@ -5,7 +5,7 @@ const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
 ])
 
-const makeEmaChangeBot = (ema, transactionFilter) => {
+const makeEmaChangeBot = (ema, transactionFilter, name) => {
   let quoteBalance = 0
   let baseBalance = 0
   let lastValue
@@ -38,7 +38,7 @@ const makeEmaChangeBot = (ema, transactionFilter) => {
     }
     lastValue = value
     const equivalentBalance = quoteBalance + baseBalance * price
-    return `emaChangeBot-${ema.count}  \tbalance: ${exchange.formatQuote(equivalentBalance)}\ttransactionCount ${transactionCount}`
+    return `emaChangeBot-${ema.count}-${name}  \tbalance: ${exchange.formatQuote(equivalentBalance)}\ttransactionCount ${transactionCount}`
   }
   return update
 }
@@ -58,21 +58,24 @@ framework.runBot(async () => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   const emas = [5,10,15,20,30,40,60,90,150].map(count => { return { count:count, update:ema(count) } })
-  const bots = emas.map(ema => makeEmaChangeBot(ema, () => true))
-    .concat(emas.map(ema => makeEmaChangeBot(ema, noLossFilter)))
+  const bots = emas.map(ema => makeEmaChangeBot(ema, () => true, ''))
+    .concat(emas.map(ema => makeEmaChangeBot(ema, noLossFilter, 'no-loss')))
 
-  const startTimeEpoch = Date.now() - 300*60*1000
-  const startTime = new Date(startTimeEpoch)
-  const beforeStartTime = new Date(startTimeEpoch - 300*60*1000)
-  const endTime = new Date(startTimeEpoch + 300*60*1000)
-  logger.warn(`Starting tests with ${options.product}\nTest period: ${startTime} - ${endTime}`)
-
-  const oldCandles = await exchange.candles({startTime: beforeStartTime, count: 300, granularity: 60})
-  const newCandles = await exchange.candles({startTime: startTime, count: 300, granularity: 60})
-  const candles = newCandles.concat(oldCandles)
+  const end = Date.now()
+  const numPeriods = 7
+  const granularity = 60
+  const periodMs = 300*granularity*1000
+  logger.warn(`Starting tests with ${options.product}\nTest period: ${new Date(end - numPeriods*periodMs)} - ${new Date(end)}`)
+  let candles = []
+  for (let i = 1; i <= numPeriods; i++) {
+    const start = end - i*periodMs
+    await sleep(1000)
+    const previousCandles = await exchange.candles({startTime: new Date(start), count: 300, granularity: granularity})
+    candles = candles.concat(previousCandles)
+  }
 
   let statuses = []
-  for (let i = 299; i >= 0; i--) {
+  for (let i = (numPeriods-1)*300-1; i >= 0; i--) {
     const candlesNow = candles.slice(i, i+300)
     emas.map(ema => ema.value = ema.update(candlesNow))
     const priceNow = candlesNow[0].close

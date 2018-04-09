@@ -54,6 +54,8 @@ x Basic test harness for stoploss tracker bot
 x Record profit from the bot under test; run test 100x and check overall profit levels
 x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
+x Run a spread of bots looking for ema direction changes
+x Try not allowing a transaction at a loss from the last one
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
@@ -62,14 +64,12 @@ x Balances should report total in BTC too
  x Default to ema 12/26
  x Use open/close not low/high
  x Buy,sell now don't work through monitor
- * Have a cancel open stop orders bot
  * Testing
   x Fill in gaps in candles returned from GDAX
   x Pull 2 consecutive lots of data from a random time in history and join together
   x Calculate a variety of emas against the data and iterate through the second half of the data
-  x Run a spread of bots looking for ema direction changes
-  x Try not allowing a transaction at a loss from the last one
-  * Gather more data and take longer runs
+  x Gather more data and take longer runs
+  ! Looks like if we can avoid fees, the bots can make profit..!
   * Allow setting granularity as option to see how longer term bots do
   * Record peak profit achieved by bot and report in status
   * Allow setting test time as option to allow repeatable and varied tests
@@ -87,6 +87,11 @@ x Balances should report total in BTC too
   ? Simulate using limit order instead of market; does the removal of fees make up for having to catch a price reversal?
  * Really buy/sell...
   * Test suite...
+* Non bot trading
+ * Have buy/sell limit bots
+ * Bots for making simple transactions with exit orders
+ * Have a cancel open stop orders bot
+ * pi-monitor page to display balances, orders, price, candles and also to allow buy/sell
 * Use empirical data
  * Need to start from random point in first half of data...
 * Get empirical price change distribution
@@ -108,7 +113,6 @@ every x minutes:
 so, the buy price tracks where we've sold, and the sell price tracks where we've bought...
 Run this bot automatically from monitor?
 * Consider dodging fees for stop bots
-* Bots for making simple transactions with exit orders
 * Should be taking profit metrics from the live bots and storing off for analysis
 * bot that sets both limit buy and sell 1,2,3,5,10% above and below price
 * bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)
