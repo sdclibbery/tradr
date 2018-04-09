@@ -61,6 +61,8 @@ x Balances should report total in BTC too
  x Consider fees
  x Default to ema 12/26
  x Use open/close not low/high
+ x Buy,sell now don't work through monitor
+ * Have a cancel open stop orders bot
  * Testing
   x Fill in gaps in candles returned from GDAX
   x Pull 2 consecutive lots of data from a random time in history and join together
@@ -69,10 +71,11 @@ x Balances should report total in BTC too
   x Try not allowing a transaction at a loss from the last one
   * Gather more data and take longer runs
   * Allow setting granularity as option to see how longer term bots do
+  * Record peak profit achieved by bot and report in status
+  * Allow setting test time as option to allow repeatable and varied tests
   * Try adding hysteresis on direction change
   * Ema crossing bots
   * Allow for fees etc
-  * Allow setting test time as option to allow repeatable tests
  * Consider hysteresis or loss aversion
   ? Hysteresis on direction changes
   ? Pair up buy/sell trades to preclude loss; don't make the second trade in the pair until it will make a profit
