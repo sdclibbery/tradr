@@ -56,6 +56,11 @@ x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
 x Run a spread of bots looking for ema direction changes
 x Try not allowing a transaction at a loss from the last one
+* Non bot trading
+ * Have buy/sell limit bots
+ * Bots for making simple transactions with exit orders
+ * Have a cancel open stop orders bot
+ * pi-monitor page to display balances, orders, price, candles and also to allow buy/sell
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
@@ -87,11 +92,6 @@ x Try not allowing a transaction at a loss from the last one
   ? Simulate using limit order instead of market; does the removal of fees make up for having to catch a price reversal?
  * Really buy/sell...
   * Test suite...
-* Non bot trading
- * Have buy/sell limit bots
- * Bots for making simple transactions with exit orders
- * Have a cancel open stop orders bot
- * pi-monitor page to display balances, orders, price, candles and also to allow buy/sell
 * Use empirical data
  * Need to start from random point in first half of data...
 * Get empirical price change distribution

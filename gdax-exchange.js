@@ -60,14 +60,14 @@ exports.createExchange = (options, logger) => {
         .catch(handleError)
     },
 
-    order: async (side, amountOfBaseCurrency, price) => {
+    order: async (side, amountOfBaseCurrency, price, product) => {
       logger.debug(`GDAX: ${side}ing ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
         side: side,
         price: price,
         size: dp(amountOfBaseCurrency, baseDp),
-        product_id: options.product,
+        product_id: product || options.product,
       })
       .then(log(`GDAX: order: placeOrder(${side}, ${amountOfBaseCurrency}, ${price})`))
       .then(catchApiError)
