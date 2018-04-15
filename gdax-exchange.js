@@ -71,9 +71,6 @@ exports.createExchange = (options, logger) => {
       })
       .then(log(`GDAX: order: placeOrder(${side}, ${amountOfBaseCurrency}, ${price})`))
       .then(catchApiError)
-      .then(({id}) => {
-        return exchange.waitForOrderFill(id)
-      })
       .catch(handleError)
     },
 
