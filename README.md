@@ -56,11 +56,11 @@ x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
 x Run a spread of bots looking for ema direction changes
 x Try not allowing a transaction at a loss from the last one
-* Non bot trading
- * Have buy/sell limit bots
- * Bots for making simple transactions with exit orders
- * Have a cancel open stop orders bot
- * pi-monitor page to display balances, orders, price, candles and also to allow buy/sell
+* Order tracking
+ * Have a sqlite database
+ * Write info on every order to it
+  * exchange, id, time, side, price, amount, who made it and why, price at time of making it
+ * Can read back info on filled orders, augmenting with GDAX status
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
