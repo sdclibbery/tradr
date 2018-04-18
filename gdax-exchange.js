@@ -1,4 +1,5 @@
 const Gdax = require('gdax');
+const tracker = require('./order-tracker');
 const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options, logger) => {
@@ -26,6 +27,27 @@ exports.createExchange = (options, logger) => {
     }
     return data
   }
+  const trackOrder = (creator, reason) => { return async (data) => {
+  try {
+      await tracker.trackOrder({
+        $id: data.id,
+        $exchange: 'GDAX',
+        $product: data.product_id,
+        $status: 'open',
+        $created: data.created_at,
+        $side: data.side,
+        $orderPrice: data.price,
+        $priceAtCreation: await exchange.latestPrice(),
+        $amount: data.size,
+        $creator: creator || 'unknown',
+        $reason: reason || 'unknown',
+      })
+      return data
+    } catch (e) {
+      console.log('trackOrder error: ', e)
+      throw e
+    }
+  } }
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
   const quoteDp = 2
@@ -60,7 +82,7 @@ exports.createExchange = (options, logger) => {
         .catch(handleError)
     },
 
-    order: async (side, amountOfBaseCurrency, price, product) => {
+    order: async (side, amountOfBaseCurrency, price, product, creator, reason) => {
       logger.debug(`GDAX: ${side}ing ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
@@ -71,6 +93,7 @@ exports.createExchange = (options, logger) => {
       })
       .then(log(`GDAX: order: placeOrder(${side}, ${amountOfBaseCurrency}, ${price})`))
       .then(catchApiError)
+      .then(trackOrder(creator, reason))
       .catch(handleError)
     },
 
@@ -82,7 +105,7 @@ exports.createExchange = (options, logger) => {
       return exchange.order('sell', amountOfBaseCurrency, price)
     },
 
-    orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency) => {
+    orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency, creator, reason) => {
       const baseInfo = amountOfBaseCurrency ? `${formatBase(amountOfBaseCurrency)}` : ''
       const quoteInfo = amountOfQuoteCurrency ? `${formatQuote(amountOfQuoteCurrency)}` : ''
       logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
@@ -95,6 +118,7 @@ exports.createExchange = (options, logger) => {
       })
       .then(log(`GDAX: orderNow: placeOrder(${side}, ${amountOfBaseCurrency}, ${amountOfQuoteCurrency})`))
       .then(catchApiError)
+      .then(trackOrder(creator, reason))
       .then(({price, size, id}) => { return {id:id, price:price, size:size}})
       .catch(handleError)
     },
