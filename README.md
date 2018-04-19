@@ -60,11 +60,13 @@ x Try not allowing a transaction at a loss from the last one
  x Have a sqlite database
  x Write info on every order to it
   x exchange, id, time, side, price, amount, who made it and why, price at time of making it
+ ! Getting WRONG priceAtCreation
  * Back up sqlite db regularly to google drive
  * Set creator and reason properly
  * Update status on cancelling orders
  * Update status on retrieving orders from gdax
  * Can read back info on filled orders, augmenting with profit info
+* Get rounding values from the product info, don't hardcode
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
@@ -121,7 +123,6 @@ Run this bot automatically from monitor?
 * bot that sets both limit buy and sell 1,2,3,5,10% above and below price
 * bot that watches for price change followed by steady and then buys if (fall-then-steady) or sell if (rise-then-steady)
  Must alternate though; at least it mustnt sell everything during sustained price rise etc
-* Get rounding values from the product info, don't hardcode
 * PumpnDump hanger-on bot
  Bot that watches for sudden jumps in price, then sells, then waits for sudden price fall, then buy back in
  Basically, take advantage of pump n dumps as they happen
