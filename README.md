@@ -60,7 +60,7 @@ x Try not allowing a transaction at a loss from the last one
  x Have a sqlite database
  x Write info on every order to it
   x exchange, id, time, side, price, amount, who made it and why, price at time of making it
- ! Getting WRONG priceAtCreation
+ x Getting WRONG priceAtCreation
  * Back up sqlite db regularly to google drive
  * Set creator and reason properly
  * Update status on cancelling orders

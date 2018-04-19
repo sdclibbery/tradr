@@ -50,6 +50,8 @@ exports.createExchange = (options, logger) => {
   } }
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
+  const quoteStep = 0.01
+  const baseStep = 0.0001
   const quoteDp = 2
   const baseDp = 4
   const formatBase = (x) => `${dp(x, baseDp)} ${baseCurrency}`
@@ -57,6 +59,8 @@ exports.createExchange = (options, logger) => {
 
   const exchange = {
 
+    quoteStep: quoteStep,
+    baseStep: baseStep,
     formatBase: formatBase,
     formatQuote: formatQuote,
     roundBase: x => Number.parseFloat(dp(x, baseDp)),
@@ -97,12 +101,12 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
-    buy: async (amountOfBaseCurrency, price) => {
-      return exchange.order('buy', amountOfBaseCurrency, price)
+    buy: async (amountOfBaseCurrency, price, creator, reason) => {
+      return exchange.order('buy', amountOfBaseCurrency, price, options.product, creator, reason)
     },
 
-    sell: async (amountOfBaseCurrency, price) => {
-      return exchange.order('sell', amountOfBaseCurrency, price)
+    sell: async (amountOfBaseCurrency, price, creator, reason) => {
+      return exchange.order('sell', amountOfBaseCurrency, price, options.product, creator, reason)
     },
 
     orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency, creator, reason) => {
