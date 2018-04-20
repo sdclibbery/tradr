@@ -50,15 +50,23 @@ exports.createExchange = (options, logger) => {
   } }
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-  const quoteStep = 0.01
-  const baseStep = 0.0001
-  const quoteDp = 2
-  const baseDp = 4
+  let quoteStep = 0.01
+  let baseStep = 0.0001
+  let quoteDp = 2
+  let baseDp = 4
   const formatBase = (x) => `${dp(x, baseDp)} ${baseCurrency}`
   const formatQuote = (x) => `${dp(x, quoteDp)} ${quoteCurrency}`
 
-  const exchange = {
+  authedClient.getProducts()
+    .then(products => {
+      const product = products.filter(p => p.id == options.product)[0]
+      exchange.quoteStep = quoteStep = product.quote_increment
+      exchange.baseStep = baseStep = product.base_min_size
+      quoteDp = Math.floor(-Math.log10(quoteStep))
+      baseDp = Math.floor(-Math.log10(baseStep))
+    }).catch(console.log);
 
+  const exchange = {
     quoteStep: quoteStep,
     baseStep: baseStep,
     formatBase: formatBase,

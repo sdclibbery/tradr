@@ -56,6 +56,7 @@ x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
 x Run a spread of bots looking for ema direction changes
 x Try not allowing a transaction at a loss from the last one
+* Get rounding values from the product info, don't hardcode
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
@@ -66,7 +67,7 @@ x Try not allowing a transaction at a loss from the last one
  * Update status on cancelling orders
  * Update status on retrieving orders from gdax
  * Can read back info on filled orders, augmenting with profit info
-* Get rounding values from the product info, don't hardcode
+* Save account info to DB whenever its accessed
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
