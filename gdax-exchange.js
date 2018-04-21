@@ -99,11 +99,11 @@ exports.createExchange = (options, logger) => {
       return authedClient.placeOrder({
         type: 'limit',
         side: side,
-        price: price,
+        price: dp(price, quoteDp),
         size: dp(amountOfBaseCurrency, baseDp),
         product_id: product || options.product,
       })
-      .then(log(`GDAX: order: placeOrder(${side}, ${amountOfBaseCurrency}, ${price})`))
+      .then(log(`GDAX: order: ${side}, ${amountOfBaseCurrency}, ${price}`))
       .then(catchApiError)
       .then(trackOrder(creator, reason))
       .catch(handleError)
@@ -222,9 +222,10 @@ exports.createExchange = (options, logger) => {
       return authedClient.getOrder(id)
         .then(log('GDAX: orderStatus'))
         .then(catchApiError)
-        .then(({done_reason, executed_value}) => ({
+        .then(({done_reason, executed_value, price}) => ({
           filled: (done_reason === 'filled'),
           filledAmountInQuoteCurrency: executed_value,
+          price: price,
         }))
         .catch(handleError)
     },

@@ -56,7 +56,9 @@ x Run test for bear stop bot and see if theres any difference
 x Balances should report total in BTC too
 x Run a spread of bots looking for ema direction changes
 x Try not allowing a transaction at a loss from the last one
-* Get rounding values from the product info, don't hardcode
+x Get rounding values from the product info, don't hardcode
+* Buy then Sell bot
+* Sell then Buy bot
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
