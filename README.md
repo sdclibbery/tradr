@@ -8,9 +8,9 @@ exports.passphrase = 'xxxxxxxxxxx';
 
 # ToDo
 
-* Move bots into own folder
+x Move bots into own folder
 * Move all trading related pages over from pi-monitor
-* Find bots in new folder
+* Find bots in new folder: done? test...
 * Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
 
 * Order tracking
