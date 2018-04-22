@@ -56,15 +56,16 @@ exports.createExchange = (options, logger) => {
   let baseDp = 4
   const formatBase = (x) => `${dp(x, baseDp)} ${baseCurrency}`
   const formatQuote = (x) => `${dp(x, quoteDp)} ${quoteCurrency}`
-
-  authedClient.getProducts()
-    .then(products => {
-      const product = products.filter(p => p.id == options.product)[0]
-      exchange.quoteStep = quoteStep = product.quote_increment
-      exchange.baseStep = baseStep = product.base_min_size
-      quoteDp = Math.floor(-Math.log10(quoteStep))
-      baseDp = Math.floor(-Math.log10(baseStep))
-    }).catch(console.log);
+  if (options.product) {
+    authedClient.getProducts()
+      .then(products => {
+        const product = products.filter(p => p.id == options.product)[0]
+        exchange.quoteStep = quoteStep = product.quote_increment
+        exchange.baseStep = baseStep = product.base_min_size
+        quoteDp = Math.floor(-Math.log10(quoteStep))
+        baseDp = Math.floor(-Math.log10(baseStep))
+      }).catch(console.log);
+    }
 
   const exchange = {
     quoteStep: quoteStep,
