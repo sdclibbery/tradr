@@ -8,57 +8,11 @@ exports.passphrase = 'xxxxxxxxxxx';
 
 # ToDo
 
-x Write algorithm
-x waitForPriceChange
-x stopLoss
-x cancelOrder
-x buy in
- x Use a (feeless) limit order not a market order
- x wait for order to fill before returning
- x waitForOrderFill
-! Maybe it SHOULDNT buy-in itself? It'll either pay fees, or have to wait for a move in the 'wrong' direction...
-   Maybe it should just take assignment of some preexisting coins and move a stoploss around them..?
- x Add an arg to choose whether to buy in
-x Move rounding to the exchange and do it for every appropriate value
-x Have an event emitter leak
- x Ask for order status, dont wait for it to fill
-x Move logging to the exchange
-x Seeing a lot of 'invalid signature' errors when price rises and the stoploss changes
-x Failed to detect the stoploss filling
-x Price keeps falling PAST the stoploss without triggering it! Is that because its a limit stoploss?
- x Fix by changing stoploss to a market order, even though that'll incur a fee
-x Profit should be calculated using ACTUAL stoploss amount including fees
-x Remove buyin option from this bot
-x Log all API call data to a log file, with timings
-x Pull a proper clean return value interface out into gdax exchange, dont just pass returned data structure back to the bot...
-x Add a readme: API key / credentials, todo
-x Simple observer bot that watches and reports prices
-x Log output to file
-x Give each bot its own 'main' file complete with cmd line args?
-x Extract bot boilerplate
-x Automatic command line help
-x create help text
-x Bot for reporting account balances
-x Need to tidy up log-then-exit pattern by adding that functionality to the Logger
-x All log lines NOT logged by logger still need to start with 'warn' 'error' etc
- x Swap these to sync logger..?
-x Catch promise rejections on all the actual bot functions - move more boilerplate into framework...
-x Bot for reporting open orders
-x Bots for making simple, single transactions
-x Pull out common functions: dp2 etc parsing product into base/quote etc ! These should live in exchange: shouldnt be dp2, should be formatBase, formatQuote etc
-x Use getProductTicker to get current latest price instead of waitForPriceChange - use for stoploss trackers
-x GDAX waitForPriceChange should only report price *changes*, not just every filled order
-x Report balance and portfolio values in EUR
-x stop bots: final logging; also dont move stop by tiny amounts
-x Basic test harness for stoploss tracker bot
-x Record profit from the bot under test; run test 100x and check overall profit levels
-x Run test for bear stop bot and see if theres any difference
-x Balances should report total in BTC too
-x Run a spread of bots looking for ema direction changes
-x Try not allowing a transaction at a loss from the last one
-x Get rounding values from the product info, don't hardcode
-* Buy then Sell bot
-* Sell then Buy bot
+* Move bots into own folder
+* Move all trading related pages over from pi-monitor
+* Find bots in new folder
+* Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
+
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
