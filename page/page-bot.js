@@ -14,7 +14,7 @@ exports.render = async (req, res, next) => {
 
 const botList = async () => {
   return (await Promise.all(
-    fs.readdirSync('../bot')
+    fs.readdirSync('./bot')
     .filter(f => f.startsWith('bot-') && f.endsWith('.js'))
     .map(async (bot) => {
       return `
@@ -38,9 +38,9 @@ const getPidsFor = async (bot) => {
 
 exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
-  args.unshift(req.params.bot)
+  args.unshift('./bot/'+req.params.bot)
   const subprocess = spawn(process.argv[0], args, {
-    cwd: '../bot',
+    cwd: './bot',
     detached: true,
     stdio: 'ignore',
   })

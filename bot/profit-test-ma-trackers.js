@@ -1,5 +1,5 @@
 const framework = require('./framework')
-const {ema} = require('./exponential-moving-average')
+const {ema} = require('../exponential-moving-average')
 
 const { options, logger, exchange } = framework.initBot([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },

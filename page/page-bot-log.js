@@ -3,7 +3,13 @@ const fs = require('fs')
 const util = require('util')
 
 exports.render = async (req, res, next) => {
-  const log = (await util.promisify(fs.readFile)(`../bot/${req.params.logFile}`)).toString()
+  try {
+    const log = (await util.promisify(fs.readFile)(`./bot/${req.params.logFile}`)).toString()
+  } catch (e) {
+    console.error(e)
+    res.status(500).send(`failed reading log file ${req.params.logFile}`)
+    return
+  }
   res.send(frame(`
     <style>
       pre { background-color:#fcfcfc }

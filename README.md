@@ -9,10 +9,12 @@ exports.passphrase = 'xxxxxxxxxxx';
 # ToDo
 
 x Move bots into own folder
-* Move all trading related pages over from pi-monitor
-* Find bots in new folder: done? test...
+x Move all trading related pages over from pi-monitor
+* Find bots in new folder
+ * Not running properly
+ * Check log pages
+ * Check launch of buy-then-sell bots from product trade page...
 * Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
-
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
@@ -24,6 +26,40 @@ x Move bots into own folder
  * Update status on retrieving orders from gdax
  * Can read back info on filled orders, augmenting with profit info
 * Save account info to DB whenever its accessed
+* Trading pages
+ x Route for page with product
+ x List account info into iframe
+ x List orders into an iframe
+ x Better default values on ETH page
+ x Trading options
+  x Buy sell above/below for when price is fluctuating
+  x Buy then sell button for price rise. Runs a Bot. Tries to buy at up to the specified sell price, then places sell order.
+     Has good tracking reason etc. Launch from button on trade product page
+ * Candle granularities
+  x Zoom in and allow swiping left/right if possible
+  * Fetch and process candles client-side
+  * Buttons to switch granularities
+ * Tradr: order tracking in sqlite
+ * order page will need pagination/sorting/filtering
+ * Show price and candles on a log plot
+  x Basic drawing
+  x Make sure its not waiting for the iframes before rendering!
+  * refactor and clean
+  * plot proper x axis using time (dont assume it from the index) - also think we're losing the most recent candle at the moment!!
+  * log plot
+  * plot scale lines etc
+ * Price and candles auto update
+ * EMAs
+ * Show live depth chart
+* Mechanism for rationalising old orders
+ * Eg find old orders that can cancel with each other given their 'createdAt' prices?
+ * Show TA indicators: RSI, NVT
+ * Can clear logs
+ * Bot log pages live update
+ * Can set arguments when starting a bot
+  ! Fix forms...
+ * Page that lists running bots with status and progress
+ * Handle missing log files more gracefully
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging

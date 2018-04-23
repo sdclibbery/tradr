@@ -2,8 +2,8 @@ if (process.framework) {
   Object.keys(process.framework).map(k => exports[k] = process.framework[k])
   return
 }
-const GdaxExchange = require('./gdax-exchange');
-const LoggerFactory = require('./logger')
+const GdaxExchange = require('../gdax-exchange');
+const LoggerFactory = require('../logger')
 const commandLineArgs = require('command-line-args')
 
 exports.initBot = (optionDefinitions) => {
