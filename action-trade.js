@@ -6,7 +6,7 @@ exports.cancel = async (req, res, next) => {
   const exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
   try {
     await exchange.cancelOrder(req.params.id)
-    res.redirect(req.query.next || `/trade`)
+    res.redirect(req.query.next || `/status`)
   } catch (e) {
     res.status(500).send(`GDAX error: ${e}`)
   }
@@ -16,7 +16,7 @@ exports.limitOrder = async (req, res, next) => {
   const exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
   try {
     await exchange.order(req.params.side, req.body.amountOfBase, req.body.price, req.body.product, 'user', req.query.reason)
-    res.redirect(req.query.next || `/trade`)
+    res.redirect(req.query.next || `/status`)
   } catch (e) {
     res.status(500).send(`GDAX error: ${e}`)
   }
@@ -28,7 +28,7 @@ exports.buySellLimitOrder = async (req, res, next) => {
   try {
     await exchange.buy(req.body.amountOfBase, req.body.buyPrice, 'user', reason)
     await exchange.sell(req.body.amountOfBase, req.body.sellPrice, 'user', reason)
-    res.redirect(req.query.next || `/trade`)
+    res.redirect(req.query.next || `/status`)
   } catch (e) {
     res.status(500).send(`GDAX error: ${e}`)
   }
@@ -42,12 +42,12 @@ exports.buyThenSell = async (req, res, next) => {
     '-t', req.body.targetPrice,
   ]
   const subprocess = spawn(process.argv[0], args, {
-    cwd: '../tradr',
+    cwd: './bot',
     detached: true,
     stdio: 'ignore',
   })
   subprocess.unref()
-  res.redirect(req.query.next || `/trade`)
+  res.redirect(req.query.next || `/bot`)
 }
 
 exports.sellThenBuy = async (req, res, next) => {
@@ -58,12 +58,12 @@ exports.sellThenBuy = async (req, res, next) => {
     '-t', req.body.targetPrice,
   ]
   const subprocess = spawn(process.argv[0], args, {
-    cwd: '../tradr',
+    cwd: './bot',
     detached: true,
     stdio: 'ignore',
   })
   subprocess.unref()
-  res.redirect(req.query.next || `/trade`)
+  res.redirect(req.query.next || `/bot`)
 }
 
 const launchBot = () => {

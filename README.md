@@ -11,8 +11,8 @@ exports.passphrase = 'xxxxxxxxxxx';
 x Move bots into own folder
 x Move all trading related pages over from pi-monitor
 * Find bots in new folder
- * Not running properly: why? Work ok when run individually; dont seem to be launching though
- * Check log pages
+ x Not running properly: why? Work ok when run individually; dont seem to be launching though
+ x Check log pages
  * Check launch of buy-then-sell bots from product trade page...
 * Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
 * Order tracking
