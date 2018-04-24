@@ -10,11 +10,10 @@ exports.passphrase = 'xxxxxxxxxxx';
 
 x Move bots into own folder
 x Move all trading related pages over from pi-monitor
-* Find bots in new folder
+x Find bots in new folder
  x Not running properly: why? Work ok when run individually; dont seem to be launching though
  x Check log pages
- * Check launch of buy-then-sell bots from product trade page...
-* Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
+ x Check launch of buy-then-sell bots from product trade page...
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
@@ -26,6 +25,7 @@ x Move all trading related pages over from pi-monitor
  * Update status on retrieving orders from gdax
  * Can read back info on filled orders, augmenting with profit info
 * Save account info to DB whenever its accessed
+* Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
 * Trading pages
  x Route for page with product
  x List account info into iframe
@@ -39,6 +39,8 @@ x Move all trading related pages over from pi-monitor
   x Zoom in and allow swiping left/right if possible
   * Fetch and process candles client-side
   * Buttons to switch granularities
+ * Live price update
+ * Indicator to show whether there's more base or quote currency, both balance and available
  * Tradr: order tracking in sqlite
  * order page will need pagination/sorting/filtering
  * Show price and candles on a log plot

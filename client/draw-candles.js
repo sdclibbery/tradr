@@ -3,10 +3,10 @@ drawCandles = (canvas, candles) => {
   ctx.fillStyle = '#f0f0f0'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  const minPrice = candles.reduce((m, c) => Math.min(m, c.low), Infinity)
+  const minPrice = candles.reduce((m, c) => Math.min(m, c.low==0 ? m : c.low), Infinity)
   const maxPrice = candles.reduce((m, c) => Math.max(m, c.high), -Infinity)
   const barW = canvas.width/300
-  const toX = (i) => canvas.width-i*barW
+  const toX = (i) => canvas.width-i*barW-2
   const toY = (p) => canvas.height - (p-minPrice)*canvas.height/(maxPrice-minPrice)
 
   candles.map((c, i) => {
@@ -22,9 +22,28 @@ drawCandles = (canvas, candles) => {
   })
 
   ctx.fillStyle = 'black'
-  ctx.font = '20px sans'
-  ctx.fillText(minPrice, 0, toY(minPrice))
-  ctx.fillText(maxPrice, 0, toY(maxPrice)+20)
-  ctx.fillText(candles[0].time, canvas.width-180, canvas.height)
-  ctx.fillText(candles[candles.length-1].time, 60, canvas.height)
+  ctx.font = '20px helvetica,arial bold'
+  ctx.textAlign = 'right'
+  ctx.fillText(candles[0].time, canvas.width, canvas.height)
+  ctx.textAlign = 'left'
+  ctx.fillText(candles[candles.length-1].time, 0, canvas.height)
+
+  ctx.textAlign = 'right'
+  ctx.textBaseline = 'middle'
+  ctx.strokeStyle = '#00000040'
+  ctx.lineWidth = 0.5
+  const range = maxPrice-minPrice
+  const logRange = Math.floor(Math.log10(range))
+  const interval = Math.pow(10, logRange)
+  const first = minPrice + interval - minPrice%interval
+  ctx.beginPath()
+  for (let p = first; p < maxPrice; p += interval/2) {
+    ctx.moveTo(0, toY(p))
+    ctx.lineTo(canvas.width, toY(p))
+    ctx.textAlign = 'left'
+    ctx.fillText(p, 0, toY(p))
+    ctx.textAlign = 'right'
+    ctx.fillText(p, canvas.width, toY(p))
+  }
+  ctx.stroke()
 }
