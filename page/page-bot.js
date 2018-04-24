@@ -38,7 +38,7 @@ const getPidsFor = async (bot) => {
 
 exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
-  args.unshift('./bot/'+req.params.bot)
+  args.unshift(req.params.bot)
   const subprocess = spawn(process.argv[0], args, {
     cwd: './bot',
     detached: true,
