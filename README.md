@@ -40,6 +40,7 @@ x Find bots in new folder
   * Fetch and process candles client-side
   * Buttons to switch granularities
  * Live price update
+  * Fetch price client side
  * Indicator to show whether there's more base or quote currency, both balance and available
  * Tradr: order tracking in sqlite
  * order page will need pagination/sorting/filtering
