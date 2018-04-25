@@ -19,11 +19,10 @@ x Find bots in new folder
  x Write info on every order to it
   x exchange, id, time, side, price, amount, who made it and why, price at time of making it
  x Getting WRONG priceAtCreation
+ x Can read back info on filled orders, augmenting with profit info
+ x Update status on cancelling orders
  * Back up sqlite db regularly to google drive
- * Set creator and reason properly
- * Update status on cancelling orders
  * Update status on retrieving orders from gdax
- * Can read back info on filled orders, augmenting with profit info
 * Save account info to DB whenever its accessed
 * Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
 * Trading pages

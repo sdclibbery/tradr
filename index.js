@@ -43,5 +43,5 @@ app.post('/bot/stop/:bot', require('./page/page-bot').stop)
 app.get('/bot/log/:logFile', require('./page/page-bot-log').render)
 
 const expressServer = app.listen(port, () => {
-  console.log('${new Date()} tradr listening on port '+port)
+  console.log(`${new Date()} tradr listening on port ${port}`)
 })

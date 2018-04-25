@@ -7,6 +7,11 @@ exports.render = async (req, res, next) => {
     <table>
     ${formatOrders(orders)}
     </table>
+    <style>
+      .side-buy { color:#008000 }
+      .side-sell { color:#a00000 }
+      .status-cancelled { color:#a0a0a0 }
+    </style>
   `))
 }
 
@@ -18,7 +23,7 @@ const formatOrders = (orders) => {
       const profit = (o.side == 'buy' ? 1 : 1) * (o.orderPrice/o.priceAtCreation - 1) * 100
       const baseCurrency = o.product.split('-')[0]
       const quoteCurrency = o.product.split('-')[1]
-      return `<tr>
+      return `<tr class="status-${o.status} side-${o.side}">
       <td>${o.exchange} ${o.product}</td>
       <td>${o.status} <b>${o.side}</b></td>
       <td><b>${dp4(o.amount)} ${baseCurrency}</b></td>

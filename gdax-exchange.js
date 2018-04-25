@@ -236,6 +236,7 @@ exports.createExchange = (options, logger) => {
       return authedClient.cancelOrder(id)
         .then(log(`GDAX: cancelOrder(${id})`))
         .then(catchApiError)
+        .then(async () => await tracker.trackOrderCancellation(id))
         .then(() => {cancelled:true})
         .catch(handleError)
     },
