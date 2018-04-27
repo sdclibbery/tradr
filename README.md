@@ -14,17 +14,6 @@ x Find bots in new folder
  x Not running properly: why? Work ok when run individually; dont seem to be launching though
  x Check log pages
  x Check launch of buy-then-sell bots from product trade page...
-* Order tracking
- x Have a sqlite database
- x Write info on every order to it
-  x exchange, id, time, side, price, amount, who made it and why, price at time of making it
- x Getting WRONG priceAtCreation
- x Can read back info on filled orders, augmenting with profit info
- x Update status on cancelling orders
- * Back up sqlite db regularly to google drive
- * Update status on retrieving orders from gdax
-* Save account info to DB whenever its accessed
-* Sort out graceful closedown: use server.close to not accept new connections, then wait for existing to complete
 * Trading pages
  x Route for page with product
  x List account info into iframe
@@ -53,6 +42,19 @@ x Find bots in new folder
  * Price and candles auto update
  * EMAs
  * Show live depth chart
+* Order tracking
+ x Have a sqlite database
+ x Write info on every order to it
+  x exchange, id, time, side, price, amount, who made it and why, price at time of making it
+ x Getting WRONG priceAtCreation
+ x Can read back info on filled orders, augmenting with profit info
+ x Update status on cancelling orders
+ * Update status on retrieving orders from gdax
+* Save account info to DB whenever its accessed
+* Back up sqlite db regularly to google drive
+  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
+  https://www.npmjs.com/package/s3-node-client
+  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
 * Mechanism for rationalising old orders
  * Eg find old orders that can cancel with each other given their 'createdAt' prices?
  * Show TA indicators: RSI, NVT

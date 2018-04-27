@@ -14,7 +14,7 @@ exports.render = async (req, res, next) => {
 
     <h3>Price/Candles</h3>
     <div style="overflow-x:auto; direction:rtl; width:100%; padding:0;">
-      <canvas id="candles" width="1800" height="500" style="width:1400px; height:500px; margin:0;"></canvas>
+      <canvas id="candles" width="1800" height="500" style="width:900px; height:250px; margin:0;"></canvas>
     </div>
     <p><span id="price">${price}</span> ${quoteCurrency}</p>
 

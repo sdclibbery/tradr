@@ -22,7 +22,7 @@ drawCandles = (canvas, candles) => {
   })
 
   ctx.fillStyle = 'black'
-  ctx.font = '20px helvetica,arial bold'
+  ctx.font = '32px helvetica,arial bold'
   ctx.textAlign = 'right'
   ctx.fillText(candles[0].time, canvas.width, canvas.height)
   ctx.textAlign = 'left'
@@ -35,9 +35,9 @@ drawCandles = (canvas, candles) => {
   const range = maxPrice-minPrice
   const logRange = Math.floor(Math.log10(range))
   const interval = Math.pow(10, logRange)
-  const first = minPrice + interval - minPrice%interval
+  const first = minPrice - minPrice%interval
   ctx.beginPath()
-  for (let p = first; p < maxPrice; p += interval/2) {
+  for (let p = first; p < maxPrice; p += interval) {
     ctx.moveTo(0, toY(p))
     ctx.lineTo(canvas.width, toY(p))
     ctx.textAlign = 'left'
