@@ -7,5 +7,6 @@ exports.render = (req, res) => {
     <p><a href="status">GDAX status</a></p>
     <p><a href="orders">Orders</a></p>
     <p><a href="bot">Bots</a></p>
+    <p><a href="system">System</a></p>
   `))
 }

@@ -2,6 +2,7 @@ const express = require('express')
 const os =  require('os')
 const basicAuth = require('express-basic-auth')
 const bcrypt = require('bcrypt')
+var request = require('request');
 
 const port = 8001
 const app = express()
@@ -41,6 +42,7 @@ app.get('/bot', require('./page/page-bot').render)
 app.post('/bot/start/:bot', require('./page/page-bot').start)
 app.post('/bot/stop/:bot', require('./page/page-bot').stop)
 app.get('/bot/log/:logFile', require('./page/page-bot-log').render)
+app.use('/system', (req, res) => req.pipe(request('http://localhost:8000/system'+req.url)).pipe(res))
 
 const expressServer = app.listen(port, () => {
   console.log(`${new Date()} tradr listening on port ${port}`)
