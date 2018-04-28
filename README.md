@@ -25,7 +25,7 @@ x Find bots in new folder
      Has good tracking reason etc. Launch from button on trade product page
  * Candle granularities
   x Zoom in and allow swiping left/right if possible
-  * Fetch and process candles client-side
+  x Fetch and process candles client-side
   * Buttons to switch granularities
  * Live price update
   * Fetch price client side

@@ -50,14 +50,7 @@ exports.render = async (req, res, next) => {
     <h3>Depth</h3>
     <script src="/draw-candles.js"></script>
     <script>
-      fetch('https://api.gdax.com/products/${product}/candles')
-      .then(res => res.json())
-      .then(cs => cs.map(candle => {
-        return { time: candle[0], low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
-      }))
-      .then(candles => {
-        drawCandles(document.getElementById('candles'), candles);
-      })
+      updateCandleChart(document.getElementById('candles'), '${product}');
     </script>
   `))
 }
