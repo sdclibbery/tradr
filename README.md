@@ -23,10 +23,11 @@ x Find bots in new folder
   x Buy sell above/below for when price is fluctuating
   x Buy then sell button for price rise. Runs a Bot. Tries to buy at up to the specified sell price, then places sell order.
      Has good tracking reason etc. Launch from button on trade product page
- * Candle granularities
+ x Candle granularities
   x Zoom in and allow swiping left/right if possible
   x Fetch and process candles client-side
-  * Buttons to switch granularities
+  x Buttons to switch granularities
+ * Display date/times better
  * Live price update
   * Fetch price client side
  * Indicator to show whether there's more base or quote currency, both balance and available

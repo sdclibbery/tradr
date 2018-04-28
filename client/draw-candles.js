@@ -1,15 +1,15 @@
-updateCandleChart = (canvas, product) => {
-  fetch(`https://api.gdax.com/products/${product}/candles`)
+updateCandleChart = (canvas, product, granularity) => {
+  fetch(`https://api.gdax.com/products/${product}/candles?granularity=${granularity}`)
   .then(res => res.json())
   .then(cs => cs.map(candle => {
     return { time: candle[0], low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
   }))
   .then(candles => {
-    draw(canvas, candles)
+    draw(canvas, candles, granularity)
   })
 }
 
-const draw = (canvas, candles) => {
+const draw = (canvas, candles, granularity) => {
   var ctx = canvas.getContext('2d')
   ctx.fillStyle = '#f0f0f0'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -24,7 +24,7 @@ const draw = (canvas, candles) => {
     const x = toX(i)-barW
 
     ctx.fillStyle = '#b0b0b0'
-    const volumeBarHeight = c.volume*5
+    const volumeBarHeight = c.volume*300/granularity
     ctx.fillRect(x, canvas.height - volumeBarHeight, barW, volumeBarHeight)
 
     ctx.fillStyle = (c.close >= c.open) ? 'green' : 'red'
