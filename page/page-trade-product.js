@@ -7,14 +7,13 @@ exports.render = async (req, res, next) => {
   const quoteCurrency = product.split('-')[1]
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
   const price = await exchange.latestPrice()
-  const candles = await exchange.candles({})
 
   res.send(frame(`
     <h1>Trade ${product}</h1>
 
     <h3>Price/Candles</h3>
     <div style="overflow-x:auto; direction:rtl; width:100%; padding:0;">
-      <canvas id="candles" width="1800" height="500" style="width:900px; height:250px; margin:0;"></canvas>
+      <canvas id="candles" width="1500" height="500" style="width:750px; height:250px; margin:0;"></canvas>
     </div>
     <p><span id="price">${price}</span> ${quoteCurrency}</p>
 
@@ -51,8 +50,14 @@ exports.render = async (req, res, next) => {
     <h3>Depth</h3>
     <script src="/draw-candles.js"></script>
     <script>
-      var candles = ${JSON.stringify(candles)};
-      drawCandles(document.getElementById('candles'), candles);
+      fetch('https://api.gdax.com/products/${product}/candles')
+      .then(res => res.json())
+      .then(cs => cs.map(candle => {
+        return { time: candle[0], low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
+      }))
+      .then(candles => {
+        drawCandles(document.getElementById('candles'), candles);
+      })
     </script>
   `))
 }
