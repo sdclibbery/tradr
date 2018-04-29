@@ -72,6 +72,8 @@ exports.createExchange = (options, logger) => {
     baseStep: baseStep,
     formatBase: formatBase,
     formatQuote: formatQuote,
+    quoteDp: quoteDp,
+    baseDp: baseDp,
     roundBase: x => Number.parseFloat(dp(x, baseDp)),
     roundQuote: x => Number.parseFloat(dp(x, quoteDp)),
 

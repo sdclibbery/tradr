@@ -19,6 +19,7 @@ const draw = (canvas, candles, granularity) => {
   const barW = canvas.width/300
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
   const toY = (p) => canvas.height - (p-minPrice)*canvas.height/(maxPrice-minPrice)
+  const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
 
   const background = () => {
     ctx.fillStyle = '#f0f0f0'
@@ -36,6 +37,15 @@ const draw = (canvas, candles, granularity) => {
     ctx.fillRect(x, Math.min(toY(c.open), toY(c.close)), barW, Math.max(Math.abs(toY(c.open)-toY(c.close)), 1))
   }
 
+  const division = (x1, y1, x2, y2) => {
+    ctx.strokeStyle = '#00000040'
+    ctx.lineWidth = 0.5
+    ctx.beginPath()
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+    ctx.stroke()
+  }
+
   const timeLabel = (time, align) => {
     ctx.fillStyle = '#000000a0'
     ctx.font = '24px helvetica,arial bold'
@@ -44,22 +54,18 @@ const draw = (canvas, candles, granularity) => {
     const date = new Date(time*1000)
     const label = `${date.toLocaleDateString()} ${date.toLocaleTimeString(undefined, {hour12:false})}`
     ctx.fillText(label, toX(time), canvas.height)
+    division(toX(time), 0, toX(time), canvas.height)
   }
 
   const priceLabel = (p) => {
     ctx.textAlign = 'right'
     ctx.textBaseline = 'middle'
-    ctx.strokeStyle = '#00000040'
     ctx.fillStyle = '#00000080'
-    ctx.lineWidth = 0.5
-    ctx.beginPath()
-    ctx.moveTo(0, toY(p))
-    ctx.lineTo(canvas.width, toY(p))
-    ctx.stroke()
     ctx.textAlign = 'left'
     ctx.fillText(p, 0, toY(p))
     ctx.textAlign = 'right'
     ctx.fillText(p, canvas.width, toY(p))
+    division(0, toY(p), canvas.width, toY(p))
   }
 
   background()
@@ -71,14 +77,19 @@ const draw = (canvas, candles, granularity) => {
     candleBar(x, c)
   })
 
-  timeLabel(candles[0].time, 'right')
-  timeLabel(candles[candles.length-1].time, 'left')
+  timeLabel(maxTime, 'right')
+  timeLabel((minTime+3*maxTime)/4, 'center')
+  timeLabel((minTime+maxTime)/2, 'center')
+  timeLabel((3*minTime+maxTime)/4, 'center')
+  timeLabel(minTime, 'left')
 
   const range = maxPrice-minPrice
   const logRange = Math.floor(Math.log10(range))
-  const interval = Math.pow(10, logRange)
+  let interval = Math.pow(10, logRange)
+  if (range/interval < 5) { interval /= 5 }
   const first = minPrice - minPrice%interval
+  const quoteDp = Math.max(Math.floor(-Math.log10(maxPrice))+3, 0)
   for (let p = first; p < maxPrice; p += interval) {
-    priceLabel(p, )
+    priceLabel(dp(p, quoteDp))
   }
 }
