@@ -18,13 +18,7 @@ exports.apply = (content) => `
     <menu>
       <a class="nav" href='/'>Home</a>
       <a class="nav" href='/status'>Status</a>
-      <a class="nav" href='/bot'>Bots</a>
       <a class="nav" href='/trade/BTC-EUR'>BTC-EUR</a>
-      <a class="nav" href='/trade/BTC-GBP'>BTC-GBP</a>
-      <a class="nav" href='/trade/ETH-BTC'>ETH-BTC</a>
-      <a class="nav" href='/trade/ETH-EUR'>ETH-EUR</a>
-      <a class="nav" href='/trade/LTC-BTC'>LTC-BTC</a>
-      <a class="nav" href='/trade/LTC-EUR'>LTC-EUR</a>
     </menu>
     ${content}
   </body>

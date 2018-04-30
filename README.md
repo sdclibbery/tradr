@@ -14,7 +14,7 @@ x Find bots in new folder
  x Not running properly: why? Work ok when run individually; dont seem to be launching though
  x Check log pages
  x Check launch of buy-then-sell bots from product trade page...
-* Trading pages
+x Trading pages
  x Route for page with product
  x List account info into iframe
  x List orders into an iframe
@@ -27,22 +27,10 @@ x Find bots in new folder
   x Zoom in and allow swiping left/right if possible
   x Fetch and process candles client-side
   x Buttons to switch granularities
- * Display date/times better
- * Live price update
-  * Fetch price client side
- * Indicator to show whether there's more base or quote currency, both balance and available
- * Tradr: order tracking in sqlite
- * order page will need pagination/sorting/filtering
- * Show price and candles on a log plot
+ x Show price and candles on a log plot
   x Basic drawing
   x Make sure its not waiting for the iframes before rendering!
-  * refactor and clean
-  * plot proper x axis using time (dont assume it from the index) - also think we're losing the most recent candle at the moment!!
-  * log plot
-  * plot scale lines etc
- * Price and candles auto update
- * EMAs
- * Show live depth chart
+  x Display date/times better
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
@@ -51,7 +39,11 @@ x Find bots in new folder
  x Can read back info on filled orders, augmenting with profit info
  x Update status on cancelling orders
  * Update status on retrieving orders from gdax
-* Save account info to DB whenever its accessed
+* Candles log plot
+* Save account balance info to DB whenever its accessed to provide a history
+* Indicator to show whether there's more base or quote currency, both balance and available
+* Page to view balance history
+* Order page will need pagination/sorting/filtering
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client
@@ -65,6 +57,11 @@ x Find bots in new folder
   ! Fix forms...
  * Page that lists running bots with status and progress
  * Handle missing log files more gracefully
+* Live price update
+ * Fetch price client side
+ * Use websocket feed to update price
+* Show live depth chart
+* EMAs
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
