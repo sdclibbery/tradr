@@ -34,6 +34,7 @@ exports.initBot = (optionDefinitions) => {
   }
 
   const exchange = GdaxExchange.createExchange(options, logger)
+  await exchange.fetchSteps()
   return {
     options: options,
     logger: logger,

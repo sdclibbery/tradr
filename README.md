@@ -31,6 +31,7 @@ x Trading pages
   x Basic drawing
   x Make sure its not waiting for the iframes before rendering!
   x Display date/times better
+x Price and amount boxes have wrong values and are not explained on ETH trade page
 * Order tracking
  x Have a sqlite database
  x Write info on every order to it
@@ -62,6 +63,8 @@ x Trading pages
  * Use websocket feed to update price
 * Show live depth chart
 * EMAs
+* Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
+* Has the bulk of the volume been coming from one account or many? Show on chart somehow
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging

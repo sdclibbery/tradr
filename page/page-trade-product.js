@@ -6,9 +6,11 @@ exports.render = async (req, res, next) => {
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
+  await exchange.fetchSteps()
   const price = await exchange.latestPrice()
 
   res.send(frame(`
+    <style>input[type="number"] { width:80px }</style>
     <h1>Trade ${product}</h1>
 
     <h3>Price/Candles</h3>
@@ -30,24 +32,24 @@ exports.render = async (req, res, next) => {
     <h4>Price fluctuating without major trend</h4>
     <form style="display:inline" action="/trade/limit/buysell?next=%2Ftrade%2F${product}&reason=buy+and+sell+above+and+below+current+price" method="post">
       <input type="hidden" name="product" value="${product}">
-      <input type="number" name="amountOfBase" value="${exchange.baseStep*10}" step="${exchange.baseStep}">
-      <input type="number" name="buyPrice" value="${exchange.roundQuote(price * 0.995)}" step="${exchange.quoteStep}">
-      <input type="number" name="sellPrice" value="${exchange.roundQuote(price * 1.005)}" step="${exchange.quoteStep}">
-      <input type="submit" value="Place orders">
+      Trade <input type="number" name="amountOfBase" value="${exchange.baseStep*10}" step="${exchange.baseStep}"> ${baseCurrency}<br>
+      Price will fall to <input type="number" name="buyPrice" value="${exchange.roundQuote(price * 0.995)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
+      Price will rise to <input type="number" name="sellPrice" value="${exchange.roundQuote(price * 1.005)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
+      <input type="submit" value="Place orders"><br>
     </form>
     <h4>Price is going to rise</h4>
     <form style="display:inline" action="/trade/buyThenSell?next=%2Ftrade%2F${product}" method="post">
       <input type="hidden" name="product" value="${product}">
-      <input type="text" name="amountOfBase" value="0.01">
-      <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 1.005)}" step="${exchange.quoteStep}">
-      <input type="submit" value="Buy then Sell">
+      Trade <input type="number" name="amountOfBase" value="0.01"> ${baseCurrency}<br>
+      Price will rise to <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 1.005)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
+      <input type="submit" value="Buy then Sell"><br>
     </form>
     <h4>Price is going to fall</h4>
     <form style="display:inline" action="/trade/sellThenBuy?next=%2Ftrade%2F${product}" method="post">
       <input type="hidden" name="product" value="${product}">
-      <input type="text" name="amountOfBase" value="0.01">
-      <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 0.995)}" step="${exchange.quoteStep}">
-      <input type="submit" value="Sell then Buy">
+      Trade <input type="number" name="amountOfBase" value="0.01"> ${baseCurrency}<br>
+      Price will fall to <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 0.995)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
+      <input type="submit" value="Sell then Buy"><br>
     </form>
 
     <h3>Orders</h3>

@@ -1,6 +1,6 @@
-const Gdax = require('gdax');
-const tracker = require('./order-tracker');
-const Credentials = require('./gdax-account-credentials'); // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
+const Gdax = require('gdax')
+const tracker = require('./order-tracker')
+const Credentials = require('./gdax-account-credentials') // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options, logger) => {
   const baseCurrency = options.product && options.product.split('-')[0]
@@ -28,7 +28,7 @@ exports.createExchange = (options, logger) => {
     return data
   }
   const trackOrder = (creator, reason) => { return async (data) => {
-  try {
+    try {
       await tracker.trackOrder({
         $id: data.id,
         $exchange: 'GDAX',
@@ -47,25 +47,16 @@ exports.createExchange = (options, logger) => {
       console.log('trackOrder error: ', e)
       throw e
     }
-  } }
+  }}
 
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
   let quoteStep = 0.01
   let baseStep = 0.0001
+  let stepsReady = false
   let quoteDp = 2
   let baseDp = 4
   const formatBase = (x) => `${dp(x, baseDp)} ${baseCurrency}`
   const formatQuote = (x) => `${dp(x, quoteDp)} ${quoteCurrency}`
-  if (options.product) {
-    authedClient.getProducts()
-      .then(products => {
-        const product = products.filter(p => p.id == options.product)[0]
-        exchange.quoteStep = quoteStep = product.quote_increment
-        exchange.baseStep = baseStep = product.base_min_size
-        quoteDp = Math.floor(-Math.log10(quoteStep))
-        baseDp = Math.floor(-Math.log10(baseStep))
-      }).catch(console.log);
-    }
 
   const exchange = {
     quoteStep: quoteStep,
@@ -76,6 +67,19 @@ exports.createExchange = (options, logger) => {
     baseDp: baseDp,
     roundBase: x => Number.parseFloat(dp(x, baseDp)),
     roundQuote: x => Number.parseFloat(dp(x, quoteDp)),
+
+    fetchSteps: async () => {
+      if (stepsReady || !options.product) { return await null }
+      await authedClient.getProducts()
+        .then(products => {
+          const product = products.filter(p => p.id == options.product)[0]
+          exchange.quoteStep = quoteStep = product.quote_increment
+          exchange.baseStep = baseStep = product.base_min_size
+          quoteDp = Math.floor(-Math.log10(quoteStep))
+          baseDp = Math.floor(-Math.log10(baseStep))
+        }).catch(console.log)
+        stepsReady = true
+    },
 
     accounts: async () => {
       return authedClient.getAccounts()
@@ -98,6 +102,7 @@ exports.createExchange = (options, logger) => {
     },
 
     order: async (side, amountOfBaseCurrency, price, product, creator, reason) => {
+      await exchange.fetchSteps()
       logger.debug(`GDAX: ${side}ing ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
@@ -121,6 +126,7 @@ exports.createExchange = (options, logger) => {
     },
 
     orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency, creator, reason) => {
+      await exchange.fetchSteps()
       const baseInfo = amountOfBaseCurrency ? `${formatBase(amountOfBaseCurrency)}` : ''
       const quoteInfo = amountOfQuoteCurrency ? `${formatQuote(amountOfQuoteCurrency)}` : ''
       logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
@@ -147,6 +153,7 @@ exports.createExchange = (options, logger) => {
     },
 
     stopLoss: async (price, amountOfBaseCurrency) => {
+      await exchange.fetchSteps()
       logger.debug(`GDAX: setting stoploss for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
@@ -163,6 +170,7 @@ exports.createExchange = (options, logger) => {
     },
 
     stopEntry: async (price, amountOfBaseCurrency) => {
+      await exchange.fetchSteps()
       logger.debug(`GDAX: setting stopentry for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
