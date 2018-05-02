@@ -40,14 +40,14 @@ exports.render = async (req, res, next) => {
     <h4>Price is going to rise</h4>
     <form style="display:inline" action="/trade/buyThenSell?next=%2Ftrade%2F${product}" method="post">
       <input type="hidden" name="product" value="${product}">
-      Trade <input type="number" name="amountOfBase" value="0.01"> ${baseCurrency}<br>
+      Trade <input type="number" name="amountOfBase" value="${exchange.baseStep*10}"> ${baseCurrency}<br>
       Price will rise to <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 1.005)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
       <input type="submit" value="Buy then Sell"><br>
     </form>
     <h4>Price is going to fall</h4>
     <form style="display:inline" action="/trade/sellThenBuy?next=%2Ftrade%2F${product}" method="post">
       <input type="hidden" name="product" value="${product}">
-      Trade <input type="number" name="amountOfBase" value="0.01"> ${baseCurrency}<br>
+      Trade <input type="number" name="amountOfBase" value="${exchange.baseStep*10}"> ${baseCurrency}<br>
       Price will fall to <input type="number" name="targetPrice" value="${exchange.roundQuote(price * 0.995)}" step="${exchange.quoteStep}"> ${quoteCurrency}<br>
       <input type="submit" value="Sell then Buy"><br>
     </form>
