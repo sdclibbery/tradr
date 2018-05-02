@@ -18,7 +18,9 @@ const draw = (canvas, candles, granularity) => {
   const maxTime = candles[0].time
   const barW = canvas.width/300
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
-  const toY = (p) => canvas.height - (p-minPrice)*canvas.height/(maxPrice-minPrice)
+  const logMinPrice = Math.log(minPrice)
+  const logMaxPrice = Math.log(maxPrice)
+  const toY = (p) => canvas.height * (1 - (Math.log(p)-logMinPrice)/(logMaxPrice-logMinPrice))
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
 
   const background = () => {
@@ -86,7 +88,7 @@ const draw = (canvas, candles, granularity) => {
   const range = maxPrice-minPrice
   const logRange = Math.floor(Math.log10(range))
   let interval = Math.pow(10, logRange)
-  if (range/interval < 5) { interval /= 5 }
+  if (range/interval < 4) { interval /= 5 }
   const first = minPrice - minPrice%interval
   const quoteDp = Math.max(Math.floor(-Math.log10(maxPrice))+3, 0)
   for (let p = first; p < maxPrice; p += interval) {

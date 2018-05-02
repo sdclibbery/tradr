@@ -32,39 +32,34 @@ x Trading pages
   x Make sure its not waiting for the iframes before rendering!
   x Display date/times better
 x Price and amount boxes have wrong values and are not explained on ETH trade page
-* Order tracking
+x Order tracking
  x Have a sqlite database
  x Write info on every order to it
   x exchange, id, time, side, price, amount, who made it and why, price at time of making it
  x Getting WRONG priceAtCreation
  x Can read back info on filled orders, augmenting with profit info
  x Update status on cancelling orders
- * Update status on retrieving orders from gdax
 * Candles log plot
 * Save account balance info to DB whenever its accessed to provide a history
-* Indicator to show whether there's more base or quote currency, both balance and available
-* Page to view balance history
-* Order page will need pagination/sorting/filtering
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client
   * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
-* Mechanism for rationalising old orders
- * Eg find old orders that can cancel with each other given their 'createdAt' prices?
- * Show TA indicators: RSI, NVT
- * Can clear logs
- * Bot log pages live update
- * Can set arguments when starting a bot
-  ! Fix forms...
- * Page that lists running bots with status and progress
- * Handle missing log files more gracefully
+* Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
+* Trade page indicator to show whether there's more base or quote currency, both balance and available
+* Page to view balance history
+* Has the bulk of the volume been coming from one account or many? Show on chart somehow
+* Order page will need pagination/sorting/filtering
 * Live price update
  * Fetch price client side
  * Use websocket feed to update price
 * Show live depth chart
-* EMAs
-* Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
-* Has the bulk of the volume been coming from one account or many? Show on chart somehow
+* Show TA indicators: RSI, NVT
+* Mechanism for rationalising old orders
+ * Eg find old orders that can cancel with each other given their 'createdAt' prices?
+* Can clear bot logs
+* Bot log pages live update
+* Show EMAs
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
