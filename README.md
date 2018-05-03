@@ -39,7 +39,7 @@ x Order tracking
  x Getting WRONG priceAtCreation
  x Can read back info on filled orders, augmenting with profit info
  x Update status on cancelling orders
-* Candles log plot
+x Candles log plot
 * Save account balance info to DB whenever its accessed to provide a history
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview

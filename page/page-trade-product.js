@@ -14,12 +14,12 @@ exports.render = async (req, res, next) => {
     <h1>Trade ${product}</h1>
 
     <h3>Price/Candles</h3>
-    <button onclick="javascript:candles(60)">1m</button>
-    <button onclick="javascript:candles(300)">5m</button>
-    <button onclick="javascript:candles(900)">15m</button>
-    <button onclick="javascript:candles(3600)">1h</button>
-    <button onclick="javascript:candles(21600)">6h</button>
-    <button onclick="javascript:candles(86400)">1d</button>
+    <button onclick="javascript:candles(60)">5h</button>
+    <button onclick="javascript:candles(300)">1d</button>
+    <button onclick="javascript:candles(900)">3d</button>
+    <button onclick="javascript:candles(3600)">12d</button>
+    <button onclick="javascript:candles(21600)">10w</button>
+    <button onclick="javascript:candles(86400)">10m</button>
     <div style="overflow-x:auto; direction:rtl; width:100%; padding:0;">
       <canvas id="candles" width="1500" height="500" style="width:750px; height:250px; margin:0;"></canvas>
     </div>
