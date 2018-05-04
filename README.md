@@ -40,7 +40,13 @@ x Order tracking
  x Can read back info on filled orders, augmenting with profit info
  x Update status on cancelling orders
 x Candles log plot
+* Bots arent working??!
+* Could only trade LTC in increments of 1
+* Buy then sell can have multiple exits?
+* Optimise/reduce gdax calls required to display account info
 * Save account balance info to DB whenever its accessed to provide a history
+ * sqlite migration to add accounts table
+ * Save the data to the table
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client

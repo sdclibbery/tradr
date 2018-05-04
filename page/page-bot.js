@@ -39,11 +39,15 @@ const getPidsFor = async (bot) => {
 exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
   args.unshift(req.params.bot)
-  const subprocess = spawn(process.argv[0], args, {
+  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
+  const subprocess = spawn(process.argv[0]+'kjjk', args, {
     cwd: './bot',
     detached: true,
     stdio: 'ignore',
   })
+  subprocess.on('error', (err) => {
+    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
+  });
   subprocess.unref()
   res.redirect(`/bot/log/${req.params.bot}.log`)
 }
