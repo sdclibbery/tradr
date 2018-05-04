@@ -40,7 +40,8 @@ x Order tracking
  x Can read back info on filled orders, augmenting with profit info
  x Update status on cancelling orders
 x Candles log plot
-* Bots arent working??!
+x Bots arent working??!
+* Also could only set zero or one as the LTC amount
 * Could only trade LTC in increments of 1
 * Buy then sell can have multiple exits?
 * Optimise/reduce gdax calls required to display account info
