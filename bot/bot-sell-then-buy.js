@@ -1,12 +1,11 @@
 const framework = require('./framework');
 
-const { options, logger, exchange } = framework.initBot([
+framework.init([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
   { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in base currency, eg in BTC for BTC-EUR' },
   { name: 'targetPrice', alias: 't', type: Number, description: 'price to buy at' },
 ])
-
-framework.runBot(async () => {
+.then(async ({ options, logger, exchange }) => {
   let orderId = null
   let currentPrice = await exchange.latestPrice()
   logger.warn(`BOT: sell-then-buy: trading ${exchange.formatBase(options.amount)} on ${options.product} from ${exchange.formatQuote(currentPrice)} with target price ${exchange.formatQuote(options.targetPrice)}`)
@@ -40,4 +39,5 @@ framework.runBot(async () => {
       }
     }
   }
-}, logger)
+})
+.catch(e => console.error(`bot ${__filename} launch error: `, e))

@@ -1,13 +1,12 @@
 const framework = require('./framework')
 const {ema} = require('../exponential-moving-average')
 
-const { options, logger, exchange } = framework.initBot([
+framework.init([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
   { name: 'close', alias: 'c', type: Number, defaultValue: 20, description: 'number of minutes to average together for the close moving average (up to 300)' },
   { name: 'far', alias: 'f', type: Number, defaultValue: 30, description: 'number of minutes to average together for the far moving average (up to 300)' },
 ])
-
-framework.runBot(async () => {
+.then(async ({ options, logger, exchange }) => {
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
 
@@ -47,4 +46,5 @@ framework.runBot(async () => {
     lastDirection = direction
     await sleep(60*1000)
   }
-}, logger)
+})
+.catch(e => console.error(`bot ${__filename} launch error: `, e))

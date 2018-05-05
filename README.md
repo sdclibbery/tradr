@@ -46,7 +46,9 @@ x Save account balance info to DB whenever its accessed, to provide a history
  x sqlite migration to add accounts table
  x Save the data to the table
 x Order page: filter out orders cancelled by bots
-* bot launch still not working :-(
+x bot launch still not working :-(
+* Fix tech debt of global exchange object in framework.js
+* Bots are opening their OWN sqlite in the /bot dir :-/
 * single thing to spawn bots
 * Handle throttling fail more gracefully
 * Allow buy-then-sell bot to have multiple exits?

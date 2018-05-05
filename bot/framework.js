@@ -5,9 +5,8 @@ if (process.framework) {
 const GdaxExchange = require('../gdax-exchange');
 const LoggerFactory = require('../logger')
 const commandLineArgs = require('command-line-args')
-let exchange
 
-exports.initBot = (optionDefinitions) => {
+exports.init = async (optionDefinitions) => {
   const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
 
   optionDefinitions.unshift({ name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' })
@@ -34,20 +33,11 @@ exports.initBot = (optionDefinitions) => {
     process.exit()
   }
 
-  exchange = GdaxExchange.createExchange(options, logger)
+  const exchange = GdaxExchange.createExchange(options, logger)
+  exchange.fetchSteps()
   return {
     options: options,
     logger: logger,
     exchange: exchange,
   }
-}
-
-exports.runBot = (bot, logger) => {
-  exchange.fetchSteps()
-  .then(bot)
-  .then(process.exit)
-  .catch(e => {
-    logger.sync.error(e)
-    process.exit()
-  })
 }
