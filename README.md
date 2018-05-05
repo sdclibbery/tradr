@@ -47,9 +47,9 @@ x Save account balance info to DB whenever its accessed, to provide a history
  x Save the data to the table
 x Order page: filter out orders cancelled by bots
 x bot launch still not working :-(
-* Fix tech debt of global exchange object in framework.js
+x Fix tech debt of global exchange object in framework.js
 * Bots are opening their OWN sqlite in the /bot dir :-/
-* single thing to spawn bots
+* Single thing to spawn bots
 * Handle throttling fail more gracefully
 * Allow buy-then-sell bot to have multiple exits?
 * Optimise/reduce gdax calls required to display account info

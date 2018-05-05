@@ -1,5 +1,7 @@
 const fs = require('fs')
 
+console.error('This file will need updating for the refactor in framework.js!')
+
 const numRuns = 1000
 
 let price, fd, buffer, index

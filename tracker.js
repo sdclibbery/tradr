@@ -1,7 +1,7 @@
 const db = require('sqlite')
 
 db
-.open('./tradr.sqlite', { Promise })
+.open(`${__dirname}/tradr.sqlite`, { Promise })
 .then(() => db.migrate({ migrationsPath: __dirname+'/migrations'}))
 .catch((err) => console.error(err.stack))
 

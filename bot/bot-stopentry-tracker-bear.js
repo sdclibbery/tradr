@@ -1,12 +1,11 @@
 const framework = require('./framework');
 
-const { options, logger, exchange } = framework.initBot([
+framework.init([
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
   { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in quote currency, eg in EUR for BTC-EUR' },
   { name: 'stopentry', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stopentry exit order' },
 ])
-
-framework.runBot(async () => {
+.then(async ({ options, logger, exchange }) => {
   const percent = options.stopentry
   const baseCurrency = options.product.split('-')[0]
   const quoteCurrency = options.product.split('-')[1]
@@ -43,4 +42,6 @@ framework.runBot(async () => {
       logger.info(`BOT: Moved stopentry to ${exchange.formatQuote(stopentryPrice)}`)
     }
   }
-}, logger)
+})
+.then(framework.close)
+.catch(framework.handleError)
