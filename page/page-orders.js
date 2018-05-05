@@ -1,7 +1,7 @@
 const frame =  require('./frame').apply
 
 exports.render = async (req, res, next) => {
-  const orders = await require('../tracker').getOrders()
+  const orders = await require('../tracker').getOrdersWithoutBotCancellations()
   res.send(frame(`
     <h1>Orders</h1>
     <table>

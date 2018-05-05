@@ -31,3 +31,7 @@ exports.trackOrderCancellation = async (id) => {
 exports.getOrders = async () => {
   return await db.all(`SELECT * FROM Orders;`)
 }
+
+exports.getOrdersWithoutBotCancellations = async () => {
+  return await db.all(`SELECT * FROM Orders WHERE status != 'cancelled' OR creator NOT LIKE 'bot-%';`)
+}
