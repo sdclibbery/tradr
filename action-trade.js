@@ -46,6 +46,9 @@ exports.buyThenSell = async (req, res, next) => {
     detached: true,
     stdio: 'ignore',
   })
+  subprocess.on('error', (err) => {
+    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
+  });
   subprocess.unref()
   res.redirect(req.query.next || `/bot`)
 }
@@ -62,6 +65,9 @@ exports.sellThenBuy = async (req, res, next) => {
     detached: true,
     stdio: 'ignore',
   })
+  subprocess.on('error', (err) => {
+    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
+  });
   subprocess.unref()
   res.redirect(req.query.next || `/bot`)
 }
