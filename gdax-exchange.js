@@ -1,5 +1,5 @@
 const Gdax = require('gdax')
-const tracker = require('./order-tracker')
+const tracker = require('./tracker')
 const Credentials = require('./gdax-account-credentials') // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
 exports.createExchange = (options, logger) => {
@@ -85,6 +85,13 @@ exports.createExchange = (options, logger) => {
       return authedClient.getAccounts()
         .then(log('GDAX: getAccounts'))
         .then(catchApiError)
+        .then(async as => {
+          const at = new Date().toUTCString()
+          await tracker.trackBalances(as.map(a => {
+            return { $currency:a.currency, $exchange:'GDAX', $at:at, $balance:dp(a.balance, 4), $available:dp(a.available, 4) }
+          }))
+          return as
+        })
         .then(as => as.map(a => {
           return { currency: a.currency, balance: a.balance, available: a.available }
         }, {}))

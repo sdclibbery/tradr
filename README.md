@@ -42,9 +42,9 @@ x Order tracking
 x Candles log plot
 x Bots arent working??!
 x Could only trade LTC in increments of 1
-* Save account balance info to DB whenever its accessed to provide a history
- * sqlite migration to add accounts table
- * Save the data to the table
+x Save account balance info to DB whenever its accessed, to provide a history
+ x sqlite migration to add accounts table
+ x Save the data to the table
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client

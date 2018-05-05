@@ -5,6 +5,14 @@ db
 .then(() => db.migrate({ migrationsPath: __dirname+'/migrations'}))
 .catch((err) => console.error(err.stack))
 
+exports.trackBalances = async (balances) => {
+  await Promise.all(
+    balances.map(b => db.run(
+      `INSERT INTO Balances (currency, exchange, at, balance, available) VALUES ($currency, $exchange, $at, $balance, $available);`, b
+    )
+  ))
+}
+
 exports.trackOrder = async (order) => {
   await db.run(
     `INSERT INTO Orders (id, exchange, product, status, created, side, orderPrice, priceAtCreation, amount, creator, reason)
