@@ -5,6 +5,7 @@ if (process.framework) {
 const GdaxExchange = require('../gdax-exchange');
 const LoggerFactory = require('../logger')
 const commandLineArgs = require('command-line-args')
+let exchange
 
 exports.initBot = (optionDefinitions) => {
   const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
@@ -33,7 +34,7 @@ exports.initBot = (optionDefinitions) => {
     process.exit()
   }
 
-  const exchange = GdaxExchange.createExchange(options, logger)
+  exchange = GdaxExchange.createExchange(options, logger)
   return {
     options: options,
     logger: logger,
