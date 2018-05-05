@@ -41,6 +41,7 @@ exports.buyThenSell = async (req, res, next) => {
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
+  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
   const subprocess = spawn(process.argv[0], args, {
     cwd: './bot',
     detached: true,
@@ -60,6 +61,7 @@ exports.sellThenBuy = async (req, res, next) => {
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
+  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
   const subprocess = spawn(process.argv[0], args, {
     cwd: './bot',
     detached: true,
