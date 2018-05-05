@@ -40,7 +40,7 @@ exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
   args.unshift(req.params.bot)
   console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
-  const subprocess = spawn(process.argv[0]+'kjjk', args, {
+  const subprocess = spawn(process.argv[0], args, {
     cwd: './bot',
     detached: true,
     stdio: 'ignore',

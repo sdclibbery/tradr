@@ -46,6 +46,7 @@ x Save account balance info to DB whenever its accessed, to provide a history
  x sqlite migration to add accounts table
  x Save the data to the table
 x Order page: filter out orders cancelled by bots
+* Handle throttling fail more gracefully
 * Allow buy-then-sell bot to have multiple exits?
 * Optimise/reduce gdax calls required to display account info
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
