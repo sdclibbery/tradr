@@ -41,10 +41,7 @@ x Order tracking
  x Update status on cancelling orders
 x Candles log plot
 x Bots arent working??!
-* Also could only set zero or one as the LTC amount
-* Could only trade LTC in increments of 1
-* Buy then sell can have multiple exits?
-* Optimise/reduce gdax calls required to display account info
+x Could only trade LTC in increments of 1
 * Save account balance info to DB whenever its accessed to provide a history
  * sqlite migration to add accounts table
  * Save the data to the table
@@ -52,6 +49,8 @@ x Bots arent working??!
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client
   * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
+* Allow buy-then-sell bot to have multiple exits?
+* Optimise/reduce gdax calls required to display account info
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
 * Page to view balance history

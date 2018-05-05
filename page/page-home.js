@@ -11,6 +11,7 @@ exports.render = (req, res) => {
     <p>
       <a href='/trade/BTC-EUR'>BTC-EUR</a>
       <a href='/trade/BTC-GBP'>BTC-GBP</a>
+      <a href='/trade/BTC-USD'>BTC-USD</a>
     </p>
     <hr>
     <p>
