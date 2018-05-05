@@ -45,16 +45,17 @@ x Could only trade LTC in increments of 1
 x Save account balance info to DB whenever its accessed, to provide a history
  x sqlite migration to add accounts table
  x Save the data to the table
-* Back up sqlite db regularly to google drive
-  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
-  https://www.npmjs.com/package/s3-node-client
-  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
+* Order page: filter out orders cancelled by bots
 * Allow buy-then-sell bot to have multiple exits?
 * Optimise/reduce gdax calls required to display account info
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
 * Page to view balance history
 * Has the bulk of the volume been coming from one account or many? Show on chart somehow
+* Back up sqlite db regularly to google drive
+  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
+  https://www.npmjs.com/package/s3-node-client
+  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
 * Order page will need pagination/sorting/filtering
 * Live price update
  * Fetch price client side
