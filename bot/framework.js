@@ -5,10 +5,9 @@ if (process.framework) {
 const GdaxExchange = require('../gdax-exchange');
 const LoggerFactory = require('../logger')
 const commandLineArgs = require('command-line-args')
+const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
 
 exports.init = async (optionDefinitions) => {
-  const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
-
   optionDefinitions.unshift({ name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' })
   let options
   try {
@@ -34,10 +33,17 @@ exports.init = async (optionDefinitions) => {
   }
 
   const exchange = GdaxExchange.createExchange(options, logger)
-  exchange.fetchSteps()
+  await exchange.fetchSteps()
   return {
     options: options,
     logger: logger,
     exchange: exchange,
   }
+}
+
+exports.close = process.exit
+
+exports.handleError = e => {
+  logger.sync.error('Bot run error: ', e)
+  process.exit()
 }

@@ -16,4 +16,5 @@ framework.init([
   const {size, price} = await exchange.sellNow(amountOfBase, amountOfQuote)
   logger.sync.info(`BOT: sold ${exchange.formatBase(size)} at ${exchange.formatQuote(price)}`)
 })
-.catch(e => console.error(`bot ${__filename} launch error: `, e))
+.then(framework.close)
+.catch(framework.handleError)

@@ -47,4 +47,5 @@ framework.init([
     await sleep(60*1000)
   }
 })
-.catch(e => console.error(`bot ${__filename} launch error: `, e))
+.then(framework.close)
+.catch(framework.handleError)
