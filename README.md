@@ -49,9 +49,9 @@ x Order page: filter out orders cancelled by bots
 x bot launch still not working :-(
 x Fix tech debt of global exchange object in framework.js
 x Bots are opening their OWN sqlite in the /bot dir :-/
-* Order filtering is using wrong filter
-* Make sure all bots are setting buy/sell reasons
+x Order filtering is using wrong filter
 * Single thing to spawn bots
+* Make sure all bots are setting buy/sell reasons
 * Handle throttling fail more gracefully
 * Allow buy-then-sell bot to have multiple exits?
 * Optimise/reduce gdax calls required to display account info
