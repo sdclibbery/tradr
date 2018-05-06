@@ -4,6 +4,7 @@ const GdaxExchange = require('../gdax-exchange');
 
 exports.render = async (req, res, next) => {
   const exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
+  await exchange.fetchSteps()
   const data = await fetchData(exchange)
   res.send(frame(`
     <h1>${os.hostname()} GDAX status</h1>

@@ -50,11 +50,22 @@ x bot launch still not working :-(
 x Fix tech debt of global exchange object in framework.js
 x Bots are opening their OWN sqlite in the /bot dir :-/
 x Order filtering is using wrong filter
+x Quote currency rounding on the account sub page is wrong
 * Single thing to spawn bots
 * Make sure all bots are setting buy/sell reasons
 * Handle throttling fail more gracefully
-* Allow buy-then-sell bot to have multiple exits?
 * Optimise/reduce gdax calls required to display account info
+* Support another exchange
+ * Trade etc pages must be told exchange as well as product
+ * Write a new exchange implementation
+  * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
+* Order tracking show filled orders and show actual profit/loss on orders page
+ * Migrate add fill-price and fees fields
+ * When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
+  * Tracker gets order status for each order it thinks is open but is missing from the list
+ * Update orders page; colours and actual profit column
+* Order page which shows the candle graph with all orders overlaid graphically as rectangles
+* Allow buy-then-sell bot to have multiple exits?
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
 * Page to view balance history
