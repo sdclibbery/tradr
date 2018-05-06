@@ -1,5 +1,4 @@
-const { spawn } = require('child_process');
-const process = require('process')
+const spawnBot = require('../spawn-bot').spawn
 const GdaxExchange = require('./gdax-exchange');
 
 exports.cancel = async (req, res, next) => {
@@ -41,16 +40,7 @@ exports.buyThenSell = async (req, res, next) => {
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
-  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
-  const subprocess = spawn(process.argv[0], args, {
-    cwd: './bot',
-    detached: true,
-    stdio: 'ignore',
-  })
-  subprocess.on('error', (err) => {
-    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
-  });
-  subprocess.unref()
+  spawnBot(args)
   res.redirect(req.query.next || `/bot`)
 }
 
@@ -61,16 +51,7 @@ exports.sellThenBuy = async (req, res, next) => {
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
-  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
-  const subprocess = spawn(process.argv[0], args, {
-    cwd: './bot',
-    detached: true,
-    stdio: 'ignore',
-  })
-  subprocess.on('error', (err) => {
-    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
-  });
-  subprocess.unref()
+  spawnBot(args)
   res.redirect(req.query.next || `/bot`)
 }
 

@@ -1,8 +1,8 @@
-const { spawn } = require('child_process');
 const frame =  require('./frame').apply
 const fs = require('fs')
 const process = require('process')
-const findProcess = require('find-process');
+const findProcess = require('find-process')
+const spawnBot = require('../spawn-bot').spawn
 
 exports.render = async (req, res, next) => {
   res.send(frame(`
@@ -39,16 +39,7 @@ const getPidsFor = async (bot) => {
 exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
   args.unshift(req.params.bot)
-  console.log(`${new Date()} Spawning bot ${process.argv[0]} ${args.join(' ')}`);
-  const subprocess = spawn(process.argv[0], args, {
-    cwd: './bot',
-    detached: true,
-    stdio: 'ignore',
-  })
-  subprocess.on('error', (err) => {
-    console.error(`${new Date()} Failed to spawn bot ${process.argv[0]} ${args.join(' ')}: `, err);
-  });
-  subprocess.unref()
+  spawnBot(args)
   res.redirect(`/bot/log/${req.params.bot}.log`)
 }
 
