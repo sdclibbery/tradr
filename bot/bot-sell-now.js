@@ -13,7 +13,7 @@ framework.init([
   const amountOfBase = currency == baseCurrency ? amount : undefined
   const amountOfQuote = currency == quoteCurrency ? amount : undefined
 
-  const {size, price} = await exchange.sellNow(amountOfBase, amountOfQuote)
+  const {size, price} = await exchange.sellNow(amountOfBase, amountOfQuote, 'sellNow bot', 'sell now at market price')
   logger.sync.info(`BOT: sold ${exchange.formatBase(size)} at ${exchange.formatQuote(price)}`)
 })
 .then(framework.close)

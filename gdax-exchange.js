@@ -151,15 +151,15 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
-    buyNow: async (amountOfBase, amountOfQuote) => {
-      return exchange.orderNow('buy', amountOfBase, amountOfQuote)
+    buyNow: async (amountOfBase, amountOfQuote, creator, reason) => {
+      return exchange.orderNow('buy', amountOfBase, amountOfQuote, creator, reason)
     },
 
-    sellNow: async (amountOfBase, amountOfQuote) => {
-      return exchange.orderNow('sell', amountOfBase, amountOfQuote)
+    sellNow: async (amountOfBase, amountOfQuote, creator, reason) => {
+      return exchange.orderNow('sell', amountOfBase, amountOfQuote, creator, reason)
     },
 
-    stopLoss: async (price, amountOfBaseCurrency) => {
+    stopLoss: async (price, amountOfBaseCurrency, creator, reason) => {
       await exchange.fetchSteps()
       logger.debug(`GDAX: setting stoploss for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({
@@ -176,7 +176,7 @@ exports.createExchange = (options, logger) => {
       .catch(handleError)
     },
 
-    stopEntry: async (price, amountOfBaseCurrency) => {
+    stopEntry: async (price, amountOfBaseCurrency, creator, reason) => {
       await exchange.fetchSteps()
       logger.debug(`GDAX: setting stopentry for ${formatBase(amountOfBaseCurrency)} at ${formatQuote(price)}`)
       return authedClient.placeOrder({

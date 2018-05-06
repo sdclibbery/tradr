@@ -51,7 +51,7 @@ x Fix tech debt of global exchange object in framework.js
 x Bots are opening their OWN sqlite in the /bot dir :-/
 x Order filtering is using wrong filter
 x Quote currency rounding on the account sub page is wrong
-* Single thing to spawn bots
+x Single thing to spawn bots
 * Make sure all bots are setting buy/sell reasons
 * Handle throttling fail more gracefully
 * Optimise/reduce gdax calls required to display account info
@@ -62,7 +62,7 @@ x Quote currency rounding on the account sub page is wrong
 * Order tracking show filled orders and show actual profit/loss on orders page
  * Migrate add fill-price and fees fields
  * When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
-  * Tracker gets order status for each order it thinks is open but is missing from the list
+  * Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
  * Update orders page; colours and actual profit column
 * Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Allow buy-then-sell bot to have multiple exits?
