@@ -38,8 +38,7 @@ const getPidsFor = async (bot) => {
 
 exports.start = (req, res) => {
   const args = req.body.args.split(' ').filter(a => a !== null && a !== '')
-  args.unshift(req.params.bot)
-  spawnBot(args)
+  spawnBot(req.params.bot, args)
   res.redirect(`/bot/log/${req.params.bot}.log`)
 }
 

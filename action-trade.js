@@ -1,4 +1,4 @@
-const spawnBot = require('../spawn-bot').spawn
+const spawnBot = require('./spawn-bot').spawn
 const GdaxExchange = require('./gdax-exchange');
 
 exports.cancel = async (req, res, next) => {
@@ -35,23 +35,21 @@ exports.buySellLimitOrder = async (req, res, next) => {
 
 exports.buyThenSell = async (req, res, next) => {
   const args = [
-    'bot-buy-then-sell.js',
     '-p', req.body.product,
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
-  spawnBot(args)
+  spawnBot('bot-buy-then-sell.js', args)
   res.redirect(req.query.next || `/bot`)
 }
 
 exports.sellThenBuy = async (req, res, next) => {
   const args = [
-    'bot-sell-then-buy.js',
     '-p', req.body.product,
     '-a', req.body.amountOfBase,
     '-t', req.body.targetPrice,
   ]
-  spawnBot(args)
+  spawnBot('bot-sell-then-buy.js', args)
   res.redirect(req.query.next || `/bot`)
 }
 
