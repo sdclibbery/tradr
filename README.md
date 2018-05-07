@@ -55,20 +55,23 @@ x Single thing to spawn bots
 x Make sure all bots are setting buy/sell reasons
 x Do any trade actions need fetch steps? No.
 x Handle throttling fail more gracefully on status page
+* Order tracking show filled orders and show actual profit/loss on orders page
+ x Migrate-add fill-price and fees fields
+ * When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
+  * Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
+ * Update orders page; colours and actual profit column
+* Order cancellation from orders page
+* Rename and rework status page into account balances page
+* Support another exchange
+ * Choose exchange: has many altcoins, has an API with trade-only keys
+ * Trade etc pages must be told exchange as well as product
+ * Write a new exchange implementation
+  * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
+* Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Optimise/reduce gdax calls on status page
  * Fetch all product prices at once?
  * Dont fetch BTC-EUR price twice...
 * Have a centralised exchange? Or a cache of centralised exchanges per product? To save fetching steps etc every time...
-* Support another exchange
- * Trade etc pages must be told exchange as well as product
- * Write a new exchange implementation
-  * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
-* Order tracking show filled orders and show actual profit/loss on orders page
- * Migrate add fill-price and fees fields
- * When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
-  * Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
- * Update orders page; colours and actual profit column
-* Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Allow buy-then-sell bot to have multiple exits?
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
