@@ -52,7 +52,3 @@ exports.sellThenBuy = async (req, res, next) => {
   spawnBot('bot-sell-then-buy.js', args)
   res.redirect(req.query.next || `/bot`)
 }
-
-const launchBot = () => {
-
-}

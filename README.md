@@ -52,9 +52,13 @@ x Bots are opening their OWN sqlite in the /bot dir :-/
 x Order filtering is using wrong filter
 x Quote currency rounding on the account sub page is wrong
 x Single thing to spawn bots
-* Make sure all bots are setting buy/sell reasons
-* Handle throttling fail more gracefully
-* Optimise/reduce gdax calls required to display account info
+x Make sure all bots are setting buy/sell reasons
+x Do any trade actions need fetch steps? No.
+x Handle throttling fail more gracefully on status page
+* Optimise/reduce gdax calls on status page
+ * Fetch all product prices at once?
+ * Dont fetch BTC-EUR price twice...
+* Have a centralised exchange? Or a cache of centralised exchanges per product? To save fetching steps etc every time...
 * Support another exchange
  * Trade etc pages must be told exchange as well as product
  * Write a new exchange implementation
