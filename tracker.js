@@ -28,6 +28,25 @@ exports.trackOrderCancellation = async (id) => {
   )
 }
 
+exports.updateLiveOrders = (liveOrderIds, getOrderStatus) => {
+  const liveOrderList = liveOrderIds.map(id => `'${id}'`).join(', ')
+  db.all(`SELECT id, amount FROM Orders WHERE id NOT IN (${liveOrderList}) AND status = 'open';`)
+  .then(ordersToCheck => {
+    ordersToCheck.forEach(({id, amount}) => {
+      getOrderStatus(id)
+      .then(({filled, filledAmountInQuoteCurrency, price}) => {
+        if (filled) {
+          const fees = filledAmountInQuoteCurrency - amount*price
+          db.run(`UPDATE Orders SET status='filled', fillPrice=$price, fees=$fees WHERE id=$id`, {$id:id, $price:price, $fees:fees})
+          .catch(console.error)
+        }
+      })
+      .catch(console.error)
+    })
+  })
+  .catch(console.error)
+}
+
 exports.getOrders = async () => {
   return await db.all(`SELECT * FROM Orders;`)
 }

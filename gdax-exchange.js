@@ -102,6 +102,10 @@ exports.createExchange = (options, logger) => {
       return authedClient.getOrders()
         .then(log('GDAX: getOrders'))
         .then(catchApiError)
+        .then(async os => {
+          tracker.updateLiveOrders(os.map(o => o.id), exchange.orderStatus)
+          return os
+        })
         .then(os => os.map(o => {
           return {id: o.id, product: o.product_id, price:o.price, stopPrice:o.stop_price, amount:o.size, side: o.side, type: o.type, stop: o.stop, created: o.created_at}
         }))
