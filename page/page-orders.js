@@ -11,6 +11,8 @@ exports.render = async (req, res, next) => {
       .side-buy { color:#008000 }
       .side-sell { color:#a00000 }
       .status-cancelled { color:#a0a0a0 }
+      .side-buy.status-filled { color:#709070 }
+      .side-sell.status-filled { color:#a07070 }
     </style>
   `))
 }
