@@ -59,7 +59,8 @@ x Handle throttling fail more gracefully on status page
  x Migrate-add fill-price and fees fields
  x When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
   x Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
- * Update orders page; filled colours and actual profit column
+ x Update orders page: filled colours
+ * Update orders page: show fill price as well, and also fees, and also actual real profit
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
 * Support another exchange
