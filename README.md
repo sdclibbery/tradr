@@ -61,14 +61,18 @@ x Handle throttling fail more gracefully on status page
   x Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
  x Update orders page: filled colours
  x Update orders page: show fill price as well, and also fees, and also actual real profit
+  * Filter out filled bot setup orders...
   * Dont show filled price/profit if the order isn't filled yet!
+* Buy then sell etc bot keeps retrying forever if theres insufficient funds
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
+* Can leave dated notes on each product page
 * Support another exchange
  * Choose exchange: has many altcoins, has an API with trade-only keys
  * Trade etc pages must be told exchange as well as product
  * Write a new exchange implementation
   * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
+* Set product alerts that show on the home page when triggered Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
 * Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Optimise/reduce gdax calls on status page
  * Fetch all product prices at once?
