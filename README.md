@@ -64,7 +64,7 @@ x Handle throttling fail more gracefully on status page
  x Update orders page: show fill price as well, and also fees, and also actual real profit
   x Order by status
   * Split into separate tables (or even separate pages)
-   * Open orders, including expected Profit, also current price for reference
+   x Open orders, including expected Profit
    * Filled orders excluding bot setup orders, including actual profit
     * Show orders filled since last visit
    * User cancelled orders
