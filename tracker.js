@@ -59,6 +59,10 @@ exports.getFilledOrders = async () => {
   return await db.all(`SELECT * FROM Orders WHERE status = 'filled' ORDER BY date(created) DESC;`)
 }
 
+exports.getUserCancelledOrders = async () => {
+  return await db.all(`SELECT * FROM Orders WHERE status = 'cancelled' AND creator = 'user' ORDER BY date(created) DESC;`)
+}
+
 exports.getOrdersWithoutBotCancellations = async () => {
   return await db.all(`SELECT * FROM Orders WHERE status != 'cancelled' OR creator NOT LIKE '% bot' ORDER BY status DESC, date(created) DESC;`)
 }

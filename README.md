@@ -55,7 +55,7 @@ x Single thing to spawn bots
 x Make sure all bots are setting buy/sell reasons
 x Do any trade actions need fetch steps? No.
 x Handle throttling fail more gracefully on status page
-* Order tracking show filled orders and show actual profit/loss on orders page
+x Order tracking show filled orders and show actual profit/loss on orders page
  x Migrate-add fill-price and fees fields
  x When getting orders, pass them to the tracker along with a callback that fetches order status from exchange
   x Tracker gets order status for each order it thinks is open but is missing from the list, and updates if required
@@ -63,11 +63,10 @@ x Handle throttling fail more gracefully on status page
  x Track fill *date* !!
  x Update orders page: show fill price as well, and also fees, and also actual real profit
   x Order by status
-  * Split into separate tables (or even separate pages)
+  x Split into separate tables (or even separate pages)
    x Open orders, including expected Profit
-   * Filled orders excluding bot setup orders, including actual profit
-    * Show orders filled since last visit
-   * User cancelled orders
+   x Filled orders excluding bot setup orders, including actual profit
+   x User cancelled orders
 * Buy then sell etc bot keeps retrying forever if theres insufficient funds
 * Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Order cancellation from orders page
