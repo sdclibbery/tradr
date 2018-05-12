@@ -15,6 +15,7 @@ framework.init([
       const {id} = await exchange.sell(options.amount, sellPrice, 'sellThenBuy bot', `trying to sell in to then buy at ${options.targetPrice}`)
       orderId = id
     } catch (e) {
+      if (e.message.includes('Insufficient')) { throw e }
       logger.error(`BOT: sell-then-buy: failed to place sell order; trying again...`)
       orderId = null
     }

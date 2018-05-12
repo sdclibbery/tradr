@@ -67,7 +67,7 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x Open orders, including expected Profit
    x Filled orders excluding bot setup orders, including actual profit
    x User cancelled orders
-* Buy then sell etc bot keeps retrying forever if theres insufficient funds
+x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 * Order page which shows the candle graph with all orders overlaid graphically as rectangles
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
