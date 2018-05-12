@@ -23,7 +23,7 @@ exports.trackOrder = async (order) => {
 
 exports.trackOrderCancellation = async (id) => {
   await db.run(
-    `UPDATE Orders SET status='cancelled' WHERE id=$id;`,
+    `UPDATE Orders SET status='cancelled', closeTime=strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id=$id;`,
     {$id:id}
   )
 }
@@ -37,7 +37,7 @@ exports.updateLiveOrders = (liveOrderIds, getOrderStatus) => {
       .then(({filled, filledAmountInQuoteCurrency, price}) => {
         if (filled) {
           const fees = filledAmountInQuoteCurrency - amount*price
-          db.run(`UPDATE Orders SET status='filled', fillPrice=$price, fees=$fees WHERE id=$id`, {$id:id, $price:price, $fees:fees})
+          db.run(`UPDATE Orders SET status='filled', fillPrice=$price, fees=$fees, closeTime=strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id=$id`, {$id:id, $price:price, $fees:fees})
           .catch(console.error)
         }
       })
