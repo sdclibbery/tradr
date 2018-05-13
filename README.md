@@ -68,20 +68,27 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x Filled orders excluding bot setup orders, including actual profit
    x User cancelled orders
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
-* Order page which shows the candle graph with all orders overlaid graphically as rectangles
+* Augment order info on the product pages with tracked info including expected profit
+* Strategy
+ * Can leave dated notes on each product page
+ * Set product alerts that show on the home page when triggered
+    Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
+ * Product alerts can auto trigger bots to run
+* Better date/time markers on candle graphs
+ * Round positions to days/hours
+ * Better labels; remember its implicit that the RHS is *now*
+* Add equivalent total in EUR and BTC to balance tracking table?
+* Product order page candle graphs show all orders overlaid graphically as rectangles
+* Ability to clear bot logs
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
-* Can leave dated notes on each product page
 * Support another exchange
  * Choose exchange: has many altcoins, has an API with trade-only keys
  * Trade etc pages must be told exchange as well as product
  * Write a new exchange implementation
   * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
-* Set product alerts that show on the home page when triggered Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
-* Optimise/reduce gdax calls on status page
- * Fetch all product prices at once?
- * Dont fetch BTC-EUR price twice...
 * Have a centralised exchange? Or a cache of centralised exchanges per product? To save fetching steps etc every time...
+ * Optimise/reduce gdax calls on status page: cache product prices for a little while
 * Allow buy-then-sell bot to have multiple exits?
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
@@ -97,9 +104,6 @@ x Buy then sell etc bot keeps retrying forever if theres insufficient funds
  * Use websocket feed to update price
 * Show live depth chart
 * Show TA indicators: RSI, NVT
-* Mechanism for rationalising old orders
- * Eg find old orders that can cancel with each other given their 'createdAt' prices?
-* Can clear bot logs
 * Bot log pages live update
 * Show EMAs
 * Hack up a moving average bots
