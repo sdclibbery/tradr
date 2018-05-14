@@ -68,10 +68,16 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x Filled orders excluding bot setup orders, including actual profit
    x User cancelled orders
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
+* Refactor exchange
+ * From startup (not exchange creation), fetch steps
+ * Remove fetchSteps
+ * Track prices once and make available
+ * Return latest prices instead of fetching
+ ? do candles??
 * Augment order info on the product pages with tracked info including expected profit
 * Strategy
  * Can leave dated notes on each product page
- * Set product alerts that show on the home page when triggered
+ * Set product alerts that show on the home & product page when triggered
     Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
  * Product alerts can auto trigger bots to run
 * Better date/time markers on candle graphs
