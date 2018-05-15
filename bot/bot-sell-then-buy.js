@@ -28,15 +28,28 @@ framework.init([
     }
 
     if (orderId) {
-      const {filled, price} = await exchange.orderStatus(orderId)
-      if (filled) {
-        logger.warn(`BOT: sell-then-buy: bought in at ${exchange.formatQuote(price)}`)
-        const {id} = await exchange.buy(options.amount, options.targetPrice, 'sellThenBuy bot', `setting buy order after selling in at ${exchange.formatQuote(currentPrice)}`)
-        logger.sync.warn(`BOT: sell-then-buy: set buy order for ${exchange.formatQuote(options.targetPrice)} : ${id}`)
+      const buyIfSellHasFilled = async () => {
+        const {filled, price} = await exchange.orderStatus(orderId)
+        if (filled) {
+          logger.warn(`BOT: sell-then-buy: bought in at ${exchange.formatQuote(price)}`)
+          const {id} = await exchange.buy(options.amount, options.targetPrice, 'sellThenBuy bot', `setting buy order after selling in at ${exchange.formatQuote(currentPrice)}`)
+          logger.sync.warn(`BOT: sell-then-buy: set buy order for ${exchange.formatQuote(options.targetPrice)} : ${id}`)
+          return true
+        }
+      }
+      if (await buyIfSellHasFilled()) {
         break
       } else {
-        await exchange.cancelOrder(orderId)
-        orderId = null
+        try {
+          await exchange.cancelOrder(orderId)
+          orderId = null
+        } catch (e) {
+          if (e.message.includes('Order already done')) {
+            if (await buyIfSellHasFilled()) {
+              break
+            }
+          }
+        }
       }
     }
   }

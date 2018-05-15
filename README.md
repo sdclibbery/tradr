@@ -68,9 +68,14 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x Filled orders excluding bot setup orders, including actual profit
    x User cancelled orders
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
+* Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
+debug [Tue May 15 2018 14:55:20 GMT+0000 (UTC)]  GDAX: cancelOrder(4138e0ce-71b8-4210-9946-b95c17fdee0b) { message: 'Order already done' }
+error [Tue May 15 2018 14:55:20 GMT+0000 (UTC)]  Bot run error:  Error: Order already done
+* Page with all graphs and prices on
 * Refactor exchange
- * From startup (not exchange creation), fetch steps
+ x From startup (not exchange creation), fetch steps
  * Remove fetchSteps
+  !!!!! BUT what about bots which will want to use an exchange immediately at startup!
  * Track prices once and make available
  * Return latest prices instead of fetching
  ? do candles??
