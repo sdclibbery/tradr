@@ -32,8 +32,8 @@ exports.init = async (optionDefinitions) => {
     process.exit()
   }
 
+  await GdaxExchange.ready()
   const exchange = GdaxExchange.createExchange(options, logger)
-  await exchange.fetchSteps()
   return {
     options: options,
     logger: logger,

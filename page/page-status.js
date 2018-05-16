@@ -6,7 +6,6 @@ exports.render = async (req, res, next) => {
   let exchange, data
   try {
     exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
-    await exchange.fetchSteps()
     data = await fetchData(exchange)
   } catch (e) { next(e); return }
   res.send(frame(`

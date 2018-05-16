@@ -6,7 +6,6 @@ exports.render = async (req, res, next) => {
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
-  await exchange.fetchSteps()
   const accounts = await exchange.accounts()
   const baseAccount = accounts.filter(a => a.currency == baseCurrency)[0] || {balance:0, available:0}
   const quoteAccount = accounts.filter(a => a.currency == quoteCurrency)[0] || {balance:0, available:0}

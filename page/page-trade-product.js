@@ -6,7 +6,6 @@ exports.render = async (req, res, next) => {
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
-  await exchange.fetchSteps()
   const price = await exchange.latestPrice()
 
   res.send(frame(`

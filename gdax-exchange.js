@@ -14,6 +14,13 @@ client.getProducts()
       return p
     })
   }).catch(console.error)
+exports.ready = async () => {
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+  while (!products) {
+    await sleep(100)
+  }
+}
+
 
 exports.createExchange = (options, logger) => {
   const baseCurrency = options.product && options.product.split('-')[0]
@@ -74,8 +81,6 @@ exports.createExchange = (options, logger) => {
     roundBase: x => Number.parseFloat(dp(x, exchange.baseDp)),
     roundQuote: x => Number.parseFloat(dp(x, exchange.quoteDp)),
 
-    fetchSteps: async () => {},
-
     accounts: async () => {
       return authedClient.getAccounts()
         .then(log('GDAX: getAccounts'))
@@ -108,7 +113,7 @@ exports.createExchange = (options, logger) => {
     },
 
     order: async (side, amountOfBaseCurrency, price, product, creator, reason) => {
-      await exchange.fetchSteps()
+      await exports.ready()
       logger.debug(`GDAX: ${side}ing ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
@@ -132,7 +137,7 @@ exports.createExchange = (options, logger) => {
     },
 
     orderNow: async (side, amountOfBaseCurrency, amountOfQuoteCurrency, creator, reason) => {
-      await exchange.fetchSteps()
+      await exports.ready()
       const baseInfo = amountOfBaseCurrency ? `${exchange.formatBase(amountOfBaseCurrency)}` : ''
       const quoteInfo = amountOfQuoteCurrency ? `${exchange.formatQuote(amountOfQuoteCurrency)}` : ''
       logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
@@ -159,7 +164,7 @@ exports.createExchange = (options, logger) => {
     },
 
     stopLoss: async (price, amountOfBaseCurrency, creator, reason) => {
-      await exchange.fetchSteps()
+      await exports.ready()
       logger.debug(`GDAX: setting stoploss for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
@@ -176,7 +181,7 @@ exports.createExchange = (options, logger) => {
     },
 
     stopEntry: async (price, amountOfBaseCurrency, creator, reason) => {
-      await exchange.fetchSteps()
+      await exports.ready()
       logger.debug(`GDAX: setting stopentry for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
