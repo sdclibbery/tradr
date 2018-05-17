@@ -84,8 +84,9 @@ x Buy then sell bot failed because the order filled between checking the status 
     Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
  * Product alerts can auto trigger bots to run
 * Better date/time markers on candle graphs
- * Round positions to days/hours
- * Better labels; remember its implicit that the RHS is *now*
+ x Round positions to days/hours
+ x Better labels; remember its implicit that the RHS is *now*
+ * click on candles places crosshair with price/date readout on
 * Add equivalent total in EUR and BTC to balance tracking table?
 * Product order page candle graphs show all orders overlaid graphically as rectangles
 * Ability to clear bot logs
