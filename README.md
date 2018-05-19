@@ -86,6 +86,7 @@ x Buy then sell bot failed because the order filled between checking the status 
 * Better date/time markers on candle graphs
  x Round positions to days/hours
  x Better labels; remember its implicit that the RHS is *now*
+ x colour volume bars by height
  * click on candles places crosshair with price/date readout on
 * Add equivalent total in EUR and BTC to balance tracking table?
 * Product order page candle graphs show all orders overlaid graphically as rectangles

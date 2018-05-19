@@ -22,14 +22,19 @@ const draw = (canvas, candles, granularity) => {
   const logMaxPrice = Math.log(maxPrice)
   const toY = (p) => canvas.height * (1 - (Math.log(p)-logMinPrice)/(logMaxPrice-logMinPrice))
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
+  const maxVolume = candles.reduce((m, c) => Math.max(m, c.volume), 0)
+  const meanVolume = candles.reduce((m, c) => m+c.volume, 0) / candles.length
 
   const background = () => {
     ctx.fillStyle = '#f0f0f0'
+    ctx.shadowColor = 'white'
+    ctx.shadowBlur = 0
     ctx.fillRect(0, 0, canvas.width, canvas.height)
   }
 
-  const volumeBar = (x, height) => {
-    ctx.fillStyle = '#b0b0b0'
+  const volumeBar = (x, volume) => {
+    const height = volume*600/granularity
+    ctx.fillStyle = volume >= meanVolume ? '#808080' : '#b0b0b0'
     ctx.fillRect(x, canvas.height - height, barW, height)
   }
 
@@ -49,7 +54,9 @@ const draw = (canvas, candles, granularity) => {
   }
 
   const timeLabel = (time, label, align) => {
-    ctx.fillStyle = '#000000a0'
+    ctx.fillStyle = 'white'
+    ctx.shadowColor = 'black'
+    ctx.shadowBlur = 6
     ctx.font = '26px helvetica,arial bold'
     ctx.textBaseline = 'bottom'
     ctx.textAlign = align
@@ -60,7 +67,9 @@ const draw = (canvas, candles, granularity) => {
   const priceLabel = (p) => {
     ctx.textAlign = 'right'
     ctx.textBaseline = 'middle'
-    ctx.fillStyle = '#00000080'
+    ctx.fillStyle = 'white'
+    ctx.shadowColor = 'black'
+    ctx.shadowBlur = 6
     ctx.textAlign = 'left'
     ctx.fillText(p, 0, toY(p))
     ctx.textAlign = 'right'
@@ -72,8 +81,7 @@ const draw = (canvas, candles, granularity) => {
 
   candles.map((c, i) => {
     const x = toX(c.time*1000)-barW
-    const volumeBarHeight = c.volume*300/granularity
-    volumeBar(x, volumeBarHeight)
+    volumeBar(x, c.volume)
     candleBar(x, c)
   })
 
