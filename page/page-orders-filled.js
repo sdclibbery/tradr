@@ -23,7 +23,7 @@ const formatOrders = (orders) => {
       const quoteCurrency = o.product.split('-')[1]
       return `<tr class="side-${o.side}">
       <td>${o.exchange} ${o.product} <b>${o.side} ${dp4(o.amount)} ${baseCurrency}</b></td>
-      <td><b>Profit: ${dp2(actualProfit(o))}%</b></td>
+      <td><b>Profit: ${dp2(actualProfit(o))}%</b> at ${o.closeTime}</td>
       <td>by <b>${o.creator}</b> for ${o.reason}</td>
       <td>created at ${o.created}, ${dp4(o.priceAtCreation)} ${quoteCurrency} target ${dp4(o.orderPrice)} ${quoteCurrency}</td>
       </tr>`

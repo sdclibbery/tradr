@@ -56,7 +56,7 @@ exports.getOpenOrders = async () => {
 }
 
 exports.getFilledOrders = async () => {
-  return await db.all(`SELECT * FROM Orders WHERE status = 'filled' ORDER BY date(created) DESC;`)
+  return await db.all(`SELECT * FROM Orders WHERE status = 'filled' ORDER BY date(closeTime) DESC, date(created) DESC;`)
 }
 
 exports.getUserCancelledOrders = async () => {

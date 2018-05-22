@@ -69,6 +69,7 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x User cancelled orders
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
+* Display and sort by fill date on filled order page
 * Refactor exchange
  x From startup (not exchange creation), fetch steps
  x ready() to allow callers to ensure exchange setup is complete
@@ -76,13 +77,13 @@ x Buy then sell bot failed because the order filled between checking the status 
  * Track prices once and make available
  * Return latest prices instead of fetching
  ? do candles??
-* Page with all graphs and prices on
-* Augment order info on the product pages with tracked info including expected profit
 * Strategy
  * Can leave dated notes on each product page
  * Set product alerts that show on the home & product page when triggered
     Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
  * Product alerts can auto trigger bots to run
+* Page with all graphs and prices on
+* Augment order info on the product pages with tracked info including expected profit
 * Better date/time markers on candle graphs
  x Round positions to days/hours
  x Better labels; remember its implicit that the RHS is *now*
