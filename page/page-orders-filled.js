@@ -10,6 +10,7 @@ exports.render = async (req, res, next) => {
     <style>
       .side-buy { color:#008000 }
       .side-sell { color:#a00000 }
+      .setup { filter: blur(0.7px) contrast(30%) brightness(1.5) grayscale(0.3) }
     </style>
   `))
 }
@@ -21,7 +22,8 @@ const formatOrders = (orders) => {
     .map(o => {
       const baseCurrency = o.product.split('-')[0]
       const quoteCurrency = o.product.split('-')[1]
-      return `<tr class="side-${o.side}">
+      const isBotSetup = o.creator.includes('bot') && o.reason.includes('trying')
+      return `<tr class="side-${o.side} ${isBotSetup?'setup':''}">
       <td>${o.exchange} ${o.product} <b>${o.side} ${dp4(o.amount)} ${baseCurrency}</b></td>
       <td><b>Profit: ${dp2(actualProfit(o))}%</b> at ${o.closeTime}</td>
       <td>by <b>${o.creator}</b> for ${o.reason}</td>
