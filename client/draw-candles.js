@@ -1,15 +1,4 @@
-updateCandleChart = (canvas, product, granularity) => {
-  fetch(`https://api.gdax.com/products/${product}/candles?granularity=${granularity}`)
-  .then(res => res.json())
-  .then(cs => cs.map(candle => {
-    return { time: candle[0], low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
-  }))
-  .then(candles => {
-    draw(canvas, candles, granularity)
-  })
-}
-
-const draw = (canvas, candles, granularity) => {
+drawCandles = (canvas, candles, granularity) => {
   var ctx = canvas.getContext('2d')
 
   const minPrice = candles.reduce((m, c) => Math.min(m, c.low==0 ? m : c.low), Infinity)

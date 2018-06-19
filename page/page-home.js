@@ -29,6 +29,10 @@ exports.render = (req, res) => {
       <a href='/trade/BCH-EUR'>BCH-EUR</a>
     </p>
     <hr>
+    <p>
+      <a href='/analyse/BTC-EUR'>Analyse BTC-EUR</a>
+    </p>
+    <hr>
     <p><a href="system">System</a></p>
   `))
 }

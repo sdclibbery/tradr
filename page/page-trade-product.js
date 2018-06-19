@@ -13,12 +13,12 @@ exports.render = async (req, res, next) => {
     <h1>Trade ${product}</h1>
 
     <h3>Price/Candles</h3>
-    <button onclick="javascript:candles(60)">5h</button>
-    <button onclick="javascript:candles(300)">1d</button>
-    <button onclick="javascript:candles(900)">3d</button>
-    <button onclick="javascript:candles(3600)">12d</button>
-    <button onclick="javascript:candles(21600)">10w</button>
-    <button onclick="javascript:candles(86400)">10m</button>
+    <button onclick="javascript:candleGraph(60)">5h</button>
+    <button onclick="javascript:candleGraph(300)">1d</button>
+    <button onclick="javascript:candleGraph(900)">3d</button>
+    <button onclick="javascript:candleGraph(3600)">12d</button>
+    <button onclick="javascript:candleGraph(21600)">10w</button>
+    <button onclick="javascript:candleGraph(86400)">10m</button>
     <div style="overflow-x:auto; direction:rtl; width:100%; padding:0;">
       <canvas id="candles" width="1500" height="500" style="width:750px; height:250px; margin:0;"></canvas>
     </div>
@@ -54,13 +54,15 @@ exports.render = async (req, res, next) => {
     <h3>Orders</h3>
     <iframe src="/orders/${product}" style="width: 100%; height: 160px;"></iframe>
 
-    <h3>Depth</h3>
+    <script src="/fetch-candles.js"></script>
     <script src="/draw-candles.js"></script>
     <script>
-      candles = (granularity) => {
-        updateCandleChart(document.getElementById('candles'), '${product}', granularity);
+      candleGraph = (granularity) => {
+        fetchCandles('${product}', granularity).then(candles => {
+          drawCandles(document.getElementById('candles'), candles, granularity)
+        })
       }
-      updateCandleChart(document.getElementById('candles'), '${product}', 60);
+      candleGraph(60);
     </script>
   `))
 }
