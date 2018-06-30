@@ -23,7 +23,6 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   const lines = (ls) => {
     ls.forEach((from, idx, h) => {
       const to = h[idx+1]
-  console.log(from, to)
       if (to) { line(from, to) }
     })
   }
@@ -31,16 +30,14 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   ctx.shadowColor = 'white'
   ctx.shadowBlur = 0
 
-  const highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } })
+  const highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } }).reverse()
   lines(hull(highs).map(({x,y}) => { return {x:toX(x), y:toY(y)} }))
 
 }
 
-const isBelowLine = (ls, le, p) => {
-  const m = (le.y - ls.y) / (le.x - ls.x)
-  const c = ls.y - m*ls.x
-  const yAtP = m*p.x + c
-  return p.y < yAtP
+const hull = (points) => {
+  const initialHull = [points.shift(), points.pop()]
+  return points.reduce(extendHull, initialHull)
 }
 
 const extendHull = (partialHull, point) => {
@@ -52,9 +49,11 @@ const extendHull = (partialHull, point) => {
   return partialHull.slice(0, iNext).concat(point, partialHull.slice(iNext))
 }
 
-const hull = (points) => {
-  const initialHull = [points.shift(), points.pop()]
-  return points.reduce(extendHull, initialHull)
+const isBelowLine = (ls, le, p) => {
+  const m = (le.y - ls.y) / (le.x - ls.x)
+  const c = ls.y - m*ls.x
+  const yAtP = m*p.x + c
+  return p.y < yAtP
 }
 
 assertSame = (actual, expected) => {
@@ -79,3 +78,5 @@ assertSame(hull([{x:0,y:1}, {x:1,y:1}]), [{x:0,y:1}, {x:1,y:1}])
 assertSame(hull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
 assertSame(hull([{x:0,y:1}, {x:1,y:0}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
 //assertSame(hull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
+// ? better algo: start with ALL points in hull, and remove any points that are
+//    below the line formed by the points either side
