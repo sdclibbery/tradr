@@ -11,20 +11,28 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   const logMaxPrice = Math.log(maxPrice)
   const toY = (p) => canvas.height * (1 - (Math.log(p)-logMinPrice)/(logMaxPrice-logMinPrice))
 
-  const line = ({x1, y1, x2, y2}) => {
-    ctx.strokeStyle = '#303030c0'
+  const line = (s, e) => {
+    ctx.strokeStyle = '#000000'//'#303030c0'
     ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.moveTo(x1, y1)
-    ctx.lineTo(x2, y2)
+    ctx.moveTo(s.x, s.y)
+    ctx.lineTo(e.x, e.y)
     ctx.stroke()
+  }
+
+  const lines = (ls) => {
+    ls.forEach((from, idx, h) => {
+      const to = h[idx+1]
+  console.log(from, to)
+      if (to) { line(from, to) }
+    })
   }
 
   ctx.shadowColor = 'white'
   ctx.shadowBlur = 0
 
-  const highs = candles.map(c => { return { x:toX(c.time*1000), y:toY(c.high) } })
-  hull(highs)//Now connect points with lines
+  const highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } })
+  lines(hull(highs).map(({x,y}) => { return {x:toX(x), y:toY(y)} }))
 
 }
 
@@ -35,16 +43,13 @@ const isBelowLine = (ls, le, p) => {
   return p.y < yAtP
 }
 
-const isBelowHull = (h, p) => {
-  const h1 = h.filter(({x}) => x > p.x)[0]
-  const h2 = h.filter(({x}) => x < p.x).reverse()[0]
-  if (!h1 || !h2) { return false }
-  return isBelowLine(h1, h2, p)
-}
-
 const extendHull = (partialHull, point) => {
-  if (isBelowHull(partialHull, point)) { return partialHull }
-  return partialHull.concat(point)
+  const iNext = partialHull.filter(({x}) => x < point.x).length
+  const iPrev = iNext - 1
+  const pp = partialHull[iPrev]
+  const pn = partialHull[iNext]
+  if (isBelowLine(pp, pn, point)) { return partialHull }
+  return partialHull.slice(0, iNext).concat(point, partialHull.slice(iNext))
 }
 
 const hull = (points) => {
@@ -61,14 +66,16 @@ assertSame = (actual, expected) => {
   }
 }
 
-assertSame(isBelowHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:2}), false)
-assertSame(isBelowHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:1}), false)
-assertSame(isBelowHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:0}), true)
-assertSame(isBelowHull([{x:0,y:1}, {x:2,y:5}], {x:1,y:3.1}), false)
-assertSame(isBelowHull([{x:0,y:1}, {x:2,y:5}], {x:1,y:2.9}), true)
-assertSame(isBelowHull([{x:-1,y:0}, {x:0,y:0}, {x:2,y:1}], {x:1,y:1}), false)
-assertSame(isBelowHull([{x:-1,y:0}, {x:0,y:0}, {x:2,y:1}], {x:1,y:0}), true)
+assertSame(isBelowLine({x:0,y:1}, {x:2,y:1}, {x:1,y:2}), false)
+assertSame(isBelowLine({x:0,y:1}, {x:2,y:1}, {x:1,y:1}), false)
+assertSame(isBelowLine({x:0,y:1}, {x:2,y:1}, {x:1,y:0}), true)
+assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:3.1}), false)
+assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:2.9}), true)
+
+assertSame(extendHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:2}), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
+assertSame(extendHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:0}), [{x:0,y:1}, {x:2,y:1}])
 
 assertSame(hull([{x:0,y:1}, {x:1,y:1}]), [{x:0,y:1}, {x:1,y:1}])
-//assertSame(hull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
+assertSame(hull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
 assertSame(hull([{x:0,y:1}, {x:1,y:0}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
+//assertSame(hull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
