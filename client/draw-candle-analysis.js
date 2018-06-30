@@ -36,17 +36,23 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
 }
 
 const hull = (points) => {
-  const initialHull = [points.shift(), points.pop()]
-  return points.reduce(extendHull, initialHull)
+  let partialHull = points
+  for (let i=0; i<5; i++) {
+    partialHull = reduceToHull(partialHull)
+  }
+  return partialHull
 }
 
-const extendHull = (partialHull, point) => {
-  const iNext = partialHull.filter(({x}) => x < point.x).length
-  const iPrev = iNext - 1
-  const pp = partialHull[iPrev]
-  const pn = partialHull[iNext]
-  if (isBelowLine(pp, pn, point)) { return partialHull }
-  return partialHull.slice(0, iNext).concat(point, partialHull.slice(iNext))
+const reduceToHull = (partialHull) => {
+  const betterHull = []
+  partialHull.forEach((p, idx, h) => {
+    const prev = h[idx-1]
+    const next = h[idx+1]
+    if (!prev || !next || !isBelowLine(prev, next, p)) {
+      betterHull.push(p)
+    }
+  })
+  return betterHull
 }
 
 const isBelowLine = (ls, le, p) => {
@@ -71,12 +77,9 @@ assertSame(isBelowLine({x:0,y:1}, {x:2,y:1}, {x:1,y:0}), true)
 assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:3.1}), false)
 assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:2.9}), true)
 
-assertSame(extendHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:2}), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
-assertSame(extendHull([{x:0,y:1}, {x:2,y:1}], {x:1,y:0}), [{x:0,y:1}, {x:2,y:1}])
-
 assertSame(hull([{x:0,y:1}, {x:1,y:1}]), [{x:0,y:1}, {x:1,y:1}])
 assertSame(hull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
 assertSame(hull([{x:0,y:1}, {x:1,y:0}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
-//assertSame(hull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
+assertSame(hull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:2}]), [{x:0,y:1}, {x:2,y:2}])
 // ? better algo: start with ALL points in hull, and remove any points that are
 //    below the line formed by the points either side
