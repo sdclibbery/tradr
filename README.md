@@ -70,6 +70,9 @@ x Order tracking show filled orders and show actual profit/loss on orders page
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
 x Display and sort by fill date on filled order page
+* Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
+* Candle analysis page
+ * Draw a convex hull of the highs and lows
 * Candle time labels wrong
  On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
  The 23rd was correct. The same problem was on all the other views too.
