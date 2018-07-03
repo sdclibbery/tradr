@@ -21,7 +21,9 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   }
 
   const lines = (ls) => {
-    ls.forEach((from, idx, h) => {
+    ls
+     .map(({x,y}) => { return {x:toX(x), y:toY(y)} })
+     .forEach((from, idx, h) => {
       const to = h[idx+1]
       if (to) { line(from, to) }
     })
@@ -31,14 +33,16 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   ctx.shadowBlur = 0
 
   let highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } }).reverse()
-  for (let i=0; i<4; i++) {
-    highs = reduceToHull(highs)
-  }
-  for (let i=0; i<5; i++) {
-    highs = reduceToHull(highs)
-    lines(highs.map(({x,y}) => { return {x:toX(x), y:toY(y)} }))
-  }
+  highs = reduceAnd(highs, 4, () => {})
+  highs = reduceAnd(highs, 5, lines)
+}
 
+const reduceAnd = (hull, times, action) => {
+  for (let i=0; i<times; i++) {
+    hull = reduceToHull(hull)
+    action(hull)
+  }
+  return hull
 }
 
 const reduceToHull = (partialHull) => {

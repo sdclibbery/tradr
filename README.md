@@ -70,10 +70,11 @@ x Order tracking show filled orders and show actual profit/loss on orders page
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
 x Display and sort by fill date on filled order page
-* Analysis page
+* Analysis page with hull
  x Rough upper hull
  * Release it...
  * Lower hull
+ * Should be open/close not low/high?
 * Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
 * Candle analysis page
  * Draw a convex hull of the highs and lows
