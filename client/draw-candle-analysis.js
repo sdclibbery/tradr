@@ -12,8 +12,8 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   const toY = (p) => canvas.height * (1 - (Math.log(p)-logMinPrice)/(logMaxPrice-logMinPrice))
 
   const line = (s, e) => {
-    ctx.strokeStyle = '#000000'//'#303030c0'
-    ctx.lineWidth = 2
+    ctx.strokeStyle = '#30303030'
+    ctx.lineWidth = 4
     ctx.beginPath()
     ctx.moveTo(s.x, s.y)
     ctx.lineTo(e.x, e.y)
@@ -30,17 +30,15 @@ drawCandleAnalysis = (canvas, candles, granularity) => {
   ctx.shadowColor = 'white'
   ctx.shadowBlur = 0
 
-  const highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } }).reverse()
-  lines(hull(highs).map(({x,y}) => { return {x:toX(x), y:toY(y)} }))
-
-}
-
-const hull = (points) => {
-  let partialHull = points
-  for (let i=0; i<5; i++) {
-    partialHull = reduceToHull(partialHull)
+  let highs = candles.map(c => { return { x:(c.time*1000), y:(c.high) } }).reverse()
+  for (let i=0; i<4; i++) {
+    highs = reduceToHull(highs)
   }
-  return partialHull
+  for (let i=0; i<5; i++) {
+    highs = reduceToHull(highs)
+    lines(highs.map(({x,y}) => { return {x:toX(x), y:toY(y)} }))
+  }
+
 }
 
 const reduceToHull = (partialHull) => {
@@ -77,9 +75,9 @@ assertSame(isBelowLine({x:0,y:1}, {x:2,y:1}, {x:1,y:0}), true)
 assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:3.1}), false)
 assertSame(isBelowLine({x:0,y:1}, {x:2,y:5}, {x:1,y:2.9}), true)
 
-assertSame(hull([{x:0,y:1}, {x:1,y:1}]), [{x:0,y:1}, {x:1,y:1}])
-assertSame(hull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
-assertSame(hull([{x:0,y:1}, {x:1,y:0}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
-assertSame(hull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:2}]), [{x:0,y:1}, {x:2,y:2}])
+assertSame(reduceToHull([{x:0,y:1}, {x:1,y:1}]), [{x:0,y:1}, {x:1,y:1}])
+assertSame(reduceToHull([{x:0,y:1}, {x:1,y:2}, {x:2,y:1}]), [{x:0,y:1}, {x:1,y:2}, {x:2,y:1}])
+assertSame(reduceToHull([{x:0,y:1}, {x:1,y:0}, {x:2,y:1}]), [{x:0,y:1}, {x:2,y:1}])
+assertSame(reduceToHull([{x:0,y:1}, {x:1,y:1.1}, {x:2,y:2}]), [{x:0,y:1}, {x:2,y:2}])
 // ? better algo: start with ALL points in hull, and remove any points that are
 //    below the line formed by the points either side
