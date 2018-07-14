@@ -31,19 +31,21 @@ exports.createExchange = (options, logger) => {
     return response
   }
 
-  const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.gdax.com')
+  const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.pro.coinbase.com')
   const websocket = new Gdax.WebsocketClient([options.product])
   websocket.on('error', log('websocket error'))
 
   logger.debug(options)
 
-  const handleError = ({message, status, reject_reason, ...data}) => {
-    logger.error('GDAX API Error', message, status, reject_reason, data)
-    throw new Error(message || reject_reason)
+  const handleError = (context) => {
+    return ({message, status, reject_reason, ...data}) => {
+      logger.error('GDAX API Error', context, message, status, reject_reason, data)
+      throw new Error(message || reject_reason)
+    }
   }
   const catchApiError = (data) => {
     if (data.message !== undefined || data.status === 'rejected') {
-      handleError(data)
+      handleError('')(data)
     }
     return data
   }
@@ -95,7 +97,7 @@ exports.createExchange = (options, logger) => {
         .then(as => as.map(a => {
           return { currency: a.currency, balance: a.balance, available: a.available }
         }, {}))
-        .catch(handleError)
+        .catch(handleError('accounts'))
     },
 
     orders: async () => {
@@ -109,7 +111,7 @@ exports.createExchange = (options, logger) => {
         .then(os => os.map(o => {
           return {id: o.id, product: o.product_id, price:o.price, stopPrice:o.stop_price, amount:o.size, side: o.side, type: o.type, stop: o.stop, created: o.created_at}
         }))
-        .catch(handleError)
+        .catch(handleError('orders'))
     },
 
     order: async (side, amountOfBaseCurrency, price, product, creator, reason) => {
@@ -125,7 +127,7 @@ exports.createExchange = (options, logger) => {
       .then(log(`GDAX: order: ${side}, ${amountOfBaseCurrency}, ${price}`))
       .then(catchApiError)
       .then(trackOrder(creator, reason))
-      .catch(handleError)
+      .catch(handleError(`order: ${side}, ${amountOfBaseCurrency}, ${price}`))
     },
 
     buy: async (amountOfBaseCurrency, price, creator, reason) => {
@@ -152,7 +154,7 @@ exports.createExchange = (options, logger) => {
       .then(catchApiError)
       .then(trackOrder(creator, reason))
       .then(({price, size, id}) => { return {id:id, price:price, size:size}})
-      .catch(handleError)
+      .catch(handleError(`order: ${side}ing ${baseInfo}${quoteInfo} at market price`))
     },
 
     buyNow: async (amountOfBase, amountOfQuote, creator, reason) => {
@@ -177,7 +179,7 @@ exports.createExchange = (options, logger) => {
       .then(log(`GDAX: stopLoss(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
-      .catch(handleError)
+      .catch(handleError(`stopLoss(${price}, ${amountOfBaseCurrency})`))
     },
 
     stopEntry: async (price, amountOfBaseCurrency, creator, reason) => {
@@ -194,7 +196,7 @@ exports.createExchange = (options, logger) => {
       .then(log(`GDAX: stopEntry(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
-      .catch(handleError)
+      .catch(handleError(`stopEntry(${price}, ${amountOfBaseCurrency})`))
     },
 
     latestPrice: async () => {
@@ -206,7 +208,7 @@ exports.createExchange = (options, logger) => {
       .then(log(`GDAX: getProductTicker(${product})`))
       .then(catchApiError)
       .then(({price}) => Number.parseFloat(price))
-      .catch(handleError)
+      .catch(handleError(`getProductTicker(${product})`))
     },
 
     _lastPrice: null,
@@ -249,7 +251,7 @@ exports.createExchange = (options, logger) => {
           filledAmountInQuoteCurrency: executed_value,
           price: price,
         }))
-        .catch(handleError)
+        .catch(handleError(`orderStatus: ${id}`))
     },
 
     cancelOrder: async (id) => {
@@ -259,7 +261,7 @@ exports.createExchange = (options, logger) => {
         .then(catchApiError)
         .then(async () => await tracker.trackOrderCancellation(id))
         .then(() => {cancelled:true})
-        .catch(handleError)
+        .catch(handleError(`cancelOrder(${id})`))
     },
 
     candles: async ({startTime, count, granularity}) => {
@@ -297,7 +299,7 @@ exports.createExchange = (options, logger) => {
         .then(cs => cs.map(candle => {
           return { time: candleTimeToDate(candle[0]), low: candle[1], high: candle[2], open: candle[3], close: candle[4], volume: candle[5] }
         }))
-        .catch(handleError)
+        .catch(handleError('candles ${granularity}'))
     },
   }
   if (options.product) {

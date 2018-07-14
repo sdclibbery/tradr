@@ -70,9 +70,11 @@ x Order tracking show filled orders and show actual profit/loss on orders page
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
 x Display and sort by fill date on filled order page
-* !!! Auto pkg update not working???
-* !!! avahi not working???
-* Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
+x Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
+* !Auto pkg update not working??? - Check on this...
+* Getting errors when accessing /orders/BTC-EUR - needs investigating and fixing!
+ * An order is not found when looking up status: what does that mean? what should we do then? Remove it from the tracker presumably?
+ ! This is on local, so was probably never a valid oprder anyway: check in sqlite viewer...
 * Strategy: order intention and learning
  * Can leave notes on orders explaining the reasoning behind them
  * Product order page candle graphs show all orders overlaid graphically as rectangles
