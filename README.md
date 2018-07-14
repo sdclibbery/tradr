@@ -70,22 +70,26 @@ x Order tracking show filled orders and show actual profit/loss on orders page
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
 x Display and sort by fill date on filled order page
+* !!! Auto pkg update not working???
+* !!! avahi not working???
+* Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
+* Strategy: order intention and learning
+ * Can leave notes on orders explaining the reasoning behind them
+ * Product order page candle graphs show all orders overlaid graphically as rectangles
+ * Augment order info on the product pages with tracked info including expected profit
 * Analysis page with hull
  x Rough upper hull
- * Release it...
- * Lower hull
+ x Lower hull
  * Should be open/close not low/high?
-* Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
-* Candle analysis page
- * Draw a convex hull of the highs and lows
-* Candle time labels wrong
- On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
- The 23rd was correct. The same problem was on all the other views too.
+ * Links from other pages
 * Strategy
  * Can leave dated notes on each product page
  * Set product alerts that show on the home & product page when triggered
-    Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
+   Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
  * Product alerts can auto trigger bots to run
+* Candle time labels wrong
+ On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
+ The 23rd was correct. The same problem was on all the other views too.
 * Refactor exchange
  x From startup (not exchange creation), fetch steps
  x ready() to allow callers to ensure exchange setup is complete
@@ -95,14 +99,12 @@ x Display and sort by fill date on filled order page
  * Calculate portfolio totals correctly
  ? do candles??
 * Page with all graphs and prices on
-* Augment order info on the product pages with tracked info including expected profit
 * Better date/time markers on candle graphs
  x Round positions to days/hours
  x Better labels; remember its implicit that the RHS is *now*
  x colour volume bars by height
  * click on candles places crosshair with price/date readout on
 * Add equivalent total in EUR and BTC to balance tracking table?
-* Product order page candle graphs show all orders overlaid graphically as rectangles
 * Ability to clear bot logs
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
