@@ -72,11 +72,11 @@ x Buy then sell bot failed because the order filled between checking the status 
 x Display and sort by fill date on filled order page
 x Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
 x !Auto pkg update not working??? - Check on this... - working now
-* Update npm packages
-* Handle case where order status lookup fails because order is not found
+x Update npm packages
+x Handle case where order status lookup fails because order is not found
  o Theres a test case in the local DB as 37e39912-e1bb-4a4d-9683-c90ae4117a42
- * Catch it cleanly and return that status or throw
- * And then mark the order closed in the tracker DB
+ x Catch it cleanly and return that status or throw
+ x And then mark the order closed in the tracker DB
 * Strategy: order intention and learning
  * Can leave notes on orders explaining the reasoning behind them
  * Product order page candle graphs show all orders overlaid graphically as rectangles

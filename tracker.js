@@ -41,7 +41,11 @@ exports.updateLiveOrders = (liveOrderIds, getOrderStatus) => {
           .catch(console.error)
         }
       })
-      .catch(console.error)
+      .catch((e) => {
+        console.error(e, `Error: Marking order ${id} as abandoned`)
+        db.run(`UPDATE Orders SET status='abandoned', closeTime=strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id=$id`, {$id:id})
+        .catch(console.error)
+      })
     })
   })
   .catch(console.error)
