@@ -71,10 +71,12 @@ x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
 x Display and sort by fill date on filled order page
 x Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
-* !Auto pkg update not working??? - Check on this...
-* Getting errors when accessing /orders/BTC-EUR - needs investigating and fixing!
- * An order is not found when looking up status: what does that mean? what should we do then? Remove it from the tracker presumably?
- ! This is on local, so was probably never a valid oprder anyway: check in sqlite viewer...
+x !Auto pkg update not working??? - Check on this... - working now
+* Update npm packages
+* Handle case where order status lookup fails because order is not found
+ o Theres a test case in the local DB as 37e39912-e1bb-4a4d-9683-c90ae4117a42
+ * Catch it cleanly and return that status or throw
+ * And then mark the order closed in the tracker DB
 * Strategy: order intention and learning
  * Can leave notes on orders explaining the reasoning behind them
  * Product order page candle graphs show all orders overlaid graphically as rectangles
