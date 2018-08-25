@@ -46,6 +46,7 @@ app.get('/bot', require('./page/page-bot').render)
 app.post('/bot/start/:bot', require('./page/page-bot').start)
 app.post('/bot/stop/:bot', require('./page/page-bot').stop)
 app.get('/bot/log/:logFile', require('./page/page-bot-log').render)
+app.get('/bot/log/:logFile/clear', require('./page/page-bot-log').clearLog)
 app.use('/system', (req, res) => req.pipe(request('http://localhost:8000/system'+req.url)).pipe(res))
 
 const expressServer = app.listen(port, () => {

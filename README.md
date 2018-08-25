@@ -77,7 +77,13 @@ x Handle case where order status lookup fails because order is not found
  o Theres a test case in the local DB as 37e39912-e1bb-4a4d-9683-c90ae4117a42
  x Catch it cleanly and return that status or throw
  x And then mark the order closed in the tracker DB
-* Product order page candle graphs show all orders overlaid graphically as rectangles
+* Ability to clear bot logs
+* Back up sqlite db regularly to google drive
+  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
+  https://www.npmjs.com/package/s3-node-client
+  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
+* Page to view balance history
+* Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
 * Can leave notes on orders explaining the reasoning behind them
 * Analysis page with hull
  x Rough upper hull
@@ -108,7 +114,6 @@ x Handle case where order status lookup fails because order is not found
  x colour volume bars by height
  * click on candles places crosshair with price/date readout on
 * Add equivalent total in EUR and BTC to balance tracking table?
-* Ability to clear bot logs
 * Order cancellation from orders page
 * Rename and rework status page into account balances page
 * Support another exchange
@@ -121,12 +126,7 @@ x Handle case where order status lookup fails because order is not found
 * Allow buy-then-sell bot to have multiple exits?
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
-* Page to view balance history
 * Has the bulk of the volume been coming from one account or many? Show on chart somehow
-* Back up sqlite db regularly to google drive
-  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
-  https://www.npmjs.com/package/s3-node-client
-  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
 * Order page will need pagination/sorting/filtering
 * Live price update
  * Fetch price client side

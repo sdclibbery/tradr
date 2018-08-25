@@ -26,6 +26,11 @@ exports.render = async (req, res, next) => {
           el.style.display = el.style.display == 'none' ? 'block' : 'none'
         }
       }
+      clearLog = function () {
+        if (confirm('Really clear log?')) {
+          document.location.href = "/bot/log/${req.params.logFile}/clear"
+        }
+      }
       window.onload = function () {
         toggleLogLevel('Debug')
         window.scrollTo(0, document.body.scrollHeight)
@@ -37,11 +42,17 @@ exports.render = async (req, res, next) => {
       <button onclick="javascript:toggleLogLevel('Info')">Info</button>
       <button onclick="javascript:toggleLogLevel('Warn')">Warn</button>
       <button onclick="javascript:toggleLogLevel('Error')">Error</button>
+      <button onclick="javascript:clearLog()">Clear Log</button>
     </div>
     <div id="log-content">
       ${format(log)}
     </div>
   `))
+}
+
+exports.clearLog = (req, res) => {
+  fs.truncateSync(`./bot/${req.params.logFile}`)
+  res.redirect(`/bot/log/${req.params.logFile}`)
 }
 
 const format = (log) => {
