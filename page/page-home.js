@@ -4,8 +4,16 @@ const frame =  require('./frame').apply
 exports.render = (req, res) => {
   res.send(frame(`
     <h1>${os.hostname()} tradr </h1>
-    <p><a href="status">GDAX status</a></p>
-    <p><a href="orders">All Orders</a><a href="orders/open">Open Orders</a><a href="orders/filled">Filled Orders</a><a href="orders/cancelled">Cancelled Orders</a></p>
+    <p>
+      <a href="status">GDAX status</a>
+      <a href="account/history">Accounts history</a>
+    </p>
+    <p>
+      <a href="orders">All Orders</a>
+      <a href="orders/open">Open Orders</a>
+      <a href="orders/filled">Filled Orders</a>
+      <a href="orders/cancelled">Cancelled Orders</a>
+    </p>
     <p><a href="bot">Bots</a></p>
     <hr>
     <p>

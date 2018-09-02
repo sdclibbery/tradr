@@ -77,12 +77,12 @@ x Handle case where order status lookup fails because order is not found
  o Theres a test case in the local DB as 37e39912-e1bb-4a4d-9683-c90ae4117a42
  x Catch it cleanly and return that status or throw
  x And then mark the order closed in the tracker DB
-* Ability to clear bot logs
+x Ability to clear bot logs
+* Page to view balance history
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client
   * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
-* Page to view balance history
 * Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
 * Can leave notes on orders explaining the reasoning behind them
 * Analysis page with hull
