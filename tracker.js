@@ -13,6 +13,10 @@ exports.trackBalances = async (balances) => {
   ))
 }
 
+exports.getBalances = async () => {
+  return await db.all(`SELECT * FROM Balances LIMIT 10;`)
+}
+
 exports.trackOrder = async (order) => {
   await db.run(
     `INSERT INTO Orders (id, exchange, product, status, created, side, orderPrice, priceAtCreation, amount, creator, reason)
