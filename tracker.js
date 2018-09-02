@@ -14,7 +14,7 @@ exports.trackBalances = async (balances) => {
 }
 
 exports.getBalances = async () => {
-  return await db.all(`SELECT * FROM Balances LIMIT 10;`)
+  return await db.all(`SELECT currency, at, balance, available FROM Balances ORDER BY currency ASC, at DESC LIMIT 100000;`)
 }
 
 exports.trackOrder = async (order) => {

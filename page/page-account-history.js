@@ -10,5 +10,14 @@ exports.render = async (req, res, next) => {
 }
 
 const format = (balances) => {
-  return JSON.stringify(balances)
+  return JSON.stringify(ignoreUnchanging(balances)).replace(/\}\,\{/gi, '},<br/>{')
+}
+
+const ignoreUnchanging = (balances) => {
+  let lastBalance
+  return balances.filter(b => {
+    const changed = b.balance != lastBalance
+    lastBalance = b.balance
+    return changed
+  })
 }

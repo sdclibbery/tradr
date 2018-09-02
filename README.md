@@ -78,7 +78,9 @@ x Handle case where order status lookup fails because order is not found
  x Catch it cleanly and return that status or throw
  x And then mark the order closed in the tracker DB
 x Ability to clear bot logs
-* Page to view balance history
+* Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
+ * Store these values when storing account balances
+ * Page to draw graphs of them
 * Back up sqlite db regularly to google drive
   https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
   https://www.npmjs.com/package/s3-node-client
@@ -99,6 +101,9 @@ x Ability to clear bot logs
 * Candle time labels wrong
  On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
  The 23rd was correct. The same problem was on all the other views too.
+* Page to view balance history
+ x Basic page (account/history)
+ * Draw some graphs
 * Refactor exchange
  x From startup (not exchange creation), fetch steps
  x ready() to allow callers to ensure exchange setup is complete
