@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 ls -a tradr.sqlite
-gzip tradr.sqlite > tradr.sqlite.gzip
+gzip -c tradr.sqlite > tradr.sqlite.gz
+ls -a tradr.sqlite.gz
+./gdrive-rpi upload -p tradr --delete tradr.sqlite.gz
 ls -a tradr.sqlite.gzip
-./gdrive upload -p tradr --delete tradr.sqlite.gzip
-ls -a tradr.sqlite.gzip
-./gdrive list
+./gdrive-rpi list -q "name contains 'tradr.sqlite'"
