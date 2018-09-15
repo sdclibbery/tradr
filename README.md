@@ -78,13 +78,12 @@ x Handle case where order status lookup fails because order is not found
  x Catch it cleanly and return that status or throw
  x And then mark the order closed in the tracker DB
 x Ability to clear bot logs
-* Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
- * Store these values when storing account balances
- * Page to draw graphs of them
 * Back up sqlite db regularly to google drive
-  https://s3.console.aws.amazon.com/s3/buckets/tradr-backup/?region=eu-west-1&tab=overview
-  https://www.npmjs.com/package/s3-node-client
-  * Need to not overwrite from dev on desktop: maybe include hostname in S3 filename?
+  * Need to not overwrite from dev on desktop: maybe include hostname in filename?
+  
+* Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
+ * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
+ * Page to draw graphs of this; also showing portfolio split between different currencies
 * Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
 * Can leave notes on orders explaining the reasoning behind them
 * Analysis page with hull
