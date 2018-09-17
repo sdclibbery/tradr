@@ -78,13 +78,11 @@ x Handle case where order status lookup fails because order is not found
  x Catch it cleanly and return that status or throw
  x And then mark the order closed in the tracker DB
 x Ability to clear bot logs
-* Back up sqlite db regularly to google drive
-  * Need to not overwrite from dev on desktop: maybe include hostname in filename?
-  
+x Ability to back up sqlite db to google drive
+* Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
  * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
  * Page to draw graphs of this; also showing portfolio split between different currencies
-* Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
 * Can leave notes on orders explaining the reasoning behind them
 * Analysis page with hull
  x Rough upper hull
@@ -97,6 +95,7 @@ x Ability to clear bot logs
    Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
  * Product alerts can auto trigger bots to run
  * Augment order info on the product pages with tracked info including expected profit
+* Add backup automation with monitoring of some kind
 * Candle time labels wrong
  On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
  The 23rd was correct. The same problem was on all the other views too.
