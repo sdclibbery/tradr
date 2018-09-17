@@ -85,12 +85,12 @@ x Ability to clear bot logs
  * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
  * Page to draw graphs of this; also showing portfolio split between different currencies
 * Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
- * refactor: pull shared client side candle stuff into separate file
+ x refactor: pull shared client side candle stuff into separate file
   x setup shared file for candle extents
   x pass extents into both draw functions from analysis page
   x draw candles uses extents
   x pass extents from product trade page
-  * draw analysis uses extents
+  x draw analysis uses extents
  * make new draw orders page
   * start with a temp test order; do drawing
   * pass real orders in
