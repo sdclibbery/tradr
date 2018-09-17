@@ -86,11 +86,11 @@ x Ability to clear bot logs
  * Page to draw graphs of this; also showing portfolio split between different currencies
 * Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
  * refactor: pull shared client side candle stuff into separate file
-  * setup shared file for candle extents
-  * allow pasing optional extents object into draw candles page
-  * allow passing optional extents object into draw analysis page
-  * use it in analysis page
-  * use it in product trade page
+  x setup shared file for candle extents
+  x pass extents into both draw functions from analysis page
+  x draw candles uses extents
+  x pass extents from product trade page
+  * draw analysis uses extents
  * make new draw orders page
   * start with a temp test order; do drawing
   * pass real orders in

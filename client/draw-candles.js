@@ -1,18 +1,16 @@
-drawCandles = (canvas, candles, granularity) => {
+drawCandles = (canvas, candles, granularity, extents) => {
   var ctx = canvas.getContext('2d')
 
-  const minPrice = candles.reduce((m, c) => Math.min(m, c.low==0 ? m : c.low), Infinity)
-  const maxPrice = candles.reduce((m, c) => Math.max(m, c.high), -Infinity)
-  const minTime = 1000*candles[candles.length-1].time
-  const maxTime = 1000*candles[0].time
+  const minPrice = extents.minPrice
+  const maxPrice = extents.maxPrice
+  const minTime = extents.minTime
+  const maxTime = extents.maxTime
   const barW = canvas.width/300
-  const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
-  const logMinPrice = Math.log(minPrice)
-  const logMaxPrice = Math.log(maxPrice)
-  const toY = (p) => canvas.height * (1 - (Math.log(p)-logMinPrice)/(logMaxPrice-logMinPrice))
+  const toX = extents.toX
+  const toY = extents.toY
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-  const maxVolume = candles.reduce((m, c) => Math.max(m, c.volume), 0)
-  const meanVolume = candles.reduce((m, c) => m+c.volume, 0) / candles.length
+  const maxVolume = extents.maxVolume
+  const meanVolume = extents.meanVolume
 
   const background = () => {
     ctx.fillStyle = '#f0f0f0'

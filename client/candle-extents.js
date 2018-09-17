@@ -9,10 +9,7 @@ candleExtents = (canvas, candles) => {
     minTime: minTime,
     maxTime: maxTime,
     toX: (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime),
-    logMinPrice: Math.log(minPrice),
-    logMaxPrice: Math.log(maxPrice),
     toY: (p) => canvas.height * (1 - (Math.log(p)-Math.log(minPrice))/(Math.log(maxPrice)-Math.log(minPrice))),
-    dp: (x, dp) => Number.parseFloat(x).toFixed(dp),
     maxVolume: candles.reduce((m, c) => Math.max(m, c.volume), 0),
     meanVolume: candles.reduce((m, c) => m+c.volume, 0) / candles.length,
   }
