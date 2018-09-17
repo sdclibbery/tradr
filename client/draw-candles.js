@@ -9,7 +9,6 @@ drawCandles = (canvas, candles, granularity, extents) => {
   const toX = extents.toX
   const toY = extents.toY
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-  const maxVolume = extents.maxVolume
   const meanVolume = extents.meanVolume
 
   const background = () => {

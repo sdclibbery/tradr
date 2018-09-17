@@ -1,10 +1,6 @@
 drawCandleAnalysis = (canvas, candles, granularity, extents) => {
   var ctx = canvas.getContext('2d')
 
-  const minPrice = extents.minPrice
-  const maxPrice = extents.maxPrice
-  const minTime = extents.minTime
-  const maxTime = extents.maxTime
   const toX = extents.toX
   const toY = extents.toY
 

@@ -20,16 +20,43 @@ exports.render = async (req, res, next) => {
     <script src="/candle-extents.js"></script>
     <script src="/draw-candles.js"></script>
     <script src="/draw-candle-analysis.js"></script>
+    <script src="/draw-orders.js"></script>
     <script>
+      const orders = [
+        {// recent
+          priceAtCreation:6200,
+          created:'2018-09-02T18:36:21.006732Z',
+          fillPrice:5355,
+          closeTime:'2018-09-17T21:36:21.006732Z',
+        },
+        { // sellThenBuy
+          priceAtCreation:7200,
+          created:'2018-05-11T14:21:02.362094Z',
+          fillPrice:6607,
+          closeTime:'2018-05-23T16:15:18.206Z',
+        },
+        { // buyThenSell
+          priceAtCreation:5574.88,
+          created:'2018-06-12T19:48:41.377677Z',
+          fillPrice:5921.0000 ,
+          closeTime:'2018-06-19T15:19:56.795Z',
+        },
+        { // still open
+          priceAtCreation:6505.69,
+          created:'2018-06-09T08:55:03.221875Z',
+          orderPrice:8827.0000,
+        },
+      ]
       candleGraph = (granularity) => {
         const canvas = document.getElementById('candles')
         fetchCandles('${product}', granularity).then(candles => {
           const extents = candleExtents(canvas, candles)
           drawCandles(canvas, candles, granularity, extents)
           drawCandleAnalysis(canvas, candles, granularity, extents)
+          drawOrders(canvas, orders, extents)
         })
       }
-      candleGraph(60);
+      candleGraph(60)
     </script>
   `))
 }
