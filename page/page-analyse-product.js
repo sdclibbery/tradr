@@ -17,13 +17,16 @@ exports.render = async (req, res, next) => {
     <canvas id="candles" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
 
     <script src="/fetch-candles.js"></script>
+    <script src="/candle-extents.js"></script>
     <script src="/draw-candles.js"></script>
     <script src="/draw-candle-analysis.js"></script>
     <script>
       candleGraph = (granularity) => {
+        const canvas = document.getElementById('candles')
         fetchCandles('${product}', granularity).then(candles => {
-          drawCandles(document.getElementById('candles'), candles, granularity)
-          drawCandleAnalysis(document.getElementById('candles'), candles, granularity)
+          const extents = candleExtents(canvas, candles)
+          drawCandles(canvas, candles, granularity, extents)
+          drawCandleAnalysis(canvas, candles, granularity, extents)
         })
       }
       candleGraph(60);

@@ -79,16 +79,25 @@ x Handle case where order status lookup fails because order is not found
  x And then mark the order closed in the tracker DB
 x Ability to clear bot logs
 x Ability to back up sqlite db to google drive
-* Product order page candle graphs show all current and historical orders overlaid graphically as rectangles
-* Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
- * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
- * Page to draw graphs of this; also showing portfolio split between different currencies
+* Product order/analysis page candle graphs show all current and historical orders overlaid graphically as rectangles
+ x refactor: pull shared client side candle stuff into separate file
+  x setup shared file for candle extents
+  x pass extents into both draw functions from analysis page
+  x draw candles uses extents
+  x pass extents from product trade page
+  x draw analysis uses extents
+ * make new draw orders page
+  * start with a temp test order; do drawing
+  * pass real orders in
 * Can leave notes on orders explaining the reasoning behind them
 * Analysis page with hull
  x Rough upper hull
  x Lower hull
  * Should be open/close not low/high?
  * Links from other pages
+* Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
+ * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
+ * Page to draw graphs of this; also showing portfolio split between different currencies
 * Strategy
  * Can leave dated notes on each product page
  * Set product alerts that show on the home & product page when triggered

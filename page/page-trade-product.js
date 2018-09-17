@@ -56,10 +56,13 @@ exports.render = async (req, res, next) => {
 
     <script src="/fetch-candles.js"></script>
     <script src="/draw-candles.js"></script>
+    <script src="/candle-extents.js"></script>
     <script>
       candleGraph = (granularity) => {
+        const canvas = document.getElementById('candles')
         fetchCandles('${product}', granularity).then(candles => {
-          drawCandles(document.getElementById('candles'), candles, granularity)
+          const extents = candleExtents(canvas, candles)
+          drawCandles(canvas, candles, granularity, extents)
         })
       }
       candleGraph(60);
