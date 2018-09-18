@@ -24,27 +24,38 @@ exports.render = async (req, res, next) => {
     <script>
       const orders = [
         {// recent
+          status:'filled',
           priceAtCreation:6200,
           created:'2018-09-02T18:36:21.006732Z',
           fillPrice:5355,
           closeTime:'2018-09-17T21:36:21.006732Z',
         },
         { // sellThenBuy
+          status:'filled',
           priceAtCreation:7200,
           created:'2018-05-11T14:21:02.362094Z',
           fillPrice:6607,
           closeTime:'2018-05-23T16:15:18.206Z',
         },
         { // buyThenSell
+          status:'filled',
           priceAtCreation:5574.88,
           created:'2018-06-12T19:48:41.377677Z',
           fillPrice:5921.0000 ,
           closeTime:'2018-06-19T15:19:56.795Z',
         },
-        { // still open
+        {
+          status:'open',
           priceAtCreation:6505.69,
           created:'2018-06-09T08:55:03.221875Z',
           orderPrice:8827.0000,
+        },
+        {
+          status:'cancelled',
+          priceAtCreation:6505.69,
+          created:'2018-07-09T08:55:03.221875Z',
+          orderPrice:8827.0000,
+          closeTime:'2018-07-19T15:19:56.795Z',
         },
       ]
       candleGraph = (granularity) => {

@@ -5,7 +5,7 @@ drawOrders = (canvas, orders, extents) => {
   const toY = extents.toY
 
   const orderBar = (o) => {
-    const color = o.closeTime ? '#00c000' : '#808080'
+    const color = ({filled:'#00c000', cancelled:'#800000'}[o.status]) || '#404040'
     ctx.fillStyle = color+'20'
     ctx.strokeStyle = color+'40'
     const x1 = toX(new Date(o.created))
