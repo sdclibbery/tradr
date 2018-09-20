@@ -7,6 +7,7 @@ exports.render = async (req, res, next) => {
   const quoteCurrency = product.split('-')[1]
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
   const price = await exchange.latestPrice()
+  const orders = await require('../tracker').getOrdersForProduct(product)
 
   res.send(frame(`
     <style>input[type="number"] { width:80px }</style>
@@ -57,12 +58,15 @@ exports.render = async (req, res, next) => {
     <script src="/fetch-candles.js"></script>
     <script src="/draw-candles.js"></script>
     <script src="/candle-extents.js"></script>
+    <script src="/draw-orders.js"></script>
     <script>
+    const orders = ${JSON.stringify(orders)}
       candleGraph = (granularity) => {
         const canvas = document.getElementById('candles')
         fetchCandles('${product}', granularity).then(candles => {
           const extents = candleExtents(canvas, candles)
           drawCandles(canvas, candles, granularity, extents)
+          drawOrders(canvas, orders, extents)
         })
       }
       candleGraph(60);

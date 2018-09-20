@@ -59,6 +59,10 @@ exports.getOrders = async () => {
   return await db.all(`SELECT * FROM Orders;`)
 }
 
+exports.getOrdersForProduct = async (product) => {
+  return await db.all(`SELECT * FROM Orders WHERE product = $product;`, {$product:product})
+}
+
 exports.getOpenOrders = async () => {
   return await db.all(`SELECT * FROM Orders WHERE status = 'open' ORDER BY date(created) DESC;`)
 }

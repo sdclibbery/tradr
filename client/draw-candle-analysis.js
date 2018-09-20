@@ -5,6 +5,7 @@ drawCandleAnalysis = (canvas, candles, granularity, extents) => {
   const toY = extents.toY
 
   const line = (s, e) => {
+    ctx.shadowBlur = 0
     ctx.strokeStyle = '#30303030'
     ctx.lineWidth = 4
     ctx.beginPath()
