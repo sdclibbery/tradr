@@ -69,6 +69,9 @@ x Order tracking show filled orders and show actual profit/loss on orders page
    x User cancelled orders
 x Buy then sell etc bot keeps retrying forever if theres insufficient funds
 x Buy then sell bot failed because the order filled between checking the status and cancelling, so the cancel failed with:
+x Analysis page with hull
+ x Rough upper hull
+ x Lower hull
 x Display and sort by fill date on filled order page
 x Migrate API usage away from api.gdax.com to api.pro.coinbase.com.
 x !Auto pkg update not working??? - Check on this... - working now
@@ -79,22 +82,17 @@ x Handle case where order status lookup fails because order is not found
  x And then mark the order closed in the tracker DB
 x Ability to clear bot logs
 x Ability to back up sqlite db to google drive
-* Product order/analysis page candle graphs show all current and historical orders overlaid graphically as rectangles
+x Product order/analysis page candle graphs show all current and historical orders overlaid graphically as rectangles
  x refactor: pull shared client side candle stuff into separate file
   x setup shared file for candle extents
   x pass extents into both draw functions from analysis page
   x draw candles uses extents
   x pass extents from product trade page
   x draw analysis uses extents
- * make new draw orders page
-  * start with a temp test order; do drawing
-  * pass real orders in
+ x make new draw orders page
+  x start with a temp test order; do drawing
+  x pass real orders in
 * Can leave notes on orders explaining the reasoning behind them
-* Analysis page with hull
- x Rough upper hull
- x Lower hull
- * Should be open/close not low/high?
- * Links from other pages
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
  * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
  * Page to draw graphs of this; also showing portfolio split between different currencies
@@ -111,6 +109,9 @@ x Ability to back up sqlite db to google drive
 * Page to view balance history
  x Basic page (account/history)
  * Draw some graphs
+* Analysis page with hull
+ * Should be open/close not low/high?
+ * Links from other pages
 * Refactor exchange
  x From startup (not exchange creation), fetch steps
  x ready() to allow callers to ensure exchange setup is complete
