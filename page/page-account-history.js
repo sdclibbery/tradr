@@ -9,17 +9,8 @@ exports.render = async (req, res, next) => {
     <script src="/draw-balances.js"></script>
     <script>
       const canvas = document.getElementById('balances')
-      const balances = ${JSON.stringify(ignoreUnchanging(balances))}
+      const balances = ${JSON.stringify(balances)}
       drawBalances(canvas, balances)
     </script>
   `))
-}
-
-const ignoreUnchanging = (balances) => {
-  let lastBalance
-  return balances.filter(b => {
-    const changed = b.balance != lastBalance
-    lastBalance = b.balance
-    return changed
-  })
 }
