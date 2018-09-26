@@ -92,10 +92,13 @@ x Product order/analysis page candle graphs show all current and historical orde
  x make new draw orders page
   x start with a temp test order; do drawing
   x pass real orders in
-* Can leave notes on orders explaining the reasoning behind them
+x Basic graph of account balances over time
+* Add x axis labels to account balance graph - extract code from drawCandles
+* Add key showing which currency is which on account balance graph
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
  * Store these values when storing account balances (or maybe better to store exchange rates when storing the existing balances?)
- * Page to draw graphs of this; also showing portfolio split between different currencies
+* Change account balance graph to show combined portfolio value and split between currencies over time
+* Can leave notes on orders explaining the reasoning behind them
 * Strategy
  * Can leave dated notes on each product page
  * Set product alerts that show on the home & product page when triggered
