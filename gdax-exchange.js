@@ -219,7 +219,11 @@ exports.createExchange = (options, logger) => {
 
     latestPriceOf: (product) => {
       const price = prices[product]
-      if (!price) { logger.error('no price found for product', product) }
+      if (!price) {
+        const msg = `no price found for product ${product}`
+        logger.error(msg)
+        throw new Error(msg)
+      }
       return price
     },
 
