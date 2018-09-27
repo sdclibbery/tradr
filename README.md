@@ -48,6 +48,11 @@ x Save account balance info to DB whenever its accessed, to provide a history
 x Order page: filter out orders cancelled by bots
 x bot launch still not working :-(
 x Fix tech debt of global exchange object in framework.js
+x Refactor exchange
+ x From startup (not exchange creation), fetch steps
+ x ready() to allow callers to ensure exchange setup is complete
+ x Remove fetchSteps
+ ? do candles??
 x Bots are opening their OWN sqlite in the /bot dir :-/
 x Order filtering is using wrong filter
 x Quote currency rounding on the account sub page is wrong
@@ -93,6 +98,11 @@ x Product order/analysis page candle graphs show all current and historical orde
   x start with a temp test order; do drawing
   x pass real orders in
 x Basic graph of account balances over time
+x Track prices once
+* Return latest prices instead of fetching
+* Wait for tracked prices instead of retracking
+* Calculate portfolio totals correctly
+* Store prices alongside balances to allow conversion to combined portfolio value
 * Add x axis labels to account balance graph - extract code from drawCandles
 * Add key showing which currency is which on account balance graph
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
@@ -115,14 +125,6 @@ x Basic graph of account balances over time
 * Analysis page with hull
  * Should be open/close not low/high?
  * Links from other pages
-* Refactor exchange
- x From startup (not exchange creation), fetch steps
- x ready() to allow callers to ensure exchange setup is complete
- x Remove fetchSteps
- * Track prices once and make available
- * Return latest prices instead of fetching
- * Calculate portfolio totals correctly
- ? do candles??
 * Page with all graphs and prices on
 * Better date/time markers on candle graphs
  x Round positions to days/hours

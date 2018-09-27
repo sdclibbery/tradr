@@ -2,6 +2,22 @@ const Gdax = require('gdax')
 const tracker = require('./tracker')
 const Credentials = require('./gdax-account-credentials') // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
+console.log('hello')
+const prices = {}
+const websocketTicker = new Gdax.WebsocketClient(
+  ['BTC-EUR', 'ETH-EUR', 'LTC-EUR', 'ETH-BTC', 'LTC-BTC'],
+  'wss://ws-feed.pro.coinbase.com',
+  Credentials,
+  { channels: ['ticker'] }
+)
+websocketTicker.on('error', console.log)
+websocketTicker.on('message', (data) => {
+  if (!data.price || !data.product_id) { return }
+  //console.log(data.product_id, data.price)
+  const price = Number.parseFloat(data.price)
+  prices[data.product_id] = price
+})
+
 const client = new Gdax.PublicClient()
 let products
 client.getProducts()
@@ -20,7 +36,6 @@ exports.ready = async () => {
     await sleep(100)
   }
 }
-
 
 exports.createExchange = (options, logger) => {
   const baseCurrency = options.product && options.product.split('-')[0]
@@ -302,6 +317,7 @@ exports.createExchange = (options, logger) => {
         .catch(handleError('candles ${granularity}'))
     },
   }
+
   if (options.product) {
     const product = products.filter(p => p.id == options.product)[0]
     exchange.quoteStep = product.quoteStep
