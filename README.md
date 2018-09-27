@@ -101,6 +101,7 @@ x Basic graph of account balances over time
 x Track prices once
 x Return latest prices instead of fetching
 * Don't use await when calling latestPrice(Of)
+ * Test bots still work!
 * Calculate portfolio totals correctly
 * Store prices alongside balances to allow conversion to combined portfolio value
 * Extract some classes from gdax-exchange

@@ -12,7 +12,7 @@ framework.init([
 
   const calcStoploss = (price) => price*(1 - percent/100)
 
-  const startPrice = await exchange.latestPrice()
+  const startPrice = exchange.latestPrice()
   const buyInPrice = startPrice - 0.01
   const entryAmountInQuoteCurrency = options.amount
   const entryAmountInBaseCurrency = options.amount / buyInPrice

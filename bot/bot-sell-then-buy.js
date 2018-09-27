@@ -7,7 +7,7 @@ framework.init([
 ])
 .then(async ({ options, logger, exchange }) => {
   let orderId = null
-  let currentPrice = await exchange.latestPrice()
+  let currentPrice = exchange.latestPrice()
   logger.warn(`BOT: sell-then-buy: trading ${exchange.formatBase(options.amount)} on ${options.product} from ${exchange.formatQuote(currentPrice)} with target price ${exchange.formatQuote(options.targetPrice)}`)
   while (true) {
     const sellPrice = currentPrice - exchange.quoteStep

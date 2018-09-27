@@ -30,7 +30,7 @@ framework.init([
     count++
 
     if (lastDirection && direction !== lastDirection) {
-      const price = await exchange.latestPrice()
+      const price = exchange.latestPrice()
       logger.warn(`Direction change to ${direction}! at price ${exchange.formatQuote(price)}; close ma: ${exchange.formatQuote(closeMa)}  far ma: ${exchange.formatQuote(farMa)}`)
       const fees = price * 0.25/100
       tempQuoteBalanceForTesting -= fees

@@ -73,7 +73,7 @@ exports.createExchange = (options, logger) => {
         $created: data.created_at,
         $side: data.side,
         $orderPrice: data.price,
-        $priceAtCreation: await exchange.latestPriceOf(data.product_id),
+        $priceAtCreation: exchange.latestPriceOf(data.product_id),
         $amount: data.size,
         $creator: creator || 'unknown',
         $reason: reason || 'unknown',
