@@ -2,10 +2,9 @@ const Gdax = require('gdax')
 const tracker = require('./tracker')
 const Credentials = require('./gdax-account-credentials') // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
 
-console.log('hello')
 const prices = {}
 const websocketTicker = new Gdax.WebsocketClient(
-  ['BTC-EUR', 'ETH-EUR', 'LTC-EUR', 'ETH-BTC', 'LTC-BTC'],
+  ['BTC-EUR', 'ETH-EUR', 'LTC-EUR', 'ETH-BTC', 'LTC-BTC', 'ETC-EUR', 'BCH-EUR'],
   'wss://ws-feed.pro.coinbase.com',
   Credentials,
   { channels: ['ticker'] }
@@ -214,16 +213,14 @@ exports.createExchange = (options, logger) => {
       .catch(handleError(`stopEntry(${price}, ${amountOfBaseCurrency})`))
     },
 
-    latestPrice: async () => {
+    latestPrice: () => {
       return exchange.latestPriceOf(options.product)
     },
 
-    latestPriceOf: async (product) => {
-      return authedClient.getProductTicker(product)
-      .then(log(`GDAX: getProductTicker(${product})`))
-      .then(catchApiError)
-      .then(({price}) => Number.parseFloat(price))
-      .catch(handleError(`getProductTicker(${product})`))
+    latestPriceOf: (product) => {
+      const price = prices[product]
+      if (!price) { logger.error('no price found for product', product) }
+      return price
     },
 
     _lastPrice: null,

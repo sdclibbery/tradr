@@ -99,8 +99,8 @@ x Product order/analysis page candle graphs show all current and historical orde
   x pass real orders in
 x Basic graph of account balances over time
 x Track prices once
-* Return latest prices instead of fetching
-* Wait for tracked prices instead of retracking
+x Return latest prices instead of fetching
+* Dont use await when calling latestPrice(Of)
 * Calculate portfolio totals correctly
 * Store prices alongside balances to allow conversion to combined portfolio value
 * Add x axis labels to account balance graph - extract code from drawCandles
