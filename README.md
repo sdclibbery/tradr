@@ -106,8 +106,8 @@ x Extract gdax price follower
 x Extract gdax account fetcher
 x Account fetcher decorates accounts with latest prices and conversions into EUR, BTC
 x Use converted balances on status and account product page
-* Store and track prices alongside balances to allow conversion to combined portfolio value
-* Calculate portfolio totals correctly(?)
+x Store and track prices alongside balances to allow conversion to combined portfolio value
+* Display valuesInEur/Btc on balances graph along with total combined value
 * Add x axis labels to account balance graph - extract code from drawCandles
 * Add key showing which currency is which on account balance graph
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time

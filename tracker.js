@@ -8,13 +8,15 @@ db
 exports.trackBalances = async (balances) => {
   await Promise.all(
     balances.map(b => db.run(
-      `INSERT INTO Balances (currency, exchange, at, balance, available) VALUES ($currency, $exchange, $at, $balance, $available);`, b
+      `INSERT INTO Balances (currency, exchange, at, balance, available, valueInEur, valueInBtc)
+        VALUES ($currency, $exchange, $at, $balance, $available, $valueInEur, $valueInBtc);`, b
     )
   ))
 }
 
 exports.getBalances = async () => {
-  return await db.all(`SELECT currency, at, balance, available FROM Balances ORDER BY currency ASC, at DESC LIMIT 100000;`)
+  return await db.all(`SELECT currency, at, balance, available, valueInEur, valueInBtc FROM Balances
+                        ORDER BY currency ASC, at DESC LIMIT 100000;`)
 }
 
 exports.trackOrder = async (order) => {

@@ -26,9 +26,11 @@ const decorate = (accounts) => {
 }
 
 const decorateWithValue = (accounts) => {
+  const btcEurPrice = latestPriceOf('BTC-EUR')
   return accounts.map((account) => {
     const price = getPriceAgainstEur(account.currency)
     account.valueInEur = account.balance * price
+    account.valueInBtc = account.valueInEur / btcEurPrice
     return account
   })
 }
@@ -50,7 +52,9 @@ const track = async (data) => {
       $exchange:'GDAX',
       $at:new Date().toUTCString(),
       $balance:dp(a.balance, 4),
-      $available:dp(a.available, 4)
+      $available:dp(a.available, 4),
+      $valueInEur:dp(a.valueInEur, 4),
+      $valueInBtc:dp(a.valueInBtc, 4),
     }
   }))
   return data
