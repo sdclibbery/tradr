@@ -68,31 +68,9 @@ const formatOrders = (orders) => {
 }
 
 const fetchData = async (exchange) => {
-  const result = {}
-  const accounts = await exchange.accounts()
-  const accountsWithValuesInEur = decorateWithValue(exchange, accounts)
-  result.accounts = accountsWithValuesInEur
-  result.totalValueInEur = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
-  result.btcEurPrice = exchange.latestPriceOf('BTC-EUR')
-  result.totalValueInBtc = result.totalValueInEur / result.btcEurPrice
-
+  const result = await exchange.accounts()
   result.orders = await exchange.orders()
-
   return result
-}
-
-const decorateWithValue = (exchange, accounts) => {
-  return accounts.map((account) => {
-    const price = getPriceAgainstEur(exchange, account.currency)
-    account.valueInEur = account.balance * price
-    return account
-  })
-}
-
-const getPriceAgainstEur = (exchange, currency) => {
-  if (currency == 'GBP') { return 1.14 }
-  if (currency == 'EUR') { return 1 }
-  return exchange.latestPriceOf(`${currency}-EUR`)
 }
 
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)

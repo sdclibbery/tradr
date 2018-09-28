@@ -3,8 +3,6 @@ const tracker = require('../tracker')
 
 const gbpToEurRate = 1.14
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-const dp2 = (x) => dp(x, 4)
-const dp4 = (x) => dp(x, 4)
 
 exports.fetcher = (authedClient, log, catchApiError, handleError) => {
   return async () => {
@@ -13,9 +11,6 @@ exports.fetcher = (authedClient, log, catchApiError, handleError) => {
       .then(catchApiError)
       .then(decorate)
       .then(track)
-      .then(data => data.accounts.map(a => {
-        return { currency: a.currency, balance: a.balance, available: a.available }
-      }, {}))
       .catch(handleError('accounts'))
   }
 }
