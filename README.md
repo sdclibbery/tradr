@@ -103,9 +103,10 @@ x Return latest prices instead of fetching
 x Don't use await when calling latestPrice(Of)
  x Test bots still work!
 x Extract gdax price follower
-* Extract gdax account gatherer that decorates with latest prices
- * Use for status page
-* Store prices alongside balances to allow conversion to combined portfolio value
+x Extract gdax account fetcher
+x Account fetcher decorates accounts with latest prices and conversions into EUR, BTC
+* Use converted balances on status page
+* Store and track prices alongside balances to allow conversion to combined portfolio value
 * Update product account page to show balances converted to EUR too
 * Calculate portfolio totals correctly(?)
 * Add x axis labels to account balance graph - extract code from drawCandles

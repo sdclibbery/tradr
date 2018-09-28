@@ -71,11 +71,11 @@ const fetchData = async (exchange) => {
   const result = {}
   const accounts = await exchange.accounts()
   const accountsWithValuesInEur = decorateWithValue(exchange, accounts)
-
   result.accounts = accountsWithValuesInEur
   result.totalValueInEur = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
   result.btcEurPrice = exchange.latestPriceOf('BTC-EUR')
   result.totalValueInBtc = result.totalValueInEur / result.btcEurPrice
+
   result.orders = await exchange.orders()
 
   return result
