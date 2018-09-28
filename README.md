@@ -102,7 +102,7 @@ x Track prices once
 x Return latest prices instead of fetching
 x Don't use await when calling latestPrice(Of)
  x Test bots still work!
-* Extract gdax price follower
+x Extract gdax price follower
 * Extract gdax account gatherer that decorates with latest prices
  * Use for status page
 * Store prices alongside balances to allow conversion to combined portfolio value
