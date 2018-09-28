@@ -34,7 +34,7 @@ exports.render = async (req, res, next) => {
 }
 const formatAccounts = (accounts) => {
   const rows = accounts
-    .map(a => `<tr>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp2(a.valueInEur) + ' EUR')} </tr>`)
+    .map(a => `<tr>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp4(a.valueInEur) + ' EUR')} </tr>`)
     .join('\n')
   return '<table><tr><th>Balance</th><th>Available</th><th>Value</th></tr>\n'+rows+'</table>'
 }
@@ -44,9 +44,9 @@ const formatOrders = (orders) => {
     .map(o => {
       const baseCurrency = o.product.split('-')[0]
       const quoteCurrency = o.product.split('-')[1]
-      const stopReport = o.stop ? `stop ${o.stop} at ${dp2(o.stopPrice)} ${quoteCurrency}: ` : ''
+      const stopReport = o.stop ? `stop ${o.stop} at ${dp4(o.stopPrice)} ${quoteCurrency}: ` : ''
       return `<tr>
-                <td>${stopReport}${o.type} ${o.side} ${dp4(o.amount)} ${baseCurrency} at ${dp2(o.price)} ${quoteCurrency}</td>
+                <td>${stopReport}${o.type} ${o.side} ${dp4(o.amount)} ${baseCurrency} at ${dp4(o.price)} ${quoteCurrency}</td>
                 <td>created at ${o.created}</td>
                 <td>
                   <form id="form-cancel-${o.id}" action="/trade/cancel/${o.id}" method="post"></form>
@@ -74,6 +74,5 @@ const fetchData = async (exchange) => {
 }
 
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-const dp2 = (x) => dp(x, 4)
 const dp4 = (x) => dp(x, 4)
 const td = (str) => `<td>${str}</td>`
