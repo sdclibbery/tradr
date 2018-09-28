@@ -254,6 +254,9 @@ exports.createExchange = (options, logger) => {
     },
 
     candles: candles(options.product, authedClient, log, catchApiError, handleError),
+    candlesFor: (product, settings) => {
+      return candles(product, authedClient, log, catchApiError, handleError)(settings)
+    },
   }
 
   if (options.product) {
