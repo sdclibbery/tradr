@@ -70,30 +70,28 @@ const formatOrders = (orders) => {
 const fetchData = async (exchange) => {
   const result = {}
   const accounts = await exchange.accounts()
-  const accountsWithValuesInEur = await decorateWithValue(exchange, accounts)
-  result.accounts = accountsWithValuesInEur
+  const accountsWithValuesInEur = decorateWithValue(exchange, accounts)
 
+  result.accounts = accountsWithValuesInEur
   result.totalValueInEur = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
   result.btcEurPrice = exchange.latestPriceOf('BTC-EUR')
   result.totalValueInBtc = result.totalValueInEur / result.btcEurPrice
-
   result.orders = await exchange.orders()
+
   return result
 }
 
-const decorateWithValue = async (exchange, accounts) => {
-  return (await Promise.all(
-    accounts.map(async (account) => {
-      const price = await getPriceAgainstEur(exchange, account.currency)
-      account.valueInEur = account.balance * price
-      return account
-    })
-  ))
+const decorateWithValue = (exchange, accounts) => {
+  return accounts.map((account) => {
+    const price = getPriceAgainstEur(exchange, account.currency)
+    account.valueInEur = account.balance * price
+    return account
+  })
 }
 
-const getPriceAgainstEur = async (exchange, currency) => {
-  if (currency == 'GBP') { return await 1.14 }
-  if (currency == 'EUR') { return await 1 }
+const getPriceAgainstEur = (exchange, currency) => {
+  if (currency == 'GBP') { return 1.14 }
+  if (currency == 'EUR') { return 1 }
   return exchange.latestPriceOf(`${currency}-EUR`)
 }
 

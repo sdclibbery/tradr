@@ -1,23 +1,9 @@
-const Gdax = require('gdax')
+const gdax = require('gdax')
+const prices = require('./gdax-exchange/gdax-prices').prices
 const tracker = require('./tracker')
-const Credentials = require('./gdax-account-credentials') // NOTE the bot ONLY requires 'trading' permissions from GDAX API key
+const credentials = require('./gdax-account-credentials') // NOTE the bot only requires 'trading' permissions from GDAX API key and should not be given more
 
-const prices = {}
-const websocketTicker = new Gdax.WebsocketClient(
-  ['BTC-EUR', 'ETH-EUR', 'LTC-EUR', 'ETH-BTC', 'LTC-BTC', 'ETC-EUR', 'BCH-EUR'],
-  'wss://ws-feed.pro.coinbase.com',
-  Credentials,
-  { channels: ['ticker'] }
-)
-websocketTicker.on('error', console.log)
-websocketTicker.on('message', (data) => {
-  if (!data.price || !data.product_id) { return }
-  //console.log(data.product_id, data.price)
-  const price = Number.parseFloat(data.price)
-  prices[data.product_id] = price
-})
-
-const client = new Gdax.PublicClient()
+const client = new gdax.PublicClient()
 let products
 client.getProducts()
   .then(ps => {
@@ -45,8 +31,8 @@ exports.createExchange = (options, logger) => {
     return response
   }
 
-  const authedClient = new Gdax.AuthenticatedClient(Credentials.key, Credentials.secret, Credentials.passphrase, 'https://api.pro.coinbase.com')
-  const websocket = new Gdax.WebsocketClient([options.product])
+  const authedClient = new gdax.AuthenticatedClient(credentials.key, credentials.secret, credentials.passphrase, 'https://api.pro.coinbase.com')
+  const websocket = new gdax.WebsocketClient([options.product])
   websocket.on('error', log('websocket error'))
 
   logger.debug(options)

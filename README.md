@@ -100,11 +100,14 @@ x Product order/analysis page candle graphs show all current and historical orde
 x Basic graph of account balances over time
 x Track prices once
 x Return latest prices instead of fetching
-* Don't use await when calling latestPrice(Of)
- * Test bots still work!
-* Calculate portfolio totals correctly
+x Don't use await when calling latestPrice(Of)
+ x Test bots still work!
+* Extract gdax price follower
+* Extract gdax account gatherer that decorates with latest prices
+ * Use for status page
 * Store prices alongside balances to allow conversion to combined portfolio value
-* Extract some classes from gdax-exchange
+* Update product account page to show balances converted to EUR too
+* Calculate portfolio totals correctly(?)
 * Add x axis labels to account balance graph - extract code from drawCandles
 * Add key showing which currency is which on account balance graph
 * Want to be able to draw graph of combined portfolio value (in both BTC and EUR) changing over time
