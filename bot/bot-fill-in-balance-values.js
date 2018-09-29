@@ -5,13 +5,16 @@ framework.init([
 ])
 .then(async ({ options, logger, exchange }) => {
   logger.warn(`filling in missing account values`)
-  const candleSets = {
-    ['BTC-EUR']: await exchange.candlesFor('BTC-EUR', {granularity: 86400}),
-    ['ETH-EUR']: await exchange.candlesFor('ETH-EUR', {granularity: 86400}),
-    ['ETH-BTC']: await exchange.candlesFor('ETH-BTC', {granularity: 86400}),
-    ['LTC-EUR']: await exchange.candlesFor('LTC-EUR', {granularity: 86400}),
-    ['LTC-BTC']: await exchange.candlesFor('LTC-BTC', {granularity: 86400}),
-  }
+  const candleSets = {}
+  candleSets['BTC-EUR'] = await exchange.candlesFor('BTC-EUR', {granularity: 86400})
+  await sleep(10*1000)
+  candleSets['ETH-EUR'] = await exchange.candlesFor('ETH-EUR', {granularity: 86400})
+  await sleep(10*1000)
+  candleSets['ETH-BTC'] = await exchange.candlesFor('ETH-BTC', {granularity: 86400})
+  await sleep(10*1000)
+  candleSets['LTC-EUR'] = await exchange.candlesFor('LTC-EUR', {granularity: 86400})
+  await sleep(10*1000)
+  candleSets['LTC-BTC'] = await exchange.candlesFor('LTC-BTC', {granularity: 86400})
   const balances = await tracker.getBalances()
   for (let balance of balances) {
     const {valueInEur, valueInBtc} = getValuesForBalance(candleSets, balance)
@@ -23,6 +26,7 @@ framework.init([
 .catch(framework.handleError)
 
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const getValuesForBalance = (candleSets, balance) => {
   const curr = balance.currency
