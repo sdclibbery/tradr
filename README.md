@@ -108,11 +108,11 @@ x Account fetcher decorates accounts with latest prices and conversions into EUR
 x Use converted balances on status and account product page
 x Store and track prices alongside balances to allow conversion to combined portfolio value
 * Fill in old account valueInEur etc by getting old prices, converting, and writing back to DB
- * Debug the bot: it should be updating and it isnt
  * Allow bot to run over other currencies etc
 * Display valuesInEur/Btc on balances graph along with total combined value
 * Add x axis labels to account balance graph - extract code from drawCandles
 * Add key showing which currency is which on account balance graph
+* Auto update balances once per day
 * Can leave notes on orders explaining the reasoning behind them
 * Strategy
  * Can leave dated notes on each product page

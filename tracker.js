@@ -13,10 +13,16 @@ exports.trackBalances = async (balances) => {
     )
   ))
 }
-exports.updateBalanceValueInEur = async (balance, valueInEur) => {
+exports.setBalanceValues = async (balance, valueInEur, valueInBtc) => {
   await db.run(
-    `UPDATE Balances SET valueInEur=$valueInEur WHERE currency=$currency AND exchange=$exchange AND at=$at;`,
-    {$valueInEur:valueInEur, $currency:balance.currency, $exchange:balance.exchange, $at:balance.at}
+    `UPDATE Balances SET valueInEur=$valueInEur, valueInBtc=$valueInBtc WHERE currency=$currency AND exchange=$exchange AND at=$at;`,
+    {
+      $valueInEur:balance.valueInEur || valueInEur,
+      $valueInBtc:balance.valueInBtc || valueInBtc,
+      $currency:balance.currency,
+      $exchange:balance.exchange,
+      $at:balance.at
+    }
   )
 }
 

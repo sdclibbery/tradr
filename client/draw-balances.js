@@ -19,8 +19,8 @@ drawBalances = (canvas, balances) => {
 }
 
 const drawBalance = (canvas, ctx, balances, colour) => {
-  const minBalance = balances.reduce((m, c) => Math.min(m, c.balance), Infinity)
-  const maxBalance = balances.reduce((m, c) => Math.max(m, c.balance), -Infinity)
+  const minBalance = balances.reduce((m, c) => Math.min(m, c.valueInEur), Infinity)
+  const maxBalance = balances.reduce((m, c) => Math.max(m, c.valueInEur), -Infinity)
   const minTime = balances.reduce((m, c) => Math.min(m, c.time), Infinity)
   const maxTime = balances.reduce((m, c) => Math.max(m, c.time), -Infinity)
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
@@ -30,8 +30,8 @@ const drawBalance = (canvas, ctx, balances, colour) => {
   ctx.strokeStyle = colour
   ctx.beginPath()
   balances.map(b => {
-    ctx.lineTo(toX(b.time), toY(b.balance))
-    ctx.fillRect(toX(b.time), toY(b.balance), 4,4)
+    ctx.lineTo(toX(b.time), toY(b.valueInEur))
+    ctx.fillRect(toX(b.time), toY(b.valueInEur), 4,4)
   })
   ctx.stroke()
 }
