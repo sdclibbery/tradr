@@ -1,5 +1,8 @@
 drawBalances = (canvas, balances) => {
-  balances = balances.map(b => { return {...b, time: Date.parse(b.at)}})
+  balances = balances
+    .map(b => { return {...b, time: Date.parse(b.at)}})
+    .map(decorateWithTotals)
+    .sort((a,b) => a.time-b.time)
 
   var ctx = canvas.getContext('2d')
   const background = () => {
@@ -10,28 +13,30 @@ drawBalances = (canvas, balances) => {
   }
   background()
 
-  const getBalancesForCurrency = cur => balances.filter(b => b.currency == cur).sort((a,b) => a.time-b.time)
-
-  drawBalance(canvas, ctx, getBalancesForCurrency('EUR'), '#ff0000')
-  drawBalance(canvas, ctx, getBalancesForCurrency('BTC'), '#00ff00')
-  drawBalance(canvas, ctx, getBalancesForCurrency('ETH'), '#0000ff')
-  drawBalance(canvas, ctx, getBalancesForCurrency('LTC'), '#ff00ff')
-}
-
-const drawBalance = (canvas, ctx, balances, colour) => {
-  const minBalance = balances.reduce((m, c) => Math.min(m, c.valueInEur), Infinity)
-  const maxBalance = balances.reduce((m, c) => Math.max(m, c.valueInEur), -Infinity)
-  const minTime = balances.reduce((m, c) => Math.min(m, c.time), Infinity)
-  const maxTime = balances.reduce((m, c) => Math.max(m, c.time), -Infinity)
+  const minBalance = 0
+  const maxBalance = balances.reduce((m, b) => Math.max(m, b.totalEur), -Infinity)
+  const minTime = balances.reduce((m, b) => Math.min(m, b.time), Infinity)
+  const maxTime = balances.reduce((m, b) => Math.max(m, b.time), -Infinity)
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
   const toY = (p) => canvas.height * (1 - ((p)-(minBalance))/((maxBalance)-(minBalance)))
 
+  const colour = '#ff0000'
   ctx.fillStyle = colour
   ctx.strokeStyle = colour
   ctx.beginPath()
   balances.map(b => {
-    ctx.lineTo(toX(b.time), toY(b.valueInEur))
-    ctx.fillRect(toX(b.time), toY(b.valueInEur), 4,4)
+    ctx.lineTo(toX(b.time), toY(b.BTC.valueInEur))
+    ctx.fillRect(toX(b.time), toY(b.BTC.valueInEur), 4,4)
   })
   ctx.stroke()
+}
+
+const decorateWithTotals = balance => {
+  balance.totalEur = currencies(balance).map(b => b.valueInEur).filter(x=>x).map(parseFloat).reduce((a,b)=>a+b, 0)
+  balance.totalBtc = currencies(balance).map(b => b.valueInBtc).filter(x=>x).map(parseFloat).reduce((a,b)=>a+b, 0)
+  return balance
+}
+
+const currencies = ({time, at, ...rest}) => {
+  return Object.values(rest)
 }

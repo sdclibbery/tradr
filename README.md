@@ -107,9 +107,10 @@ x Extract gdax account fetcher
 x Account fetcher decorates accounts with latest prices and conversions into EUR, BTC
 x Use converted balances on status and account product page
 x Store and track prices alongside balances to allow conversion to combined portfolio value
-* Fill in old account valueInEur etc by getting old prices, converting, and writing back to DB
- * Allow bot to run over other currencies etc
+x Fill in old account valueInEur etc by getting old prices, converting, and writing back to DB
+ x Allow bot to run over other currencies etc
 * Display valuesInEur/Btc on balances graph along with total combined value
+ x draw btc
 * Add x axis labels to account balance graph - extract code from drawCandles
 * Add key showing which currency is which on account balance graph
 * Auto update balances once per day
