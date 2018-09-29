@@ -9,23 +9,21 @@ framework.init([
   logger.warn(`filling in missing account values...`)
 
   const candles = await exchange.candlesFor('BTC-EUR', {granularity: 86400})
-
   const balances = await tracker.getBalances()
-  await Promise.all(balances
+  const toUpdate = balances
     .filter(b => b.valueInEur === null)
     .filter(b => b.currency === 'BTC')
-    .map(async balance => {
+  for (let balance of toUpdate) {
       const candle = findCandle(candles, Date.parse(balance.at))
       if (!candle) {
         logger.error(`no candle found for balance ${JSON.stringify(balance)}`)
-        return
+        continue
       }
       const price = (candle.open + candle.close) / 2
       const valueInEur = dp(balance.balance * price, 4)
       logger.warn(`updating balance ${balance.balance} ${balance.currency} ${balance.at} valueInEur: ${valueInEur}`)
       await tracker.updateBalanceValueInEur(balance, valueInEur)
-    })
-  )
+    }
 })
 .then(framework.close)
 .catch(framework.handleError)

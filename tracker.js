@@ -21,7 +21,7 @@ exports.updateBalanceValueInEur = async (balance, valueInEur) => {
 }
 
 exports.getBalances = async () => {
-  return await db.all(`SELECT currency, at, balance, available, valueInEur, valueInBtc FROM Balances
+  return await db.all(`SELECT currency, exchange, at, balance, available, valueInEur, valueInBtc FROM Balances
                         ORDER BY currency ASC, at DESC LIMIT 100000;`)
 }
 
