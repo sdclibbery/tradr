@@ -111,8 +111,7 @@ x Fill in old account valueInEur etc by getting old prices, converting, and writ
  x Allow bot to run over other currencies etc
 x Display valuesInEur/Btc on balances graph along with total combined value
 x Add key showing which currency is which on account balance graph
-* Add y axis labels
-* Add x axis labels to account balance graph - extract code from drawCandles
+x Add axis labels to account balance graph - extract code from drawCandles
 * Auto update balances once per day (and don't do it on accessing accounts)
 * Show orders on the account history graph
 * Have second account history graph in Btc as well as the Eur one
