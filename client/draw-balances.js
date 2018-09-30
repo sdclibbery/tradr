@@ -1,4 +1,4 @@
-drawBalances = (canvas, balances) => {
+drawBalances = (canvas, balances, colours) => {
   balances = balances
     .map(b => { return {...b, time: Date.parse(b.at)}})
     .map(decorateWithTotals)
@@ -20,15 +20,27 @@ drawBalances = (canvas, balances) => {
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
   const toY = (p) => canvas.height * (1 - ((p)-(minBalance))/((maxBalance)-(minBalance)))
 
-  const colour = '#ff0000'
-  ctx.fillStyle = colour
-  ctx.strokeStyle = colour
-  ctx.beginPath()
-  balances.map(b => {
-    ctx.lineTo(toX(b.time), toY(b.BTC.valueInEur))
-    ctx.fillRect(toX(b.time), toY(b.BTC.valueInEur), 4,4)
+  const line = (colour, t1, b1, t2, b2) => {
+    const v1 = (b1 && (b1.valueInEur || b1.totalEur)) || 0
+    const v2 = (b2 && (b2.valueInEur || b2.totalEur)) || 0
+    ctx.fillStyle = colour
+    ctx.strokeStyle = colour
+    ctx.beginPath()
+    ctx.lineTo(toX(t1), toY(v1))
+    ctx.lineTo(toX(t2), toY(v2))
+    ctx.stroke()
+    ctx.fillRect(toX(t2)-1, toY(v2)-1, 3, 3)
+  }
+
+  balances.map((b,i) => {
+    const b2 = balances[i-1]
+    if (!b2) { return }
+    line(colours.EUR, b.time, b.EUR, b2.time, b2.EUR)
+    line(colours.LTC, b.time, b.LTC, b2.time, b2.LTC)
+    line(colours.ETH, b.time, b.ETH, b2.time, b2.ETH)
+    line(colours.BTC, b.time, b.BTC, b2.time, b2.BTC)
+    line(colours.TOTAL, b.time, b, b2.time, b2)
   })
-  ctx.stroke()
 }
 
 const decorateWithTotals = balance => {

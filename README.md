@@ -109,11 +109,13 @@ x Use converted balances on status and account product page
 x Store and track prices alongside balances to allow conversion to combined portfolio value
 x Fill in old account valueInEur etc by getting old prices, converting, and writing back to DB
  x Allow bot to run over other currencies etc
-* Display valuesInEur/Btc on balances graph along with total combined value
- x draw btc
+x Display valuesInEur/Btc on balances graph along with total combined value
+x Add key showing which currency is which on account balance graph
 * Add x axis labels to account balance graph - extract code from drawCandles
-* Add key showing which currency is which on account balance graph
-* Auto update balances once per day
+* Auto update balances once per day (and dont do it on accessing accounts)
+* Show orders on the account history graph
+* Show account history graph as stacked
+* Have second account history graph in Btc as well as the Eur one
 * Can leave notes on orders explaining the reasoning behind them
 * Strategy
  * Can leave dated notes on each product page
