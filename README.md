@@ -112,43 +112,25 @@ x Fill in old account valueInEur etc by getting old prices, converting, and writ
 x Display valuesInEur/Btc on balances graph along with total combined value
 x Add key showing which currency is which on account balance graph
 x Add axis labels to account balance graph - extract code from drawCandles
-* Auto update balances once per day (and don't do it on accessing accounts)
 * Show orders on the account history graph
+* Auto update balances once per day (and don't do it on accessing accounts)
 * Have second account history graph in Btc as well as the Eur one
+* Add backup automation with monitoring of some kind
+* Show live depth chart
+
 * Can leave notes on orders explaining the reasoning behind them
-* Strategy
- * Can leave dated notes on each product page
- * Set product alerts that show on the home & product page when triggered
-   Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
- * Product alerts can auto trigger bots to run
- * Augment order info on the product pages with tracked info including expected profit
+* Can leave dated notes on each product page
+* Allow buy-then-sell bot to have multiple exits?
+* Set product alerts that show on the home & product page when triggered
+ Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
+* Product alerts can auto trigger bots to run
+* Augment order info on the product pages with tracked info including expected profit
 * Add backup automation with monitoring of some kind
 * Candle time labels wrong
  On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
  The 23rd was correct. The same problem was on all the other views too.
-* Page to view balance history
- x Basic page (account/history)
- * Draw some graphs
-* Analysis page with hull
- * Should be open/close not low/high?
- * Links from other pages
-* Page with all graphs and prices on
-* Better date/time markers on candle graphs
- x Round positions to days/hours
- x Better labels; remember its implicit that the RHS is *now*
- x colour volume bars by height
- * click on candles places crosshair with price/date readout on
-* Add equivalent total in EUR and BTC to balance tracking table?
+* Graphs: click on candles places crosshair with price/date readout on
 * Order cancellation from orders page
-* Rename and rework status page into account balances page
-* Support another exchange
- * Choose exchange: has many altcoins, has an API with trade-only keys
- * Trade etc pages must be told exchange as well as product
- * Write a new exchange implementation
-  * Testing, including testing api compatibility between the exchanges to ensure changes are made evenly
-* Have a centralised exchange? Or a cache of centralised exchanges per product? To save fetching steps etc every time...
- * Optimise/reduce gdax calls on status page: cache product prices for a little while
-* Allow buy-then-sell bot to have multiple exits?
 * Bot that looks for very sudden price changes on one market not driven by other markets, and jumps in expecting that price to jump back when the arbitrage bots kick in...
 * Trade page indicator to show whether there's more base or quote currency, both balance and available
 * Has the bulk of the volume been coming from one account or many? Show on chart somehow
@@ -156,10 +138,10 @@ x Add axis labels to account balance graph - extract code from drawCandles
 * Live price update
  * Fetch price client side
  * Use websocket feed to update price
-* Show live depth chart
 * Show TA indicators: RSI, NVT
 * Bot log pages live update
 * Show EMAs
+
 * Hack up a moving average bots
  x Basic tracking of averages from candles
  x Set average counts from options and reduce logging
