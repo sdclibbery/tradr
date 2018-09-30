@@ -41,6 +41,15 @@ drawBalances = (canvas, balances, colours) => {
     line(colours.BTC, b.time, b.BTC, b2.time, b2.BTC)
     line(colours.TOTAL, b.time, b, b2.time, b2)
   })
+
+  drawLabels(canvas, {
+    minPrice:minBalance,
+    maxPrice:maxBalance,
+    minTime:minTime,
+    maxTime:maxTime,
+    toX:toX,
+    toY:toY,
+  })
 }
 
 const decorateWithTotals = balance => {

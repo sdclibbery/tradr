@@ -22,6 +22,7 @@ exports.render = async (req, res, next) => {
     <script src="/draw-candles.js"></script>
     <script src="/draw-candle-analysis.js"></script>
     <script src="/draw-orders.js"></script>
+    <script src="/draw-labels.js"></script>
     <script>
       const orders = ${JSON.stringify(orders)}
       candleGraph = (granularity) => {

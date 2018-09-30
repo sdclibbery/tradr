@@ -18,6 +18,7 @@ exports.render = async (req, res, next) => {
       <span id="ETC">ETC</span>
     </p>
     <script src="/draw-balances.js"></script>
+    <script src="/draw-labels.js"></script>
     <script>
       const colours = {
         TOTAL: '#000000',
