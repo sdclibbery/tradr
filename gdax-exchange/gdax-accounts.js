@@ -10,7 +10,6 @@ exports.fetcher = (authedClient, log, catchApiError, handleError) => {
       .then(log('GDAX: getAccounts'))
       .then(catchApiError)
       .then(decorate)
-      .then(track)
       .catch(handleError('accounts'))
   }
 }
@@ -43,19 +42,4 @@ const getPriceAgainstEur = (currency) => {
 
 const latestPriceOf = (account) => {
   return prices[account]
-}
-
-const track = async (data) => {
-  await tracker.trackBalances(data.accounts.map(a => {
-    return {
-      $currency:a.currency,
-      $exchange:'GDAX',
-      $at:new Date().toUTCString(),
-      $balance:dp(a.balance, 4),
-      $available:dp(a.available, 4),
-      $valueInEur:dp(a.valueInEur, 4),
-      $valueInBtc:dp(a.valueInBtc, 4),
-    }
-  }))
-  return data
 }

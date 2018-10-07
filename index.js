@@ -2,7 +2,8 @@ const express = require('express')
 const os =  require('os')
 const basicAuth = require('express-basic-auth')
 const bcrypt = require('bcrypt')
-var request = require('request');
+const request = require('request')
+const recorder = require('./recorder')
 
 const port = 8001
 const app = express()

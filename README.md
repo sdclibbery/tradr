@@ -112,12 +112,13 @@ x Fill in old account valueInEur etc by getting old prices, converting, and writ
 x Display valuesInEur/Btc on balances graph along with total combined value
 x Add key showing which currency is which on account balance graph
 x Add axis labels to account balance graph - extract code from drawCandles
-* Show orders on the account history graph
-* Auto update balances once per day (and don't do it on accessing accounts)
+x Auto update balances once per day (and don't do it on accessing accounts)
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
 * Show live depth chart
+* Show orders on the account history graph
 
+* Fix datetime format for Balances.at table: sqlite cant read it as a date()!!!
 * Can leave notes on orders explaining the reasoning behind them
 * Can leave dated notes on each product page
 * Allow buy-then-sell bot to have multiple exits?
