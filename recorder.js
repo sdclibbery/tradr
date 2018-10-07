@@ -11,7 +11,7 @@ const trackAccounts = async () => {
     return {
       $currency:a.currency,
       $exchange:'GDAX',
-      $at:new Date().toUTCString(),
+      $at:new Date().toISOString(),
       $balance:dp(a.balance, 4),
       $available:dp(a.available, 4),
       $valueInEur:dp(a.valueInEur, 4),
@@ -20,5 +20,5 @@ const trackAccounts = async () => {
   }))
   console.log(new Date(), ' Tracking accounts: Done')
 }
+setTimeout(trackAccounts, 10*1000)
 setInterval(trackAccounts, 24*60*60*1000)
-trackAccounts().then()

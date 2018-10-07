@@ -14,7 +14,7 @@ drawBalances = (canvas, balances, colours) => {
   background()
 
   const minBalance = 0
-  const maxBalance = balances.reduce((m, b) => Math.max(m, b.totalEur), -Infinity)
+  const maxBalance = balances.reduce((m, b) => Math.max(m, b.totalEur||0), -Infinity)
   const minTime = balances.reduce((m, b) => Math.min(m, b.time), Infinity)
   const maxTime = balances.reduce((m, b) => Math.max(m, b.time), -Infinity)
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
