@@ -18,23 +18,31 @@ exports.render = async (req, res, next) => {
     <canvas id="candles" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
 
     <script src="/fetch-candles.js"></script>
+    <script src="/fetch-order-book.js"></script>
     <script src="/candle-extents.js"></script>
     <script src="/draw-candles.js"></script>
     <script src="/draw-candle-analysis.js"></script>
     <script src="/draw-orders.js"></script>
+    <script src="/draw-order-book.js"></script>
     <script src="/draw-labels.js"></script>
     <script>
+      const canvas = document.getElementById('candles')
       const orders = ${JSON.stringify(orders)}
-      candleGraph = (granularity) => {
-        const canvas = document.getElementById('candles')
-        fetchCandles('${product}', granularity).then(candles => {
-          const extents = candleExtents(canvas, candles)
-          drawCandles(canvas, candles, granularity, extents)
-          drawCandleAnalysis(canvas, candles, granularity, extents)
-          drawOrders(canvas, orders, extents)
-        })
-      }
-      candleGraph(60)
+      fetchOrderBook('${product}').then(book => {
+        candleGraph = (granularity) => {
+          let extents
+          fetchCandles('${product}', granularity).then(candles => {
+            extents = candleExtents(canvas, candles)
+            extents.background()
+            drawCandleAnalysis(canvas, candles, granularity, extents)
+            drawOrders(canvas, orders, extents)
+            drawLabels(canvas, extents)
+            drawOrderBook(canvas, book, extents)
+            drawCandles(canvas, candles, granularity, extents)
+          })
+        }
+        candleGraph(60)
+      })
     </script>
   `))
 }

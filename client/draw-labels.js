@@ -101,4 +101,6 @@ drawLabels = (canvas, extents) => {
   for (let p = first; p < maxPrice; p += interval) {
     priceLabel(dp(p, quoteDp))
   }
+  
+  ctx.shadowBlur = 0
 }

@@ -12,5 +12,11 @@ candleExtents = (canvas, candles) => {
     toY: (p) => canvas.height * (1 - (Math.log(p)-Math.log(minPrice))/(Math.log(maxPrice)-Math.log(minPrice))),
     maxVolume: candles.reduce((m, c) => Math.max(m, c.volume), 0),
     meanVolume: candles.reduce((m, c) => m+c.volume, 0) / candles.length,
+    background: () => {
+      const ctx = canvas.getContext('2d')
+      ctx.fillStyle = '#f0f0f0'
+      ctx.shadowBlur = 0
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+    },
   }
 }
