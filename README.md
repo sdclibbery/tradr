@@ -113,11 +113,15 @@ x Display valuesInEur/Btc on balances graph along with total combined value
 x Add key showing which currency is which on account balance graph
 x Add axis labels to account balance graph - extract code from drawCandles
 x Auto update balances once per day (and don't do it on accessing accounts)
+* Account balance display bug
+  Sometimes a single set of balances gets more than one ms 'at' value, screwing up the data
+* Show live depth chart
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
-* Show live depth chart
 * Show orders on the account history graph
+* Need to keep price info for BTC-USD or remove it from homepage
 
+* Remove balance fix-up bot and tracker.setBalanceValues
 * Fix datetime format for Balances.at table: sqlite cant read it as a date()!!!
 * Can leave notes on orders explaining the reasoning behind them
 * Can leave dated notes on each product page

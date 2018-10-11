@@ -46,10 +46,14 @@ const byDate = (balances) => {
 
 const combineByDate = (dates, balance) => {
   let date = dates[dates.length-1]
-  if (!date || balance.at !== date.at) {
+  if (!date || !datesAreClose(balance.at, date.at)) {
     date = { at:balance.at }
     dates.push(date)
   }
   date[balance.currency] = { valueInEur: balance.valueInEur, valueInBtc: balance.valueInBtc }
   return dates
+}
+
+const datesAreClose = (a, b) => {
+  return Math.abs(Date.parse(a) - Date.parse(b)) < 10000
 }
