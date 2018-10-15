@@ -6,17 +6,18 @@ drawOrderBook = (canvas, book, extents) => {
   const min = extents.minPrice
   const max = extents.maxPrice
 
-  const drawBucket = ({lo, hi, volume}) => {
+  const drawBucket = (maxVolume) => ({lo, hi, volume}) => {
     ctx.fillStyle = '#0000a060'
     ctx.strokeStyle = '#0000a0a0'
-    const w = volume*3000/(max-min)
+    const w = volume*canvas.width/5/maxVolume
     ctx.fillRect(canvas.width-w, toY(lo), w, toY(hi)-toY(lo))
   }
 
-  book.bids
+  const buckets = book.bids
     .concat(book.asks)
     .reduce(bucket(min, max), [])
-    .map(drawBucket)
+  const maxVolume = buckets.map(({volume}) => volume).reduce((v,a) => Math.max(v,a), 0)
+  buckets.map(drawBucket(maxVolume))
 }
 
 const bucket = (min, max) => (buckets, order) => {

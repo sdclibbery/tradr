@@ -115,16 +115,16 @@ x Add axis labels to account balance graph - extract code from drawCandles
 x Auto update balances once per day (and don't do it on accessing accounts)
 x Fix datetime format for Balances.at table: sqlite cant read it as a date(); use toIsoString instead
 x Account balance display bug sometimes a single set of balances gets more than one ms 'at' value, screwing up the data
+x Show orders on the account history graph
 * Show live depth chart
  x Fetch in client from https://api.pro.coinbase.com/products/BTC-EUR/book?level=3
  x Colours for bid vs ask
  x Bucket by price
- * Load orderbook later (but still only once)
- * Volume scaling
- * Use full level 3 order book in live
+ x Load orderbook later (but still only once)
+ x Volume scaling
+ * Optimise: ignore orders outside range
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
-* Show orders on the account history graph
 * Add ZRX to homepage and accounts page
 
 * Fix old datetime formats in Balances.at table
