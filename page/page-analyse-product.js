@@ -28,21 +28,24 @@ exports.render = async (req, res, next) => {
     <script>
       const canvas = document.getElementById('candles')
       const orders = ${JSON.stringify(orders)}
-      fetchOrderBook('${product}').then(book => {
-        candleGraph = (granularity) => {
-          let extents
-          fetchCandles('${product}', granularity).then(candles => {
-            extents = candleExtents(canvas, candles)
-            extents.background()
-            drawCandleAnalysis(canvas, candles, granularity, extents)
-            drawOrders(canvas, orders, extents)
-            drawLabels(canvas, extents)
-            drawOrderBook(canvas, book, extents)
-            drawCandles(canvas, candles, granularity, extents)
-          })
-        }
-        candleGraph(60)
+      let extents
+      let book
+      fetchOrderBook('${product}').then(b => {
+        book = b
+        if (extents) { drawOrderBook(canvas, book, extents) }
       })
+      candleGraph = (granularity) => {
+        fetchCandles('${product}', granularity).then(candles => {
+          extents = candleExtents(canvas, candles)
+          extents.background()
+          drawCandleAnalysis(canvas, candles, granularity, extents)
+          drawOrders(canvas, orders, extents)
+          drawLabels(canvas, extents)
+          if (book) { drawOrderBook(canvas, book, extents) }
+          drawCandles(canvas, candles, granularity, extents)
+        })
+      }
+      candleGraph(60)
     </script>
   `))
 }

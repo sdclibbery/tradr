@@ -118,7 +118,8 @@ x Account balance display bug sometimes a single set of balances gets more than 
 * Show live depth chart
  x Fetch in client from https://api.pro.coinbase.com/products/BTC-EUR/book?level=3
  x Colours for bid vs ask
- * Bucket by price
+ x Bucket by price
+ * Load orderbook later (but still only once)
  * Volume scaling
  * Use full level 3 order book in live
 * Have second account history graph in Btc as well as the Eur one
