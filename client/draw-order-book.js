@@ -21,6 +21,7 @@ drawOrderBook = (canvas, book, extents) => {
 }
 
 const bucket = (min, max) => (buckets, order) => {
+  if (order.price < min || order.price > max) { return buckets }
   const size = (max-min)/50
   const lo = Math.floor(order.price / size) * size
   getOrAddBucket(buckets, lo, lo+size).volume += parseFloat(order.volume)
@@ -55,3 +56,5 @@ assertSame(bucket(0,500)([], o2), [{lo:0, hi:10, volume:2}])
 assertSame(bucket(0,500)([{lo:0, hi:10, volume:1}], o2), [{lo:0, hi:10, volume:3}])
 assertSame(bucket(0,500)([], o10), [{lo:10, hi:20, volume:10}])
 assertSame(bucket(0,500)([{lo:0, hi:10, volume:1}], o10), [{lo:0, hi:10, volume:1}, {lo:10, hi:20, volume:10}])
+assertSame(bucket(100,600)([], o1), [])
+assertSame(bucket(-500,0)([], o1), [])
