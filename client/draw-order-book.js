@@ -7,8 +7,7 @@ drawOrderBook = (canvas, book, extents) => {
   const max = extents.maxPrice
 
   const drawBucket = (maxVolume) => ({lo, hi, volume}) => {
-    ctx.fillStyle = '#0000a060'
-    ctx.strokeStyle = '#0000a0a0'
+    ctx.fillStyle = '#0000a040'
     const w = volume*canvas.width/5/maxVolume
     ctx.fillRect(canvas.width-w, toY(lo), w, toY(hi)-toY(lo))
   }
