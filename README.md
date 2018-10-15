@@ -117,12 +117,14 @@ x Fix datetime format for Balances.at table: sqlite cant read it as a date(); us
 x Account balance display bug sometimes a single set of balances gets more than one ms 'at' value, screwing up the data
 * Show live depth chart
  x Fetch in client from https://api.pro.coinbase.com/products/BTC-EUR/book?level=3
- * Colours for bid vs ask
+ x Colours for bid vs ask
  * Bucket by price
  * Volume scaling
+ * Use full level 3 order book in live
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
 * Show orders on the account history graph
+* Add ZRX to homepage and accounts page
 
 * Fix old datetime formats in Balances.at table
 * Need to keep price info for BTC-USD or remove it from homepage

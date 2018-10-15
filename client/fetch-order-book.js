@@ -1,5 +1,5 @@
 fetchOrderBook = (product) => {
-  return fetch(`https://api.pro.coinbase.com/products/${product}/book?level=2`)
+  return fetch(`https://api.pro.coinbase.com/products/${product}/book?level=3`)
     .then(res => res.json())
     .then(book => {
       return {
