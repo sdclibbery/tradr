@@ -8,12 +8,13 @@ exports.render = async (req, res, next) => {
 
   res.send(frame(`
     <h1>Analyse ${product}</h1>
-    <button onclick="javascript:candleGraph(60)">5h</button>
-    <button onclick="javascript:candleGraph(300)">1d</button>
-    <button onclick="javascript:candleGraph(900)">3d</button>
-    <button onclick="javascript:candleGraph(3600)">12d</button>
-    <button onclick="javascript:candleGraph(21600)">10w</button>
-    <button onclick="javascript:candleGraph(86400)">10m</button>
+    <button onclick="javascript:candleGraph(60,'normal')">5h</button>
+    <button onclick="javascript:candleGraph(300,'normal')">1d</button>
+    <button onclick="javascript:candleGraph(900,'normal')">3d</button>
+    <button onclick="javascript:candleGraph(3600,'normal')">12d</button>
+    <button onclick="javascript:candleGraph(21600,'normal')">10w</button>
+    <button onclick="javascript:candleGraph(86400,'normal')">10m</button>
+    <button onclick="javascript:candleGraph(86400,'extend')">10m extend</button>
 
     <canvas id="candles" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
 
@@ -34,9 +35,9 @@ exports.render = async (req, res, next) => {
         book = b
         if (extents) { drawOrderBook(canvas, book, extents) }
       })
-      candleGraph = (granularity) => {
+      candleGraph = (granularity, scale) => {
         fetchCandles('${product}', granularity).then(candles => {
-          extents = candleExtents(canvas, candles, 'normal')
+          extents = candleExtents(canvas, candles, scale)
           extents.background()
           drawCandleAnalysis(canvas, candles, granularity, extents)
           drawOrders(canvas, orders, extents)

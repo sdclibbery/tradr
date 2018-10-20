@@ -125,6 +125,7 @@ x Show live depth chart
  x Optimise: ignore orders outside range
 x Add ZRX to homepage and accounts page
 x Volume scaling on all candle graphs
+x Have extended y axis on analysis page
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
 

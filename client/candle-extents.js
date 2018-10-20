@@ -3,8 +3,8 @@ candleExtents = (canvas, candles, scale) => {
   let maxPrice = candles.reduce((m, c) => Math.max(m, c.high), -Infinity)
   if (scale == 'extend') {
     const range = maxPrice-minPrice
-    maxPrice = maxPrice + range/4
-    minPrice = minPrice - range/7
+    maxPrice = maxPrice + range/2
+    minPrice = minPrice - range/4
   }
   const minTime = 1000*candles[candles.length-1].time
   const maxTime = 1000*candles[0].time
