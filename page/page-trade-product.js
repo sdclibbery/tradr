@@ -65,7 +65,7 @@ exports.render = async (req, res, next) => {
       candleGraph = (granularity) => {
         const canvas = document.getElementById('candles')
         fetchCandles('${product}', granularity).then(candles => {
-          const extents = candleExtents(canvas, candles)
+          const extents = candleExtents(canvas, candles, 'normal')
           drawCandles(canvas, candles, granularity, extents)
           drawOrders(canvas, orders, extents)
         })

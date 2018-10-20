@@ -36,7 +36,7 @@ exports.render = async (req, res, next) => {
       })
       candleGraph = (granularity) => {
         fetchCandles('${product}', granularity).then(candles => {
-          extents = candleExtents(canvas, candles)
+          extents = candleExtents(canvas, candles, 'normal')
           extents.background()
           drawCandleAnalysis(canvas, candles, granularity, extents)
           drawOrders(canvas, orders, extents)
