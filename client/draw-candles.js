@@ -9,11 +9,10 @@ drawCandles = (canvas, candles, granularity, extents) => {
   const toX = extents.toX
   const toY = extents.toY
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
-  const meanVolume = extents.meanVolume
 
   const volumeBar = (x, volume) => {
-    const height = volume*600/granularity
-    ctx.fillStyle = volume >= meanVolume ? '#808080' : '#b0b0b0'
+    const height = canvas.height*0.5*volume/extents.maxVolume
+    ctx.fillStyle = volume >= extents.meanVolume ? '#808080' : '#b0b0b0'
     ctx.fillRect(x, canvas.height - height, barW, height)
   }
 
