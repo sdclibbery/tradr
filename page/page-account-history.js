@@ -16,6 +16,7 @@ exports.render = async (req, res, next) => {
       <span id="LTC">LTC</span>
       <span id="BCH">BCH</span>
       <span id="ETC">ETC</span>
+      <span id="ZRX">ZRX</span>
     </p>
     <script src="/draw-balances.js"></script>
     <script src="/draw-labels.js"></script>
@@ -29,6 +30,7 @@ exports.render = async (req, res, next) => {
         LTC: '#0000c0',
         BCH: '#c05050',
         ETC: '#50c050',
+        ZRX: '#00c0c0',
       }
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
       const canvas = document.getElementById('balances')

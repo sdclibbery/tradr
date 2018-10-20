@@ -123,9 +123,10 @@ x Show live depth chart
  x Load orderbook later (but still only once)
  x Volume scaling
  x Optimise: ignore orders outside range
+* Add ZRX to homepage and accounts page
+* Volume scaling on all candle graphs
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
-* Add ZRX to homepage and accounts page
 
 * Fix old datetime formats in Balances.at table
 * Need to keep price info for BTC-USD or remove it from homepage

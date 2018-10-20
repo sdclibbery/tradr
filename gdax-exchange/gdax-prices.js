@@ -2,7 +2,14 @@ const gdax = require('gdax')
 
 const prices = {}
 const websocketTicker = new gdax.WebsocketClient(
-  ['BTC-EUR', 'ETH-EUR', 'LTC-EUR', 'ETH-BTC', 'LTC-BTC', 'ETC-EUR', 'BCH-EUR'],
+  [
+    'BTC-EUR',
+    'ETH-EUR', 'ETH-BTC',
+    'LTC-EUR', 'LTC-BTC',
+    'ETC-EUR', 'ETC-BTC',
+    'BCH-EUR', 'BCH-BTC',
+    'ZRX-EUR', 'ZRX-BTC',
+  ],
   'wss://ws-feed.pro.coinbase.com',
   null,
   { channels: ['ticker'] }
