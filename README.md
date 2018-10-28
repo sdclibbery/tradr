@@ -126,10 +126,10 @@ x Show live depth chart
 x Add ZRX to homepage and accounts page
 x Volume scaling on all candle graphs
 x Have extended y axis on analysis page
+x Need to keep price info for BTC-USD or remove it from homepage
 * Account history page show orders
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
-* Need to keep price info for BTC-USD or remove it from homepage
 
 * Allow buy-then-sell bot to have multiple exits?
 * Augment order info on the product pages with tracked info including expected profit
