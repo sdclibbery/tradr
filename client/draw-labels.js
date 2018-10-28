@@ -11,8 +11,8 @@ drawLabels = (canvas, extents) => {
   const priceLabel = (p) => {
     ctx.textAlign = 'right'
     ctx.textBaseline = 'middle'
-    ctx.fillStyle = 'white'
-    ctx.shadowColor = 'black'
+    ctx.fillStyle = '#ffffffa0'
+    ctx.shadowColor = '#000000d0'
     ctx.shadowBlur = 6
     ctx.textAlign = 'left'
     ctx.fillText(p, 0, toY(p))
@@ -31,8 +31,8 @@ drawLabels = (canvas, extents) => {
   }
 
   const timeLabel = (time, label, align) => {
-    ctx.fillStyle = 'white'
-    ctx.shadowColor = 'black'
+    ctx.fillStyle = '#ffffffe0'
+    ctx.shadowColor = '#000000e0'
     ctx.shadowBlur = 6
     ctx.font = '26px helvetica,arial bold'
     ctx.textBaseline = 'bottom'
@@ -101,6 +101,6 @@ drawLabels = (canvas, extents) => {
   for (let p = first; p < maxPrice; p += interval) {
     priceLabel(dp(p, quoteDp))
   }
-  
+
   ctx.shadowBlur = 0
 }

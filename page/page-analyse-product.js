@@ -41,9 +41,9 @@ exports.render = async (req, res, next) => {
           extents.background()
           drawCandleAnalysis(canvas, candles, granularity, extents)
           drawOrders(canvas, orders, extents)
-          drawLabels(canvas, extents)
           if (book) { drawOrderBook(canvas, book, extents) }
           drawCandles(canvas, candles, granularity, extents)
+          drawLabels(canvas, extents)
         })
       }
       candleGraph(60)

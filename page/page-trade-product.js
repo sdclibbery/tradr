@@ -68,8 +68,8 @@ exports.render = async (req, res, next) => {
           const extents = candleExtents(canvas, candles, 'normal')
           extents.background()
           drawOrders(canvas, orders, extents)
-          drawLabels(canvas, extents)
           drawCandles(canvas, candles, granularity, extents)
+          drawLabels(canvas, extents)
         })
       }
       candleGraph(60);

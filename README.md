@@ -126,20 +126,20 @@ x Show live depth chart
 x Add ZRX to homepage and accounts page
 x Volume scaling on all candle graphs
 x Have extended y axis on analysis page
+* Account history page show orders
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind
-
-* Fix old datetime formats in Balances.at table
 * Need to keep price info for BTC-USD or remove it from homepage
+
+* Allow buy-then-sell bot to have multiple exits?
+* Augment order info on the product pages with tracked info including expected profit
+* Fix old datetime formats in Balances.at table
 * Remove balance fix-up bot and tracker.setBalanceValues
 * Can leave notes on orders explaining the reasoning behind them
 * Can leave dated notes on each product page
-* Allow buy-then-sell bot to have multiple exits?
 * Set product alerts that show on the home & product page when triggered
  Eg: if ETHEUR falls below 600 then consider selling as 10 week support is broken
 * Product alerts can auto trigger bots to run
-* Augment order info on the product pages with tracked info including expected profit
-* Add backup automation with monitoring of some kind
 * Candle time labels wrong
  On 12 day view, on 27th may, today was shown as 3/5, and the 24th was shown as 0/5 etc
  The 23rd was correct. The same problem was on all the other views too.
