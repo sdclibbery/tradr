@@ -17,9 +17,11 @@ client.getProducts()
       return p
     })
   }).catch(console.error)
-exports.ready = async () => {
+exports.ready = async (product) => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-  while (!products) {
+  const needsPrice = !!product
+  const hasPrice = !!(prices[product])
+  while (!products || (needsPrice() && !hasPrice())) {
     await sleep(100)
   }
 }

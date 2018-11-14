@@ -32,7 +32,7 @@ exports.init = async (optionDefinitions) => {
     process.exit()
   }
 
-  await GdaxExchange.ready()
+  await GdaxExchange.ready(options.product)
   const exchange = GdaxExchange.createExchange(options, logger)
   return {
     options: options,
