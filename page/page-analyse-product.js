@@ -9,12 +9,17 @@ exports.render = async (req, res, next) => {
   res.send(frame(`
     <h1>Analyse ${product}</h1>
     <button onclick="javascript:candleGraph(60,'normal')">5h</button>
+    <button onclick="javascript:candleGraph(60,'extend')">5hx</button>
     <button onclick="javascript:candleGraph(300,'normal')">1d</button>
+    <button onclick="javascript:candleGraph(300,'extend')">1dx</button>
     <button onclick="javascript:candleGraph(900,'normal')">3d</button>
+    <button onclick="javascript:candleGraph(900,'extend')">3dx</button>
     <button onclick="javascript:candleGraph(3600,'normal')">12d</button>
+    <button onclick="javascript:candleGraph(3600,'extend')">12dx</button>
     <button onclick="javascript:candleGraph(21600,'normal')">10w</button>
+    <button onclick="javascript:candleGraph(21600,'extend')">10wx</button>
     <button onclick="javascript:candleGraph(86400,'normal')">10m</button>
-    <button onclick="javascript:candleGraph(86400,'extend')">10m extend</button>
+    <button onclick="javascript:candleGraph(86400,'extend')">10mx</button>
 
     <canvas id="candles" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
 
