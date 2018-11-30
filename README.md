@@ -127,7 +127,8 @@ x Add ZRX to homepage and accounts page
 x Volume scaling on all candle graphs
 x Have extended y axis on analysis page
 x Need to keep price info for BTC-USD or remove it from homepage
-* Allow 'extend' for every view on analysis page
+x Allow 'extend' for every view on analysis page
+x Account balances are broken due to new currencies getting added
 * Account history page show orders
 * Have second account history graph in Btc as well as the Eur one
 * Add backup automation with monitoring of some kind

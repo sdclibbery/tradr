@@ -73,6 +73,6 @@ const fetchData = async (exchange) => {
   return result
 }
 
-const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
+const dp = (x, dp) => (isNaN(x)) ? '?' : Number.parseFloat(x).toFixed(dp)
 const dp4 = (x) => dp(x, 4)
 const td = (str) => `<td>${str}</td>`

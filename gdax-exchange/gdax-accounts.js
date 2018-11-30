@@ -18,7 +18,9 @@ const decorate = (accounts) => {
   const decorated = {}
   const accountsWithValuesInEur = decorateWithValue(accounts)
   decorated.accounts = accountsWithValuesInEur
-  decorated.totalValueInEur = accountsWithValuesInEur.reduce((s, a) => s + a.valueInEur, 0)
+  decorated.totalValueInEur = accountsWithValuesInEur
+        .filter(({valueInEur}) => valueInEur)
+        .reduce((s, a) => s + a.valueInEur, 0)
   decorated.btcEurPrice = latestPriceOf('BTC-EUR')
   decorated.totalValueInBtc = decorated.totalValueInEur / decorated.btcEurPrice
   return decorated
@@ -28,7 +30,7 @@ const decorateWithValue = (accounts) => {
   const btcEurPrice = latestPriceOf('BTC-EUR')
   return accounts.map((account) => {
     const price = getPriceAgainstEur(account.currency)
-    account.valueInEur = account.balance * price
+    account.valueInEur = (account.balance == 0) ? 0 : account.balance * price
     account.valueInBtc = account.valueInEur / btcEurPrice
     return account
   })
