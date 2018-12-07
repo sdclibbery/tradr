@@ -188,6 +188,10 @@ exports.createExchange = (options, logger) => {
       .catch(handleError(`stopEntry(${price}, ${amountOfBaseCurrency})`))
     },
 
+    allPrices: () => {
+      return prices
+    },
+
     latestPrice: () => {
       return exchange.latestPriceOf(options.product)
     },

@@ -30,6 +30,9 @@ exports.render = async (req, res, next) => {
       <input type="text" name="price" value="${exchange.roundQuote(data.btcEurPrice - 0.01)}">
       <input type="submit" value="Place order">
     </form>
+    <h3>Prices</h3>
+    <table>${Object.entries(data.prices).filter(([k,v]) => k!=='at').map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table>
+    At: ${new Date(data.prices.at).toLocaleString()}
   `))
 }
 const formatAccounts = (accounts) => {
@@ -70,6 +73,7 @@ const formatOrders = (orders) => {
 const fetchData = async (exchange) => {
   const result = await exchange.accounts()
   result.orders = await exchange.orders()
+  result.prices = exchange.allPrices()
   return result
 }
 

@@ -129,10 +129,11 @@ x Have extended y axis on analysis page
 x Need to keep price info for BTC-USD or remove it from homepage
 x Allow 'extend' for every view on analysis page
 x Account balances are broken due to new currencies getting added
+* 10mx view doesnt work
 * Account history page show orders
 * Have second account history graph in Btc as well as the Eur one
-* Add backup automation with monitoring of some kind
 
+* Add backup automation with monitoring of some kind
 * Allow buy-then-sell bot to have multiple exits?
 * Augment order info on the product pages with tracked info including expected profit
 * Fix old datetime formats in Balances.at table

@@ -19,6 +19,7 @@ websocketTicker.on('message', (data) => {
   if (!data.price || !data.product_id) { return }
   const price = Number.parseFloat(data.price)
   prices[data.product_id] = price
+  prices.at = Date.now()
 })
 
 exports.prices = prices
