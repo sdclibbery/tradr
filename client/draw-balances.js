@@ -1,4 +1,4 @@
-drawBalances = (canvas, balances, colours) => {
+drawBalances = (canvas, currency, balances, colours) => {
   balances = balances
     .map(b => { return {...b, time: Date.parse(b.at)}})
     .map(decorateWithTotals)
@@ -14,15 +14,15 @@ drawBalances = (canvas, balances, colours) => {
   background()
 
   const minBalance = 0
-  const maxBalance = balances.reduce((m, b) => Math.max(m, b.totalEur||0), -Infinity)
+  const maxBalance = balances.reduce((m, b) => Math.max(m, b['total'+currency]||0), -Infinity)
   const minTime = balances.reduce((m, b) => Math.min(m, b.time), Infinity)
   const maxTime = balances.reduce((m, b) => Math.max(m, b.time), -Infinity)
   const toX = (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime)
   const toY = (p) => canvas.height * (1 - ((p)-(minBalance))/((maxBalance)-(minBalance)))
 
   const line = (colour, t1, b1, t2, b2) => {
-    const v1 = (b1 && (b1.valueInEur || b1.totalEur)) || 0
-    const v2 = (b2 && (b2.valueInEur || b2.totalEur)) || 0
+    const v1 = (b1 && (b1['valueIn'+currency] || b1['total'+currency])) || 0
+    const v2 = (b2 && (b2['valueIn'+currency] || b2['total'+currency])) || 0
     ctx.fillStyle = colour
     ctx.strokeStyle = colour
     ctx.beginPath()

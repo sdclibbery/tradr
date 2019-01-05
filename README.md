@@ -129,11 +129,13 @@ x Have extended y axis on analysis page
 x Need to keep price info for BTC-USD or remove it from homepage
 x Allow 'extend' for every view on analysis page
 x Account balances are broken due to new currencies getting added
-* Sometimes prices stop updating: presumably the websocket connection gets closed. Need to detect this and remake the connection
+x Sometimes prices stop updating: presumably the websocket connection gets closed. Need to detect this and remake the connection
+x Have second account history graph in Btc as well as the Eur one
+* Update node modules
+* Check apt upgrades on box
 * 10mx view doesnt work
 * Red/green colours for order well
 * Account history page show orders
-* Have second account history graph in Btc as well as the Eur one
 
 * Add backup automation with monitoring of some kind
 * Allow buy-then-sell bot to have multiple exits?

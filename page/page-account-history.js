@@ -6,7 +6,20 @@ exports.render = async (req, res, next) => {
   res.send(frame(`
     <h1>Account Balance History</h1>
     <h3>In Eur</h3>
-    <canvas id="balances" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
+    <canvas id="balances-eur" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
+    <p>
+      <span id="TOTAL">Total</span>
+      <span id="EUR">EUR</span>
+      <span id="GBP">GBP</span>
+      <span id="BTC">BTC</span>
+      <span id="ETH">ETH</span>
+      <span id="LTC">LTC</span>
+      <span id="BCH">BCH</span>
+      <span id="ETC">ETC</span>
+      <span id="ZRX">ZRX</span>
+    </p>
+    <h3>In Btc</h3>
+    <canvas id="balances-btc" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <p>
       <span id="TOTAL">Total</span>
       <span id="EUR">EUR</span>
@@ -33,9 +46,9 @@ exports.render = async (req, res, next) => {
         ZRX: '#00c0c0',
       }
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
-      const canvas = document.getElementById('balances')
       const balances = ${JSON.stringify(balances)}
-      drawBalances(canvas, balances, colours)
+      drawBalances(document.getElementById('balances-eur'), 'Eur', balances, colours)
+      drawBalances(document.getElementById('balances-btc'), 'Btc', balances, colours)
     </script>
   `))
 }
