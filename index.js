@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res, next) => {
-  console.log(new Date(), req.connection.remoteAddress, req.url, req.method)
+  console.log(new Date(), req.headers['x-forwarded-for'] || req.connection.remoteAddress, req.url, req.method)
   next();
 });
 app.use(express.urlencoded({extended:false}));
