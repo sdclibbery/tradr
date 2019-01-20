@@ -132,7 +132,7 @@ x Account balances are broken due to new currencies getting added
 x Sometimes prices stop updating: presumably the websocket connection gets closed. Need to detect this and remake the connection
 x Have second account history graph in Btc as well as the Eur one
 x Update node modules
-* Red/green colours for order well
+x Red/green colours for order well
 * Account history page show orders
 
 * Add backup automation with monitoring of some kind
