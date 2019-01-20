@@ -131,9 +131,7 @@ x Allow 'extend' for every view on analysis page
 x Account balances are broken due to new currencies getting added
 x Sometimes prices stop updating: presumably the websocket connection gets closed. Need to detect this and remake the connection
 x Have second account history graph in Btc as well as the Eur one
-* Update node modules
-* Check apt upgrades on box
-* 10mx view doesnt work
+x Update node modules
 * Red/green colours for order well
 * Account history page show orders
 
