@@ -29,7 +29,7 @@ const spreadTracker = (bids, asks) => {
         if (side === 'buy' && price > _bottom) {
           newBottom(price)
         }
-        if (side === 'sell') {
+        if (side === 'sell' && price < _top) {
           newTop(price)
         }
       })
@@ -48,6 +48,11 @@ const assert = require('assert')
   const s = spreadTracker([3,2,1], [4,5,6])
   assert.strictEqual(false, s.updates([{side:'buy', price:2, empty:false}]), 'update with no change to spread bottom returns false')
   assert.deepEqual([3,4], [s.bottom(),s.top()], 'update with no change to spread bottom leaves spread untouched')
+}
+{
+  const s = spreadTracker([3,2,1], [4,5,6])
+  assert.strictEqual(false, s.updates([{side:'sell', price:5, empty:false}]), 'update with no change to spread top returns false')
+  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update with no change to spread top leaves spread untouched')
 }
 {
   const s = spreadTracker([3,2,1], [4,5,6])
