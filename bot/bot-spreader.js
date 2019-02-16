@@ -28,17 +28,13 @@ const spreadTracker = (bids, asks) => {
       updates.forEach(({side, price, clear}) => {
         if (side === 'buy') {
           let i
-          for (i=0; i < _bids.length; i++) { if (_bids[i] < price) break; }
-          if (_bids[i] < price) {
-            _bids.splice(i, 0, price)
-          }
+          for (i=0; i < _bids.length; i++) { if (_bids[i] < price) break; } // Find indes where price fits into bids list
+          _bids.splice(i, 0, price)
         }
         if (side === 'sell') {
           let i
-          for (i=0; i < _asks.length; i++) { if (_asks[i] > price) break; }
-          if (_asks[i] > price) {
-            _asks.splice(i, 0, price)
-          }
+          for (i=0; i < _asks.length; i++) { if (_asks[i] > price) break; } // Find indes where price fits into bids list
+          _asks.splice(i, 0, price)
         }
       })
       return _bids[0] !== oldBottom || _asks[0] !== oldTop
