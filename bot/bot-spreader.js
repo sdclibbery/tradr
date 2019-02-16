@@ -30,12 +30,11 @@ const spreadTracker = () => {
     top: () => _top,
   }
 }
-const assert = (m,e,a) => { if (e!==a) throw(`Unit Test failure! '${m}': Expected ${e}, actual ${a}`) }
+const assert = require('assert')
 {
   const s = spreadTracker()
   s.snapshot([3,2,1], [4,5,6])
-  assert('snapshot bottom', 3, s.bottom())
-  assert('snapshot top', 4, s.top())
+  assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot')
 }
 
 // websocket feed
