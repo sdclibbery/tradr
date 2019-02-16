@@ -75,12 +75,6 @@ const connect = () => {
         logger.info(`BOT: Initial spread: ${spread.bottom()} - ${spread.top()}`)
         break;
       case 'l2update':
-        if (nearTo(Number.parseFloat(data.changes[0][1]), spread.bottom())) {
-          logger.info(`BOT: BOTTOM: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
-        }
-        if (nearTo(Number.parseFloat(data.changes[0][1]), spread.top())) {
-          logger.info(`BOT: TOP: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
-        }
         if (spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), clear:(size == "0") }}))) {
           logger.info(`BOT: New spread: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
         }
