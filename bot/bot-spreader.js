@@ -17,6 +17,8 @@ try {
 const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
 
+const nearTo = (a,b) => ((a >= b - 1e-8) && (a <= b + 1e-8))
+
 // spread tracking
 const spreadTracker = (bids, asks) => {
   let _bids = bids
@@ -29,7 +31,7 @@ const spreadTracker = (bids, asks) => {
         if (side === 'buy') {
           let i
           for (i=0; i < _bids.length; i++) { if (_bids[i] <= price) break; } // Find index where price fits into bids list
-          if (_bids[i] === price) {
+          if (nearTo(_bids[i], price)) {
             if (clear) _bids.splice(i,1) // remove cleared price
           } else {
             _bids.splice(i, 0, price) // insert new price
@@ -38,7 +40,7 @@ const spreadTracker = (bids, asks) => {
         if (side === 'sell') {
           let i
           for (i=0; i < _asks.length; i++) { if (_asks[i] >= price) break; } // Find index where price fits into bids list
-          if (_asks[i] === price) {
+          if (nearTo(_asks[i], price)) {
             if (clear) _asks.splice(i,1) // remove cleared price
           } else {
             _asks.splice(i, 0, price) // insert new price
@@ -73,7 +75,13 @@ const connect = () => {
         logger.info(`BOT: Initial spread: ${spread.bottom()} - ${spread.top()}`)
         break;
       case 'l2update':
-        if (spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), clear:!size }}))) {
+        if (nearTo(Number.parseFloat(data.changes[0][1]), spread.bottom())) {
+          logger.info(`BOT: BOTTOM: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
+        }
+        if (nearTo(Number.parseFloat(data.changes[0][1]), spread.top())) {
+          logger.info(`BOT: TOP: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
+        }
+        if (spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), clear:(size == "0") }}))) {
           logger.info(`BOT: New spread: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
         }
         break;
@@ -92,71 +100,66 @@ connect()
 
 // --- Spread Tracker tests ---
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()], 'snapshot')
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'buy', price:2, clear:false}]), 'update with no change to spread bottom returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update with no change to spread bottom leaves spread untouched')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'buy', price:2.1, clear:false}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'sell', price:5, clear:false}]), 'update with no change to spread top returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update with no change to spread top leaves spread untouched')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'sell', price:5.1, clear:false}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(true, s.updates([{side:'buy', price:3.5, clear:false}]), 'update that pushes spread bottom returns true')
-  assert.deepEqual([3.5,4], [s.bottom(),s.top()], 'update that pushes spread bottom updates spread')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(true, s.updates([{side:'buy', price:3.5, clear:false}]))
+  assert.deepEqual([3.5,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(true, s.updates([{side:'sell', price:3.5, clear:false}]), 'update that pushes spread top returns true')
-  assert.deepEqual([3,3.5], [s.bottom(),s.top()], 'update that pushes spread top updates spread')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(true, s.updates([{side:'sell', price:3.5, clear:false}]))
+  assert.deepEqual([3.1,3.5], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(true, s.updates([{side:'sell', price:3.5, clear:false}]), 'update that pushes spread top returns true')
-  assert.deepEqual([3,3.5], [s.bottom(),s.top()], 'update that pushes spread top updates spread')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'buy', price:2.1, clear:true}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'buy', price:2, clear:true}]), 'update clear non-bottom returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-bottom spread untouched')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'sell', price:5.1, clear:true}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'sell', price:5, clear:true}]), 'update clear non-top returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-top spread untouched')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(true, s.updates([{side:'buy', price:3.1, clear:true}]))
+  assert.deepEqual([2.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(true, s.updates([{side:'buy', price:3, clear:true}]), 'update clear bottom returns true')
-  assert.deepEqual([2,4], [s.bottom(),s.top()], 'update clear bottom updates spread')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(true, s.updates([{side:'sell', price:4.1, clear:true}]))
+  assert.deepEqual([3.1,5.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(true, s.updates([{side:'sell', price:4, clear:true}]), 'update clear top returns true')
-  assert.deepEqual([3,5], [s.bottom(),s.top()], 'update clear top updates spread')
+  const s = spreadTracker([3.1], [4.1])
+  assert.strictEqual(true, s.updates([{side:'buy', price:2.1, clear:false}, {side:'buy', price:3.1, clear:true}]))
+  assert.deepEqual([2.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3], [4])
-  assert.strictEqual(true, s.updates([{side:'buy', price:2, clear:false}, {side:'buy', price:3, clear:true}]), 'update buy to new price at end returns true')
-  assert.deepEqual([2,4], [s.bottom(),s.top()], 'update buy to new price at end has new spread')
+  const s = spreadTracker([3.1], [4.1])
+  assert.strictEqual(true, s.updates([{side:'sell', price:5.1, clear:false}, {side:'sell', price:4.1, clear:true}]))
+  assert.deepEqual([3.1,5.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3], [4])
-  assert.strictEqual(true, s.updates([{side:'sell', price:5, clear:false}, {side:'sell', price:4, clear:true}]), 'update sell to new price at end returns true')
-  assert.deepEqual([3,5], [s.bottom(),s.top()], 'update sell to new price at end has new spread')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'buy', price:2.5, clear:true}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }
 {
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'buy', price:2.5, clear:true}]), 'update missing clear non-bottom returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update missing clear non-bottom spread untouched')
-}
-{
-  const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'sell', price:4.5, clear:true}]), 'update missing clear non-top returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update missing clear non-top spread untouched')
+  const s = spreadTracker([3.1,2.1,1.1], [4.1,5.1,6.1])
+  assert.strictEqual(false, s.updates([{side:'sell', price:4.5, clear:true}]))
+  assert.deepEqual([3.1,4.1], [s.bottom(),s.top()])
 }

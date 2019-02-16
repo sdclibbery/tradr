@@ -136,7 +136,7 @@ x Red/green colours for order well
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
  x TDD the logic for snapshot and updates to track the order well and then spread correctly
- ! NOT WORKING - seems to not be clearing entries as the price moves?
+ ! NOT WORKING - seems to not be clearing entries as the price moves? Floating point? Or logic error?
  * TDD the logic for simulating placing order when the spread changes
 * Sim'd arbitrage bot that tracks arbitrage on EUR-BTC-GBP
  * Hack something into gdax-prices.js as a quick test
