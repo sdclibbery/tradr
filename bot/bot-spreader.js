@@ -28,7 +28,7 @@ const spreadTracker = (bids, asks) => {
       updates.forEach(({side, price, clear}) => {
         if (side === 'buy') {
           let i
-          for (i=0; i < _bids.length; i++) { if (_bids[i] <= price) break; } // Find indes where price fits into bids list
+          for (i=0; i < _bids.length; i++) { if (_bids[i] <= price) break; } // Find index where price fits into bids list
           if (_bids[i] === price) {
             if (clear) _bids.splice(i,1) // remove cleared price
           } else {
@@ -37,7 +37,7 @@ const spreadTracker = (bids, asks) => {
         }
         if (side === 'sell') {
           let i
-          for (i=0; i < _asks.length; i++) { if (_asks[i] >= price) break; } // Find indes where price fits into bids list
+          for (i=0; i < _asks.length; i++) { if (_asks[i] >= price) break; } // Find index where price fits into bids list
           if (_asks[i] === price) {
             if (clear) _asks.splice(i,1) // remove cleared price
           } else {
@@ -56,7 +56,7 @@ const spreadTracker = (bids, asks) => {
 let websocket
 let spread
 const connect = () => {
-  logger.info(`BOT: Connecting to WebSocket for level2 feed.`)
+  logger.info(`BOT: Connecting to WebSocket for level2 feed on ${options.product}.`)
   websocket = new gdax.WebsocketClient(
     [ options.product ],
     'wss://ws-feed.pro.coinbase.com',
@@ -73,7 +73,9 @@ const connect = () => {
         logger.info(`BOT: Initial spread: ${spread.bottom()} - ${spread.top()}`)
         break;
       case 'l2update':
-        spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), clear:!size }}))
+        if (spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), clear:!size }}))) {
+          logger.info(`BOT: New spread: ${spread.bottom()} - ${spread.top()}\n${JSON.stringify(data.changes)}`)
+        }
         break;
     }
   })
@@ -87,6 +89,7 @@ const connect = () => {
 connect()
 
 //---------------------------------------------
+
 // --- Spread Tracker tests ---
 {
   const s = spreadTracker([3,2,1], [4,5,6])
