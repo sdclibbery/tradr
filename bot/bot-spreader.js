@@ -17,13 +17,10 @@ const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
 
 // spread tracking
-const spreadTracker = () => {
-  let _bottom, _top
+const spreadTracker = (bids, asks) => {
+  let _bottom = bids[0]
+  let _top = asks[0]
   return {
-    snapshot: (bids, asks) => {
-      _bottom = bids[0]
-      _top = asks[0]
-    },
     updates: (updates) => {
     },
     bottom: () => _bottom,
@@ -31,11 +28,11 @@ const spreadTracker = () => {
   }
 }
 const assert = require('assert')
-{ const s = spreadTracker(); s.snapshot([3,2,1], [4,5,6]); assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot'); }
+{ const s = spreadTracker([3,2,1], [4,5,6]); assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot'); }
 
 // websocket feed
 let websocket
-const spread = spreadTracker()
+let spread
 const connect = () => {
   logger.info(`BOT: Connecting to WebSocket for level2 feed.`)
   websocket = new gdax.WebsocketClient(
@@ -47,7 +44,7 @@ const connect = () => {
   websocket.on('message', (data) => {
     switch (data.type) {
       case 'snapshot':
-        spread.snapshot(
+        spread = spreadTracker(
           data.bids.map(([p]) => Number.parseFloat(p)),
           data.asks.map(([p]) => Number.parseFloat(p))
         )
