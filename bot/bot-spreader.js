@@ -22,7 +22,16 @@ const spreadTracker = (bids, asks) => {
   let _top = asks[0]
   return {
     updates: (updates) => {
-      return false
+      let updatedSpread = false
+      updates.forEach(({side, price, empty}) => {
+        if (!empty) {
+          switch (side) {
+            case 'buy': _bottom = price; break
+          }
+          updatedSpread = true
+        }
+      })
+      return updatedSpread
     },
     bottom: () => _bottom,
     top: () => _top,
@@ -35,8 +44,13 @@ const assert = require('assert')
 }
 {
   const s = spreadTracker([3,2,1], [4,5,6])
-  assert.strictEqual(false, s.updates([{side:'buy', price:2, empty:true}]), 'updates with no change to spread returns false')
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'updates with no change leaves spread untouched')
+  assert.strictEqual(false, s.updates([{side:'buy', price:2, empty:true}]), 'update with no change to spread returns false')
+  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update with no change leaves spread untouched')
+}
+{
+  const s = spreadTracker([3,2,1], [4,5,6])
+  assert.strictEqual(true, s.updates([{side:'buy', price:3.5, empty:false}]), 'update that pushes spread bottom returns true')
+  assert.deepEqual([3.5,4], [s.bottom(),s.top()], 'update that pushes spread bottom updates spread')
 }
 
 // websocket feed
