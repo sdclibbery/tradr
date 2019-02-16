@@ -107,3 +107,9 @@ connect()
   assert.deepEqual([3,3.5], [s.bottom(),s.top()], 'update that pushes spread top updates spread')
 }
 // All clear:true cases
+// Clear non-bottom
+// Clear non-top
+// Clear bottom
+// Clear top
+// Add non-bottom then clear bottom
+// Add non-top then clear top
