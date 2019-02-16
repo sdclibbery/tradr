@@ -133,6 +133,13 @@ x Sometimes prices stop updating: presumably the websocket connection gets close
 x Have second account history graph in Btc as well as the Eur one
 x Update node modules
 x Red/green colours for order well
+* Sim'd spread bot that posts at bid & ask prices
+ x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
+ * TDD the logic for snapshot and updates to track the order well and then spread correctly
+ * TDD the logic for simulating placing order when the spread changes
+* Sim'd arbitrage bot that tracks arbitrage on EUR-BTC-GBP
+ * Hack something into gdax-prices.js as a quick test
+* Show MACD 21/9 on analysis page (https://twitter.com/zhusu/status/1092305648904065024?s=19) 
 * Account history page show orders
 
 * Add backup automation with monitoring of some kind
