@@ -28,8 +28,12 @@ const spreadTracker = (bids, asks) => {
       updates.forEach(({side, price, clear}) => {
         if (side === 'buy') {
           let i
-          for (i=0; i < _bids.length; i++) { if (_bids[i] < price) break; } // Find indes where price fits into bids list
-          _bids.splice(i, 0, price)
+          for (i=0; i < _bids.length; i++) { if (_bids[i] <= price) break; } // Find indes where price fits into bids list
+          if (_bids[i] === price) {
+            if (clear) _bids.splice(i,1) // remove cleared price
+          } else {
+            _bids.splice(i, 0, price) // insert new price
+          }
         }
         if (side === 'sell') {
           let i
@@ -119,11 +123,11 @@ connect()
   assert.strictEqual(false, s.updates([{side:'sell', price:5, clear:true}]), 'update clear non-top returns false')
   assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-top spread untouched')
 }
-// {
-//   const s = spreadTracker([3,2,1], [4,5,6])
-//   assert.strictEqual(true, s.updates([{side:'buy', price:3, clear:true}]), 'update clear bottom returns true')
-//   assert.deepEqual([2,4], [s.bottom(),s.top()], 'update clear bottom updates spread')
-// }
+{
+  const s = spreadTracker([3,2,1], [4,5,6])
+  assert.strictEqual(true, s.updates([{side:'buy', price:3, clear:true}]), 'update clear bottom returns true')
+  assert.deepEqual([2,4], [s.bottom(),s.top()], 'update clear bottom updates spread')
+}
 // Clear top
 // Add bid at end of list then clear all to make it bottom
 // Add ask at end of list then clear all to make it top
