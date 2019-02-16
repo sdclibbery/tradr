@@ -28,7 +28,10 @@ const spreadTracker = (bids, asks) => {
   }
 }
 const assert = require('assert')
-{ const s = spreadTracker([3,2,1], [4,5,6]); assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot'); }
+{
+  const s = spreadTracker([3,2,1], [4,5,6])
+  assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot')
+}
 
 // websocket feed
 let websocket
@@ -48,6 +51,7 @@ const connect = () => {
           data.bids.map(([p]) => Number.parseFloat(p)),
           data.asks.map(([p]) => Number.parseFloat(p))
         )
+        logger.info(`BOT: Initial spread: ${spread.bottom()} - ${spread.top()}`)
         break;
       case 'l2update':
         spread.updates(data.changes.map(([side, priceStr, size]) => { return { side:side, price:Number.parseFloat(priceStr), empty:!size }}))
