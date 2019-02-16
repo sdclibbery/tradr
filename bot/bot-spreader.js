@@ -137,5 +137,14 @@ connect()
   assert.strictEqual(true, s.updates([{side:'sell', price:4, clear:true}]), 'update clear top returns true')
   assert.deepEqual([3,5], [s.bottom(),s.top()], 'update clear top updates spread')
 }
-// Add bid at end of list then clear all to make it bottom
-// Add ask at end of list then clear all to make it top
+{
+  const s = spreadTracker([3], [4])
+  assert.strictEqual(true, s.updates([{side:'buy', price:2, clear:false}, {side:'buy', price:3, clear:true}]), 'update buy to new price at end returns true')
+  assert.deepEqual([2,4], [s.bottom(),s.top()], 'update buy to new price at end has new spread')
+}
+{
+  const s = spreadTracker([3], [4])
+  assert.strictEqual(true, s.updates([{side:'sell', price:5, clear:false}, {side:'sell', price:4, clear:true}]), 'update sell to new price at end returns true')
+  assert.deepEqual([3,5], [s.bottom(),s.top()], 'update sell to new price at end has new spread')
+}
+// Clear an entry thats not in the list
