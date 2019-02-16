@@ -31,11 +31,7 @@ const spreadTracker = () => {
   }
 }
 const assert = require('assert')
-{
-  const s = spreadTracker()
-  s.snapshot([3,2,1], [4,5,6])
-  assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot')
-}
+{ const s = spreadTracker(); s.snapshot([3,2,1], [4,5,6]); assert.deepEqual([3,4], [s.bottom(),s.top()], 'snapshot'); }
 
 // websocket feed
 let websocket
