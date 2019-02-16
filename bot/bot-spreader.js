@@ -19,25 +19,38 @@ const quoteCurrency = options.product.split('-')[1]
 
 // spread tracking
 const spreadTracker = (bids, asks) => {
-  let _bottom = bids[0]
-  let _top = asks[0]
+  let _bids = bids
+  let _asks = asks
   return {
     updates: (updates) => {
-      let updatedSpread = false
-      const newBottom = (b) => { _bottom=b; updatedSpread=true; }
-      const newTop = (t) => { _top=t; updatedSpread=true; }
+      const oldBottom = _bids[0]
+      const oldTop = _asks[0]
       updates.forEach(({side, price, clear}) => {
-        if (side === 'buy' && price > _bottom) {
-          newBottom(price)
+        if (side === 'buy') {
+          for (let i=0; i < _bids.length; i++) {
+            if (_bids[i] > price) {
+              continue
+            }
+            if (_bids[i] < price) {
+              _bids.splice(i, 0, price)
+            }
+          }
         }
-        if (side === 'sell' && price < _top) {
-          newTop(price)
+        if (side === 'sell') {
+          for (let i=0; i < _asks.length; i++) {
+            if (_asks[i] < price) {
+              continue
+            }
+            if (_asks[i] > price) {
+              _asks.splice(i, 0, price)
+            }
+          }
         }
       })
-      return updatedSpread
+      return _bids[0] !== oldBottom || _asks[0] !== oldTop
     },
-    bottom: () => _bottom,
-    top: () => _top,
+    bottom: () => _bids[0],
+    top: () => _asks[0],
   }
 }
 
@@ -116,8 +129,11 @@ connect()
   assert.strictEqual(false, s.updates([{side:'sell', price:5, clear:true}]), 'update clear non-top returns false')
   assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-top spread untouched')
 }
-// Clear non-top
-// Clear bottom
+// {
+//   const s = spreadTracker([3,2,1], [4,5,6])
+//   assert.strictEqual(true, s.updates([{side:'buy', price:3, clear:true}]), 'update clear bottom returns true')
+//   assert.deepEqual([2,4], [s.bottom(),s.top()], 'update clear bottom updates spread')
+// }
 // Clear top
-// Add non-bottom then clear bottom
-// Add non-top then clear top
+// Add bid at end of list then clear all to make it bottom
+// Add ask at end of list then clear all to make it top
