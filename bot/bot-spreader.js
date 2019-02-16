@@ -111,6 +111,11 @@ connect()
   assert.strictEqual(false, s.updates([{side:'buy', price:2, clear:true}]), 'update clear non-bottom returns false')
   assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-bottom spread untouched')
 }
+{
+  const s = spreadTracker([3,2,1], [4,5,6])
+  assert.strictEqual(false, s.updates([{side:'sell', price:5, clear:true}]), 'update clear non-top returns false')
+  assert.deepEqual([3,4], [s.bottom(),s.top()], 'update clear non-top spread untouched')
+}
 // Clear non-top
 // Clear bottom
 // Clear top
