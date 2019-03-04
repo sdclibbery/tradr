@@ -6,7 +6,7 @@ const connect = () => {
   console.log(`${new Date()} Connecting to WebSocket for price feed.`)
   let websocketTicker = new gdax.WebsocketClient(
     [
-      'BTC-EUR',
+      'BTC-EUR', 'BTC-GBP',
       'ETH-EUR', 'ETH-BTC',
       'LTC-EUR', 'LTC-BTC',
       'ETC-EUR', 'ETC-BTC',
