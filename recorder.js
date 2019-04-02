@@ -22,3 +22,12 @@ const trackAccounts = async () => {
 }
 setTimeout(trackAccounts, 10*1000)
 setInterval(trackAccounts, 24*60*60*1000)
+
+const trackOrders = async () => {
+  console.log(new Date(), ' Tracking orders')
+  const exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
+  await exchange.orders()
+  console.log(new Date(), ' Tracking orders: Done')
+}
+setTimeout(trackOrders, 20*1000)
+setInterval(trackOrders, 60*60*1000)
