@@ -19,7 +19,11 @@ exports.render = (req, res) => {
     <p>
       <a href='/trade/BTC-EUR'>BTC-EUR</a>
       <a href='/analyse/BTC-EUR'>Analyse BTC-EUR</a>
+    </p>
+    <hr>
+    <p>
       <a href='/trade/BTC-GBP'>BTC-GBP</a>
+      <a href='/analyse/BTC-GBP'>Analyse BTC-GBP</a>
     </p>
     <hr>
     <p>
@@ -32,19 +36,6 @@ exports.render = (req, res) => {
       <a href='/trade/LTC-BTC'>LTC-BTC</a>
       <a href='/analyse/LTC-BTC'>Analyse LTC-BTC</a>
       <a href='/trade/LTC-EUR'>LTC-EUR</a>
-    </p>
-    <hr>
-    <p>
-      <a href='/trade/ZRX-BTC'>ZRX-BTC</a>
-      <a href='/analyse/ZRX-BTC'>Analyse ZRX-BTC</a>
-      <a href='/trade/ZRX-EUR'>BCH-EUR</a>
-      <a href='/analyse/ZRX-EUR'>Analyse ZRX-EUR</a>
-    </p>
-    <hr>
-    <p>
-      <a href='/trade/BCH-BTC'>BCH-BTC</a>
-      <a href='/analyse/BCH-BTC'>Analyse BCH-BTC</a>
-      <a href='/trade/BCH-EUR'>BCH-EUR</a>
     </p>
     <hr>
     <p><a href="system">System</a></p>

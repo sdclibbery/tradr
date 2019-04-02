@@ -18,7 +18,6 @@ exports.apply = (content) => `
     <menu>
       <a class="nav" href='/'>Home</a>
       <a class="nav" href='/status'>Status</a>
-      <a class="nav" href='/trade/BTC-EUR'>BTC-EUR</a>
     </menu>
     ${content}
   </body>
