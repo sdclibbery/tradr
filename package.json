@@ -11,11 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^2.0.1",
-    "command-line-args": "^5.0.2",
+    "command-line-args": "^5.1.1",
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.6",
-    "find-process": "^1.2.1",
-    "gdax": "^0.5.1",
+    "find-process": "^1.4.1",
+    "gdax": "^0.8.0",
     "sqlite": "^2.9.3"
   },
   "devDependencies": {
