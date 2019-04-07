@@ -1,4 +1,5 @@
 const gdax = require('gdax')
+const credentials = require('../gdax-account-credentials')
 
 const prices = {}
 
@@ -11,7 +12,7 @@ const connect = () => {
       'LTC-EUR', 'LTC-BTC',
     ],
     'wss://ws-feed.pro.coinbase.com',
-    null,
+    credentials,
     { channels: ['ticker'] }
   )
   websocketTicker.on('message', (data) => {
