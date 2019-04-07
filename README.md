@@ -133,8 +133,8 @@ x Sometimes prices stop updating: presumably the websocket connection gets close
 x Have second account history graph in Btc as well as the Eur one
 x Update node modules
 x Red/green colours for order well
-x Update orders automatically, not just when user visits status/trade pages
-? Fix price feed failing
+* Fix price feed failing
+* Update orders automatically, not just when user visits status/trade pages
 * Highlight non-empty accounts on status page
 * Account history page show orders
 
