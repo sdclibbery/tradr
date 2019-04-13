@@ -23,11 +23,24 @@ const connect = () => {
   })
   websocketTicker.on('error', console.log)
   websocketTicker.on('close', () => {
-    console.log(`${new Date()} WebSocket for prices closed unexpectedly. Retrying in 60s...`)
+    console.log(`${new Date()} WebSocket for prices closed unexpectedly.`)
     websocketTicker = undefined
-    setTimeout(connect, 60000)
   })
+  return () => {
+    if (websocketTicker) {
+      try { websocketTicker.disconnect() }
+      catch (e) { console.log(`${new Date()} WebSocket for prices close error ${e}`) }
+    }
+    websocketTicker = undefined
+  }
 }
-connect()
+let closeWebSocket = connect()
+setInterval(() => {
+  if (prices.at + 120000 < Date.now()) {
+    console.log(`${new Date()} Watchdog for price WebSocket: no price updates for 2 min. Retrying feed now.`)
+    closeWebSocket()
+    closeWebSocket = connect()
+  }
+}, 60000)
 
 exports.prices = prices

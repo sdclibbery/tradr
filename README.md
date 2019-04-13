@@ -136,10 +136,12 @@ x Red/green colours for order well
 x Update orders automatically, not just when user visits status/trade pages
 ? Fix price feed failing
 * Show total amount deposited/withdrawn on account history graphs
+ * Prototype fetching and converting transfers
+ * Show on graph
+ * Track these on a daily batch instead of pull for page view
 * Highlight non-empty accounts on status page
-* New trading bots
- * Like buy-then-sell etc but with stop loss and possibly multiple exits
- * And easy trigger for these from trading page (maybe graphical even?)
+* Add optional stop loss to buy-then-sell etc (including support on trade page)
+* Revamp trade page to allow graphical setup of trades
 * Account history page show orders
 
 * Sim'd spread bot that posts at bid & ask prices
