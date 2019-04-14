@@ -136,10 +136,12 @@ x Red/green colours for order well
 x Update orders automatically, not just when user visits status/trade pages
 x Fix price feed failing
 * Show total amount deposited/withdrawn on account history graphs
- * Fetch and convert transfers
- * Show on graph
- * Track these on a daily batch instead of pull for page view
- * And save to DB
+ x Fetcher for transfers for one account
+ * Batch job to track transfers once per day and write into DB
+  * Fetch accounts
+  * Fetch transfers for each account
+  * Send to DB
+ * Fetch from DB and show on graph
 * Highlight non-empty accounts on status page
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Revamp trade page to allow graphical setup of trades

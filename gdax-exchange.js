@@ -1,7 +1,6 @@
 const gdax = require('gdax')
 const prices = require('./gdax-exchange/gdax-prices').prices
 const accounts = require('./gdax-exchange/gdax-accounts').fetcher
-const transfers = require('./gdax-exchange/gdax-transfers').fetcher
 const candles = require('./gdax-exchange/gdax-candles').fetcher
 const tracker = require('./tracker')
 const credentials = require('./gdax-account-credentials') // NOTE the bot only requires 'trading' permissions from GDAX API key and should not be given more
@@ -89,7 +88,13 @@ exports.createExchange = (options, logger) => {
     roundQuote: x => Number.parseFloat(dp(x, exchange.quoteDp)),
 
     accounts: accounts(authedClient, log, catchApiError, handleError),
-    transfers: transfers(authedClient, log, catchApiError, handleError),
+
+    transfersForAccount: async (accountId) => {
+      return authedClient.getAccountTransfers(accountId)
+        .then(log('GDAX: getAccountTransfers'))
+        .then(catchApiError)
+        .catch(handleError('transfersForAccount'))
+    },
 
     orders: async () => {
       return authedClient.getOrders()
