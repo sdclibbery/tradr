@@ -134,11 +134,12 @@ x Have second account history graph in Btc as well as the Eur one
 x Update node modules
 x Red/green colours for order well
 x Update orders automatically, not just when user visits status/trade pages
-? Fix price feed failing
+x Fix price feed failing
 * Show total amount deposited/withdrawn on account history graphs
- * Prototype fetching and converting transfers
+ * Fetch and convert transfers
  * Show on graph
  * Track these on a daily batch instead of pull for page view
+ * And save to DB
 * Highlight non-empty accounts on status page
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Revamp trade page to allow graphical setup of trades
