@@ -138,8 +138,8 @@ x Fix price feed failing
 * Show total amount deposited/withdrawn on account history graphs
  x Fetcher for transfers for one account
  * Batch job to track transfers once per day and write into DB
-  * Fetch accounts
-  * Fetch transfers for each account
+  x Fetch accounts
+  x Fetch transfers for each account
   * Send to DB
  * Fetch from DB and show on graph
 * Highlight non-empty accounts on status page
