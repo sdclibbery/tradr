@@ -142,8 +142,10 @@ x Fix price feed failing
   x Fetch transfers for each account
   x Send to DB
  * Fetch from DB and show on graph
-* Batch process to update live orders too?
+  * Show as arrow indicating the effect on the particular balance
+* Do something clever to calculate actual profit/loss taking transfers into account, and show on account history
 * Highlight non-empty accounts on status page
+* Batch process to update live orders too?
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Revamp trade page to allow graphical setup of trades
 * Account history page show orders

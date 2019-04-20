@@ -1,8 +1,11 @@
-drawBalances = (canvas, currency, balances, colours) => {
+drawBalances = (canvas, currency, balances, transfers, colours) => {
   balances = balances
     .map(b => { return {...b, time: Date.parse(b.at)}})
     .map(decorateWithTotals)
     .sort((a,b) => a.time-b.time)
+  transfers = transfers
+    .map(t => { return {...t, time: Date.parse(t.at)}})
+console.log(JSON.stringify(transfers, null, 2))
 
   var ctx = canvas.getContext('2d')
   const background = () => {
@@ -21,8 +24,9 @@ drawBalances = (canvas, currency, balances, colours) => {
   const toY = (p) => canvas.height * (1 - ((p)-(minBalance))/((maxBalance)-(minBalance)))
 
   const line = (colour, t1, b1, t2, b2) => {
-    const v1 = (b1 && (b1['valueIn'+currency] || b1['total'+currency])) || 0
-    const v2 = (b2 && (b2['valueIn'+currency] || b2['total'+currency])) || 0
+    const toBalanceValue = b => (b && (b['valueIn'+currency] || b['total'+currency])) || (b && !isNaN(b) && b) || 0
+    const v1 = toBalanceValue(b1)
+    const v2 = toBalanceValue(b2)
     ctx.fillStyle = colour
     ctx.strokeStyle = colour
     ctx.beginPath()
@@ -32,7 +36,7 @@ drawBalances = (canvas, currency, balances, colours) => {
     ctx.fillRect(toX(t2)-1, toY(v2)-1, 3, 3)
   }
 
-  balances.map((b,i) => {
+  balances.forEach((b,i) => {
     const b2 = balances[i-1]
     if (!b2) { return }
     line(colours.EUR, b.time, b.EUR, b2.time, b2.EUR)
@@ -40,6 +44,10 @@ drawBalances = (canvas, currency, balances, colours) => {
     line(colours.ETH, b.time, b.ETH, b2.time, b2.ETH)
     line(colours.BTC, b.time, b.BTC, b2.time, b2.BTC)
     line(colours.TOTAL, b.time, b, b2.time, b2)
+  })
+
+  transfers.forEach(t => {
+    line(colours[t.currency.toUpperCase()], t.time, minBalance, t.time, maxBalance)
   })
 
   drawLabels(canvas, {

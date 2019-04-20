@@ -2,7 +2,8 @@ const frame =  require('./frame').apply
 const tracker = require('../tracker');
 
 exports.render = async (req, res, next) => {
-  const balances = byDate(await tracker.getBalances())
+  const balances = byDate(await tracker.getBalances()).reduce(combineByDate, [])
+  const transfers = byDate(await tracker.getTransfers())
   res.send(frame(`
     <h1>Account Balance History</h1>
     <h3>In Eur</h3>
@@ -47,8 +48,9 @@ exports.render = async (req, res, next) => {
       }
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
       const balances = ${JSON.stringify(balances)}
-      drawBalances(document.getElementById('balances-eur'), 'Eur', balances, colours)
-      drawBalances(document.getElementById('balances-btc'), 'Btc', balances, colours)
+      const transfers = ${JSON.stringify(transfers)}
+      drawBalances(document.getElementById('balances-eur'), 'Eur', balances, transfers, colours)
+      drawBalances(document.getElementById('balances-btc'), 'Btc', balances, transfers, colours)
     </script>
   `))
 }
@@ -56,7 +58,6 @@ exports.render = async (req, res, next) => {
 const byDate = (balances) => {
   return balances
     .sort((a,b) => Date.parse(a.at) - Date.parse(b.at))
-    .reduce(combineByDate, [])
 }
 
 const combineByDate = (dates, balance) => {
