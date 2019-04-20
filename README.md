@@ -137,11 +137,12 @@ x Update orders automatically, not just when user visits status/trade pages
 x Fix price feed failing
 * Show total amount deposited/withdrawn on account history graphs
  x Fetcher for transfers for one account
- * Batch job to track transfers once per day and write into DB
+ x Batch job to track transfers once per day and write into DB
   x Fetch accounts
   x Fetch transfers for each account
-  * Send to DB
+  x Send to DB
  * Fetch from DB and show on graph
+* Batch process to update live orders too?
 * Highlight non-empty accounts on status page
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Revamp trade page to allow graphical setup of trades

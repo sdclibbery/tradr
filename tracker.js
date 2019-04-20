@@ -13,6 +13,7 @@ exports.trackBalances = async (balances) => {
     )
   ))
 }
+
 exports.setBalanceValues = async (balance, valueInEur, valueInBtc) => {
   await db.run(
     `UPDATE Balances SET valueInEur=$valueInEur, valueInBtc=$valueInBtc WHERE currency=$currency AND exchange=$exchange AND at=$at;`,
@@ -29,6 +30,17 @@ exports.setBalanceValues = async (balance, valueInEur, valueInBtc) => {
 exports.getBalances = async () => {
   return await db.all(`SELECT currency, exchange, at, balance, available, valueInEur, valueInBtc FROM Balances
                         ORDER BY currency ASC, at DESC LIMIT 100000;`)
+}
+
+exports.trackTransfer = async (transfer) => {
+  await db.run(
+    `INSERT OR IGNORE INTO Transfers (exchange, id, currency, type, at, amount)
+      VALUES ($exchange, $id, $currency, $type, $at, $amount);`, transfer
+  )
+}
+
+exports.getTransfers = async () => {
+  return await db.all(`SELECT * FROM Transfers;`)
 }
 
 exports.trackOrder = async (order) => {

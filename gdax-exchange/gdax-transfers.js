@@ -11,12 +11,19 @@ const batch = () => {
         exchange.transfersForAccount(id).then((transfers) => {
           transfers
             .filter(({completed_at}) => completed_at != undefined)
-            .forEach(({type, completed_at, amount}) => {
+            .forEach(({type, completed_at, amount, id}) => {
               console.log(`${new Date()} ${type} of ${amount} ${currency} at ${completed_at}`)
+              tracker.trackTransfer({
+                $exchange: 'GDAX',
+                $id: id,
+                $currency: currency,
+                $type: type,
+                $at: completed_at,
+                $amount: amount,
+              }).catch(console.log)
             })
         })
       })
   })
 }
-//setTimeout(batch, 1000)
 setInterval(batch, 24*60*60*1000)
