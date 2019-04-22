@@ -135,15 +135,19 @@ x Update node modules
 x Red/green colours for order well
 x Update orders automatically, not just when user visits status/trade pages
 x Fix price feed failing
-* Show total amount deposited/withdrawn on account history graphs
+x Record transfers
  x Fetcher for transfers for one account
  x Batch job to track transfers once per day and write into DB
   x Fetch accounts
   x Fetch transfers for each account
   x Send to DB
- * Fetch from DB and show on graph
-  * Show as arrow indicating the effect on the particular balance
-* Do something clever to calculate actual profit/loss taking transfers into account, and show on account history
+* Store prices of BTC/ETH/LTC in GBP/EUR/USD each day instead
+ * Store off once per day
+ * And backfill with historic data since 2017
+ * Use coin metrics data, and currency convert for GBP/EUR?
+* Use the historic price data instead of storing 'valueInEur' etc in the account balance
+ * Maybe ditch balance storage altogether as can be fetched from coinbase, including transfers?
+  * Then rewrite account history page altogether to use this?
 * Highlight non-empty accounts on status page
 * Batch process to update live orders too?
 * Add optional stop loss to buy-then-sell etc (including support on trade page)

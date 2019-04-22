@@ -2,8 +2,10 @@ const frame =  require('./frame').apply
 const tracker = require('../tracker');
 
 exports.render = async (req, res, next) => {
-  const balances = byDate(await tracker.getBalances()).reduce(combineByDate, [])
+  const balances = byDate(await tracker.getBalances())
+                    .reduce(combineByDate, [])
   const transfers = byDate(await tracker.getTransfers())
+
   res.send(frame(`
     <h1>Account Balance History</h1>
     <h3>In Eur</h3>
@@ -63,13 +65,25 @@ const byDate = (balances) => {
 const combineByDate = (dates, balance) => {
   let date = dates[dates.length-1]
   if (!date || !datesAreClose(balance.at, date.at)) {
-    date = { at:balance.at }
+    date = {}
     dates.push(date)
   }
+  date.at = balance.at
   date[balance.currency] = { valueInEur: balance.valueInEur, valueInBtc: balance.valueInBtc }
   return dates
 }
 
 const datesAreClose = (a, b) => {
   return Math.abs(Date.parse(a) - Date.parse(b)) < 10000
+}
+
+//-------------------
+
+assertSame = (actual, expected) => {
+  if (JSON.stringify(actual) != JSON.stringify(expected)) {
+    console.log('\nAccount history page test failed!!!')
+    console.log(' Expected: ', expected)
+    console.log(' Actual: ', actual)
+    console.trace()
+  }
 }
