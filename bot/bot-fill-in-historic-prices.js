@@ -35,7 +35,7 @@ framework.init([
       price = price / conversions[date]
     }
     if (!!price && new Date(time) >= cutoff) {
-      logger.info(`BOT: TRACKING: product:${options.product}, at:${date.toUTCString()}, price:${price}  ORIGINAL USD ${l.split(',')[5]}`)
+      logger.debug(`BOT: TRACKING: product:${options.product}, at:${date.toUTCString()}, price:${price}  ORIGINAL USD ${l.split(',')[5]}`)
       await tracker.trackPrice({$product:options.product, $at:date.toUTCString(), $price:price})
     }
     if (!(i%100)) { logger.info(`BOT: progress: ${time}`) }
