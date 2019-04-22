@@ -60,5 +60,6 @@ const batch = () => {
   })
 }
 setInterval(batch, 24*60*60*1000)
+setTimeout(batch, 40*1000)
 
 exports.prices = prices

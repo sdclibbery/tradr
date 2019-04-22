@@ -142,11 +142,8 @@ x Record transfers
   x Fetch transfers for each account
   x Send to DB
 x Store prices of BTC/ETH/LTC in GBP/EUR/USD each day instead
-* Bot to backfill prices with historic data since 2017
- * Pass in the product
- * Open and parse the relevant CSV files
- * Write price data to DB (??weekly before 2017?)
- * Run it for all price-tracked products in dev and live, then backup DB
+x Bot to backfill prices with historic data since 2017
+ x Run it for all price-tracked products in dev and live, then backup DB
 * New account history page
  * Fetch all account history for all relevant currencies (EUR, GBP, BTC, ETH, LTC)
  * Crunch down so its maximum of daily granularity
