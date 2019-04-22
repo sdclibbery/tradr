@@ -12,7 +12,7 @@ framework.init([
   const needsConversion = quoteCurrency !== 'USD'
   if (needsConversion) {
     require('fs')
-    .readFileSync(`./data/${quoteCurrency.toLowerCase()}_usd_daily_historic.csv`, {encoding:'utf8'})
+    .readFileSync(`../data/${quoteCurrency.toLowerCase()}_usd_daily_historic.csv`, {encoding:'utf8'})
     .split(/\r?\n/)
     .forEach(l => {
       const time = l.split(',')[0].split(' ')[0].split('.')
@@ -23,7 +23,7 @@ framework.init([
   }
   const targetCurrency = needsConversion ? 'usd' : quoteCurrency.toLowerCase()
   const lines = require('fs')
-    .readFileSync(`./data/${baseCurrency.toLowerCase()}_${targetCurrency}_daily_historic.csv`, {encoding:'utf8'})
+    .readFileSync(`../data/${baseCurrency.toLowerCase()}_${targetCurrency}_daily_historic.csv`, {encoding:'utf8'})
     .split(/\r?\n/)
   const cutoff = new Date('2017-01-01')
   for (i in lines) {
