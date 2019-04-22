@@ -4,8 +4,8 @@ const credentials = require('../gdax-account-credentials')
 
 const products = [
   'BTC-EUR', 'BTC-GBP', 'BTC-USD',
-  'ETH-EUR', 'ETH-BTC',
-  'LTC-EUR', 'LTC-BTC',
+  'ETH-EUR', 'ETH-GBP', 'ETH-BTC',
+  'LTC-EUR', 'LTC-GBP', 'LTC-BTC',
 ]
 const prices = {}
 
