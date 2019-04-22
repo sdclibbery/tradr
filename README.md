@@ -142,8 +142,8 @@ x Record transfers
   x Fetch transfers for each account
   x Send to DB
 * Store prices of BTC/ETH/LTC in GBP/EUR/USD each day instead
- * Store off once per day
- * And backfill with historic data since 2017
+ x Store off once per day
+ * Backfill with historic data since 2017
  * Use coin metrics data, and currency convert for GBP/EUR?
 * Use the historic price data instead of storing 'valueInEur' etc in the account balance
  * Maybe ditch balance storage altogether as can be fetched from coinbase, including transfers?

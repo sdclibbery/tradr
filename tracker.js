@@ -43,6 +43,13 @@ exports.getTransfers = async () => {
   return await db.all(`SELECT * FROM Transfers;`)
 }
 
+exports.trackPrice = async (price) => {
+  await db.run(
+    `INSERT OR IGNORE INTO Prices (product, at, price)
+      VALUES ($product, $at, $price);`, price
+  )
+}
+
 exports.trackOrder = async (order) => {
   await db.run(
     `INSERT INTO Orders (id, exchange, product, status, created, side, orderPrice, priceAtCreation, amount, creator, reason)

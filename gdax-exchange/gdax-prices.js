@@ -1,16 +1,18 @@
 const gdax = require('gdax')
+const tracker = require('../tracker')
 const credentials = require('../gdax-account-credentials')
 
+const products = [
+  'BTC-EUR', 'BTC-GBP', 'BTC-USD',
+  'ETH-EUR', 'ETH-BTC',
+  'LTC-EUR', 'LTC-BTC',
+]
 const prices = {}
 
 const connect = () => {
   console.log(`${new Date()} Connecting to WebSocket for price feed.`)
   let websocketTicker = new gdax.WebsocketClient(
-    [
-      'BTC-EUR', 'BTC-GBP', 'BTC-USD',
-      'ETH-EUR', 'ETH-BTC',
-      'LTC-EUR', 'LTC-BTC',
-    ],
+    products,
     'wss://ws-feed.pro.coinbase.com',
     credentials,
     { channels: ['ticker'] }
@@ -42,5 +44,21 @@ setInterval(() => {
     closeWebSocket = connect()
   }
 }, 60000)
+
+const batch = () => {
+  console.log(`${new Date()} Tracking prices`)
+  products.forEach(product => {
+    const price = prices[product]
+    if (!!price) {
+      console.log(`${new Date()} Tracking price of ${product}: ${price}`)
+      tracker.trackPrice({
+        $at: (new Date(prices.at)).toUTCString(),
+        $product: product,
+        $price: price,
+      }).catch(console.log)
+    }
+  })
+}
+setInterval(batch, 24*60*60*1000)
 
 exports.prices = prices
