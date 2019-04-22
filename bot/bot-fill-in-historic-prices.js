@@ -15,10 +15,17 @@ framework.init([
     .readFileSync(`../data/${quoteCurrency.toLowerCase()}_usd_daily_historic.csv`, {encoding:'utf8'})
     .split(/\r?\n/)
     .forEach(l => {
-      const time = l.split(',')[0].split(' ')[0].split('.')
-      const date = new Date(`${time[2]}-${time[1]}-${time[0]}`)
-      const price = l.split(',')[1]
-      conversions[date] = price
+      if (quoteCurrency !== 'BTC') {
+        const time = l.split(',')[0].split(' ')[0].split('.')
+        const date = new Date(`${time[2]}-${time[1]}-${time[0]}`)
+        const price = l.split(',')[1]
+        conversions[date] = price
+      } else {
+        const time = l.split(',')[0]
+        const date = new Date(time)
+        let price = l.split(',')[5]
+        conversions[date] = price
+      }
     })
   }
   const targetCurrency = needsConversion ? 'usd' : quoteCurrency.toLowerCase()
