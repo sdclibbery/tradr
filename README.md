@@ -141,15 +141,20 @@ x Record transfers
   x Fetch accounts
   x Fetch transfers for each account
   x Send to DB
-* Store prices of BTC/ETH/LTC in GBP/EUR/USD each day instead
- x Store off once per day
- * Backfill with historic data since 2017
- * Use coin metrics data, and currency convert for GBP/EUR?
-* Use the historic price data instead of storing 'valueInEur' etc in the account balance
- * Maybe ditch balance storage altogether as can be fetched from coinbase, including transfers?
-  * Then rewrite account history page altogether to use this?
+x Store prices of BTC/ETH/LTC in GBP/EUR/USD each day instead
+* Bot to backfill prices with historic data since 2017
+ * Pass in the product
+ * Open and parse the relevant CSV files
+ * Write price data to DB (??weekly before 2017?)
+ * Run it for all price-tracked products in dev and live, then backup DB
+* New account history page
+ * Fetch all account history for all relevant currencies (EUR, GBP, BTC, ETH, LTC)
+ * Crunch down so its maximum of daily granularity
+ * Apply historic price data to convert all amounts into required target currency
+ * Keep running totals of transfers in target currency, and subtract from balances to give profit each day
+* Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
+* Tidy price batch tracking into recorder.js
 * Highlight non-empty accounts on status page
-* Batch process to update live orders too?
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Revamp trade page to allow graphical setup of trades
 * Account history page show orders
