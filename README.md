@@ -146,11 +146,12 @@ x Bot to backfill prices with historic data since 2017
  x Run it for all price-tracked products in dev and live, then backup DB
 * New account history page
  * Fetch account history
-  * Handle pagination in gdax request
+  * Graph this
+  * Handle pagination in gdax request: eg: authedClient.getAccountHistory(accountID, { before: 3000 }, callback);
  * Apply historic price data to convert into account statement in required target currency
  * Keep running totals of transfers in target currency, and subtract from balances to decorate with profit
- * Graph this
  * Do for all relevant currencies
+ * Graph all this
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency

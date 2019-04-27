@@ -24,19 +24,17 @@ exports.render = async (req, res, next) => {
       <span id="ETC">ETC</span>
       <span id="ZRX">ZRX</span>
     </p>
-    <script src="/draw-labels.js"></script>
     <script src="/account-extents.js"></script>
+    <script src="/draw-labels.js"></script>
+    <script src="/draw-transactions.js"></script>
     <script>
       const colours = {
         TOTAL: '#000000',
         EUR: '#707070',
-        GBP: '#c0c0c0',
+        GBP: '#a0a0a0',
         BTC: '#c00000',
         ETH: '#00c000',
         LTC: '#0000c0',
-        BCH: '#c05050',
-        ETC: '#50c050',
-        ZRX: '#00c0c0',
       }
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
 
@@ -44,6 +42,7 @@ exports.render = async (req, res, next) => {
       const canvas = document.getElementById('balances-eur')
       const extents = accountExtents(canvas, transactions)
       extents.background()
+      drawTransactions(canvas, extents, transactions, colours.EUR)
       drawLabels(canvas, extents)
     </script>
   `))
