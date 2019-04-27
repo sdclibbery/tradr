@@ -146,22 +146,23 @@ x Bot to backfill prices with historic data since 2017
  x Run it for all price-tracked products in dev and live, then backup DB
 * New account history page
  * Fetch all account history for all relevant currencies (EUR, GBP, BTC, ETH, LTC)
- * Crunch down so its maximum of daily granularity
- * Apply historic price data to convert all amounts into required target currency
- * Keep running totals of transfers in target currency, and subtract from balances to give profit each day
+ * Apply historic price data to convert into account statement in required target currency
+ * Keep running totals of transfers in target currency, and subtract from balances to decorate with profit
+ * Graph all this
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
-* Highlight non-empty accounts on status page
+* Switch from EUR to GBP as primary quote currency
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
-* Revamp trade page to allow graphical setup of trades
+* Some kind of notification when orders fill
 * Account history page show orders
+* Revamp trade page to allow graphical setup of trades
+* Highlight non-empty accounts on status page
 
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
  x TDD the logic for snapshot and updates to track the order well and then spread correctly
  * TDD the logic for simulating placing order when the spread changes
-* Sim'd arbitrage bot that tracks arbitrage on EUR-BTC-GBP
- * Hack something into gdax-prices.js as a quick test
+* Sim'd arbitrage bot that tracks arbitrage on EUR-BTC-GBP (USD-BTC-GBP??)
 * Show MACD 21/9 on analysis page (https://twitter.com/zhusu/status/1092305648904065024?s=19)
 * Add backup automation with monitoring of some kind
 * Allow buy-then-sell bot to have multiple exits?
