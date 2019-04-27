@@ -1,8 +1,13 @@
 const frame =  require('./frame').apply
 const tracker = require('../tracker');
+const GdaxExchange = require('../gdax-exchange');
 
 exports.render = async (req, res, next) => {
-  const transactions = [{balance:0, time:Date.now()-100*24*60*60*1000}, {balance:100, time:Date.now()}]//Temp test data
+  exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
+  const accounts = (await exchange.accounts()).accounts
+    .filter(a => a.currency == 'EUR')//!
+  const transactions = (await exchange.accountHistory(accounts[0].id))
+    .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:balance, type:type, amount:amount}})
 
   res.send(frame(`
     <h1>Account History</h1>

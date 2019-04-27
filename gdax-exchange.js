@@ -89,6 +89,13 @@ exports.createExchange = (options, logger) => {
 
     accounts: accounts(authedClient, log, catchApiError, handleError),
 
+    accountHistory: async (accountId) => {
+      return authedClient.getAccountHistory(accountId)
+        .then(log('GDAX: getAccountHistory'))
+        .then(catchApiError)
+        .catch(handleError('accountHistory'))
+    },
+
     transfersForAccount: async (accountId) => {
       return authedClient.getAccountTransfers(accountId)
         .then(log('GDAX: getAccountTransfers'))

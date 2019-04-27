@@ -1,9 +1,8 @@
 accountExtents = (canvas, transactions) => {
   let minAmount = 0
   let maxAmount = transactions.reduce((m, c) => Math.max(m, c.balance), -Infinity)
-  const minTime = transactions[0].time
-  const maxTime = transactions[transactions.length-1].time
-console.log(`${minAmount}  ${maxAmount}  ${minTime}  ${maxTime}`)
+  const minTime = transactions[transactions.length-1].time
+  const maxTime = transactions[0].time
   return {
     minPrice: minAmount,
     maxPrice: maxAmount,
