@@ -31,7 +31,7 @@ exports.createExchange = (options, logger) => {
   const quoteCurrency = options.product && options.product.split('-')[1]
 
   const log = id => response => {
-    logger.debug(id, response)
+    logger.debug(id, JSON.stringify(response, null, 2))
     return response
   }
 
@@ -43,7 +43,7 @@ exports.createExchange = (options, logger) => {
 
   const handleError = (context) => {
     return ({message, status, reject_reason, ...data}) => {
-      logger.error('GDAX API Error', context, message, status, reject_reason, data)
+      logger.error('GDAX API Error', context, JSON.stringify(message, null, 2), JSON.stringify(status, null, 2), JSON.stringify(reject_reason, null, 2), JSON.stringify(data, null, 2))
       throw new Error(message || reject_reason)
     }
   }
@@ -90,10 +90,30 @@ exports.createExchange = (options, logger) => {
     accounts: accounts(authedClient, log, catchApiError, handleError),
 
     accountHistory: async (accountId) => {
-      return authedClient.getAccountHistory(accountId)
-        .then(log('GDAX: getAccountHistory'))
-        .then(catchApiError)
-        .catch(handleError('accountHistory'))
+      let data = {}
+      let transactions = []
+      do {
+        data = await exchange.accountHistoryPage(accountId, data.before || 1)
+                .then(log('GDAX: getAccountHistory page'))
+                .then(catchApiError)
+                .catch(handleError('accountHistory'))
+        transactions = data.concat(transactions)
+        before = data.before
+      } while (data.length > 0)
+      return transactions
+    },
+
+    accountHistoryPage: (accountId, before) => {
+      return new Promise((resolve, reject) => {
+        authedClient.getAccountHistory(accountId, {before:before}, (err, response, data) => {
+          if (err) { reject(err) }
+          else {
+            data.before = response.headers['cb-before']
+            data.next = response.headers['cb-after']
+            resolve(data)
+          }
+        })
+      })
     },
 
     transfersForAccount: async (accountId) => {
