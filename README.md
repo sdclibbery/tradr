@@ -148,8 +148,8 @@ x Bot to backfill prices with historic data since 2017
  x Fetch account history
   x Graph this
   x Handle pagination in gdax request: eg:
- * Apply historic price data to convert into account statement in required target currency
  * Keep running totals of transfers in target currency, and subtract from balances to decorate with profit
+ * Apply historic price data to convert into account statement in required target currency
  * Do for all relevant currencies
  * Graph all this
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc

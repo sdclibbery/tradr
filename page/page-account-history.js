@@ -4,9 +4,9 @@ const GdaxExchange = require('../gdax-exchange');
 
 exports.render = async (req, res, next) => {
   exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
-  const accounts = (await exchange.accounts()).accounts
-    .filter(a => a.currency == 'EUR')//!
-  const transactions = (await exchange.accountHistory(accounts[0].id))
+  const account = (await exchange.accounts()).accounts
+    .filter(a => a.currency == 'EUR')[0]//!
+  const transactions = (await exchange.accountHistory(account.id))
     .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:balance, type:type, amount:amount}})
 
   res.send(frame(`
@@ -26,7 +26,7 @@ exports.render = async (req, res, next) => {
     </p>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>
-    <script src="/draw-transactions.js"></script>
+    <script src="/draw-balances.js"></script>
     <script>
       const colours = {
         TOTAL: '#000000',
@@ -42,7 +42,7 @@ exports.render = async (req, res, next) => {
       const canvas = document.getElementById('balances-eur')
       const extents = accountExtents(canvas, transactions)
       extents.background()
-      drawTransactions(canvas, extents, transactions, colours.EUR)
+      drawBalances(canvas, extents, transactions, colours.EUR)
       drawLabels(canvas, extents)
     </script>
   `))

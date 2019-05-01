@@ -55,11 +55,11 @@ drawLabels = (canvas, extents) => {
 
   const months = ['', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   const thisMonth = new Date().getMonth()
-  for (let m = thisMonth; m > thisMonth-12; m--) {
+  for (let m = thisMonth; m > thisMonth-24; m--) {
     const d = new Date(0)
     d.setYear(thisYear)
     const t = d.setMonth(m)
-    timeLabel(t, months[(m+12)%12], 'center')
+    timeLabel(t, months[(m+24)%12], 'center')
   }
 
   const aDay = 24*60*60*1000
