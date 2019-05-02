@@ -4,10 +4,15 @@ const GdaxExchange = require('../gdax-exchange');
 
 exports.render = async (req, res, next) => {
   exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
-  const account = (await exchange.accounts()).accounts
-    .filter(a => a.currency == 'EUR')[0]//!
-  const transactions = (await exchange.accountHistory(account.id))
-    .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:balance, type:type, amount:amount}})
+  const accounts = (await exchange.accounts()).accounts.filter(a => a.balance > 0)
+  let statement = []
+  for (idx in accounts) {
+    const account = accounts[idx]
+    const transactions = (await exchange.accountHistory(account.id))
+      .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:balance, type:type, amount:amount, currency:account.currency}})
+    statement = statement.concat(transactions)
+  }
+  statement.sort((l,r) => r.time - l.time)
 
   res.send(frame(`
     <h1>Account History</h1>
@@ -24,6 +29,13 @@ exports.render = async (req, res, next) => {
       <span id="ETC">ETC</span>
       <span id="ZRX">ZRX</span>
     </p>
+    <h3>Statement</h3>
+    <table>
+    <tr><th>Date</th><th>transaction</th><th>balance</th></tr>
+    ${
+      statement.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.type} ${t.amount} ${t.currency}</td><td>${t.balance}</td></tr>`)
+    }
+    </table>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>
     <script src="/draw-balances.js"></script>
@@ -38,11 +50,11 @@ exports.render = async (req, res, next) => {
       }
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
 
-      const transactions = ${JSON.stringify(transactions)}
+      const statement = ${JSON.stringify(statement)}
       const canvas = document.getElementById('balances-eur')
-      const extents = accountExtents(canvas, transactions)
+      const extents = accountExtents(canvas, statement)
       extents.background()
-      drawBalances(canvas, extents, transactions, colours.EUR)
+      drawBalances(canvas, extents, statement, colours.EUR)
       drawLabels(canvas, extents)
     </script>
   `))
