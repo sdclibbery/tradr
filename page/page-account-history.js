@@ -15,10 +15,17 @@ exports.render = async (req, res, next) => {
   statement.sort((l,r) => r.time - l.time)
   for (idx in statement) {
     const t = statement[idx]
-//    if (t.currency == 'BTC') {
-//      const {price,at,epochTimestamp} = await tracker.priceAt('BTC-GBP', t.time)
-// console.log(`${t.time}  ${new Date(t.time)}  ${price}  ${epochTimestamp}  ${at}`)
-//    }
+    if (['BTC','ETH','LTC'].includes(t.currency)) {
+      const {price} = await tracker.priceAt(`${t.currency}-GBP`, t.time)
+      t.balanceInGbp = t.balance * price
+      t.amountInGbp = t.amount * price
+    } else if (t.currency == 'GBP') {
+      t.balanceInGbp = t.balance
+      t.amountInGbp = t.amount
+    } else if (t.currency == 'EUR') {
+      t.balanceInGbp = t.balance * 0.8
+      t.amountInGbp = t.amount * 0.8
+    }
   }
 
   res.send(frame(`
@@ -32,15 +39,12 @@ exports.render = async (req, res, next) => {
       <span id="BTC">BTC</span>
       <span id="ETH">ETH</span>
       <span id="LTC">LTC</span>
-      <span id="BCH">BCH</span>
-      <span id="ETC">ETC</span>
-      <span id="ZRX">ZRX</span>
     </p>
     <h3>Statement</h3>
     <table>
-    <tr><th>Date</th><th>transaction</th><th>balance</th></tr>
+    <tr><th>Date</th><th>transaction</th><th>balance</th><th>balanceInGbp</th></tr>
     ${
-      statement.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.type} ${t.amount} ${t.currency}</td><td>${t.balance}</td></tr>`)
+      statement.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.type} ${t.amount} ${t.currency}</td><td>${t.balance}</td><td>${t.balanceInGbp}</td></tr>`)
     }
     </table>
     <script src="/account-extents.js"></script>

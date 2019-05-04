@@ -151,7 +151,8 @@ x Bot to backfill prices with historic data since 2017
  x Fetch all relevant currencies and combine into single time-sorted statment
  * Convert all currencies into target currencies and keep balances and amounts in those
   x Add epoch timestamp column to price data
-  * Backfill column with a bot
+  x Backfill column with a bot
+ x Decorate transactions with amount and balance converted to GBP
  * Decorate transactions with running total of transfers ("transferBalance")
  * Make a combined transferBalance history giving total transfers from all accounts in all target currencies
  * Make a combined balance history in all target currencies
