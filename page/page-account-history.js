@@ -15,10 +15,10 @@ exports.render = async (req, res, next) => {
   statement.sort((l,r) => r.time - l.time)
   for (idx in statement) {
     const t = statement[idx]
-    if (t.currency == 'BTC') {
-      const {price,at,epochTimestamp} = await tracker.priceAt('BTC-GBP', t.time)
-//console.log(`${t.time}  ${new Date(t.time)}  ${price}  ${epochTimestamp}  ${at}`)
-    }
+//    if (t.currency == 'BTC') {
+//      const {price,at,epochTimestamp} = await tracker.priceAt('BTC-GBP', t.time)
+// console.log(`${t.time}  ${new Date(t.time)}  ${price}  ${epochTimestamp}  ${at}`)
+//    }
   }
 
   res.send(frame(`

@@ -49,6 +49,12 @@ exports.trackPrice = async (price) => {
       VALUES ($product, $at, $price, $epochTimeStamp);`, price
   )
 }
+exports.getAllPrices = async () => {
+  return await db.all(`SELECT * FROM Prices;`)
+}
+exports.setPriceEpochTimestamp = async (product, at, epochTimestamp) => {
+  await db.run(`UPDATE Prices SET epochTimestamp=$epochTimestamp WHERE product=$product AND at=$at`, {$product:product, $at:at, $epochTimestamp:epochTimestamp})
+}
 
 exports.priceAt = async (product, epochTimeStamp) => {
   return await db.get(

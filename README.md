@@ -164,6 +164,7 @@ x Bot to backfill prices with historic data since 2017
 * Account history page show orders
 * Revamp trade page to allow graphical setup of trades
 * Highlight non-empty accounts on status page
+* Set correct close time for orders, not just the time we checked and found they'd been closed
 
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
