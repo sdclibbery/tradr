@@ -51,10 +51,12 @@ const batch = () => {
     const price = prices[product]
     if (!!price) {
       console.log(`${new Date()} Tracking price of ${product}: ${price}`)
+      const date = new Date(prices.at)
       tracker.trackPrice({
-        $at: (new Date(prices.at)).toUTCString(),
+        $at: date.toUTCString(),
         $product: product,
         $price: price,
+        $epochTimeStamp:(date.getTime()),
       }).catch(console.log)
     }
   })

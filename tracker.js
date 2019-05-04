@@ -45,8 +45,18 @@ exports.getTransfers = async () => {
 
 exports.trackPrice = async (price) => {
   await db.run(
-    `INSERT OR IGNORE INTO Prices (product, at, price)
-      VALUES ($product, $at, $price);`, price
+    `INSERT OR IGNORE INTO Prices (product, at, price, epochTimeStamp)
+      VALUES ($product, $at, $price, $epochTimeStamp);`, price
+  )
+}
+
+exports.priceAt = async (product, epochTimeStamp) => {
+  return await db.get(
+    `SELECT * FROM Prices WHERE product = $product AND epochTimeStamp IN (
+      SELECT MIN(epochTimeStamp) FROM 'Prices' WHERE epochTimeStamp >= $epochTimeStamp AND product = $product
+      UNION SELECT MAX(epochTimeStamp) FROM 'Prices' WHERE epochTimeStamp <= $epochTimeStamp AND product = $product
+    ) ORDER BY ABS($epochTimeStamp - epochTimeStamp) LIMIT 1;`,
+    {$epochTimeStamp: epochTimeStamp, $product: product}
   )
 }
 
