@@ -1,4 +1,4 @@
-drawBalances = (canvas, extents, transactions, color) => {
+drawBalances = (canvas, extents, transactions, getValue, color) => {
   const ctx = canvas.getContext('2d')
 
   const toX = extents.toX
@@ -9,12 +9,12 @@ drawBalances = (canvas, extents, transactions, color) => {
     ctx.strokeStyle = color
     ctx.lineWidth = 3
     ctx.beginPath()
-    ctx.moveTo(toX(t1.time), toY(t1.balance))
-    ctx.lineTo(toX(t2.time), toY(t1.balance))
-    ctx.lineTo(toX(t2.time), toY(t2.balance))
+    ctx.moveTo(toX(t1.time), toY(getValue(t1)))
+    ctx.lineTo(toX(t1.time), toY(getValue(t2)))
+    ctx.lineTo(toX(t2.time), toY(getValue(t2)))
     ctx.stroke()
     ctx.fillStyle = color
-    ctx.fillRect(toX(t2.time)-2, toY(t2.balance)-2, 5, 5)
+    ctx.fillRect(toX(t2.time)-2, toY(getValue(t2))-2, 5, 5)
   }
 
   transactions.map((t, i) => {

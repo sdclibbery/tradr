@@ -1,6 +1,6 @@
 accountExtents = (canvas, transactions) => {
-  let minAmount = 0
-  let maxAmount = transactions.reduce((m, c) => Math.max(m, c.balance), -Infinity)
+  let minAmount = transactions.reduce((m, c) => Math.min(m, c.totalProfitInGbp), Infinity)
+  let maxAmount = transactions.reduce((m, c) => Math.max(m, c.totalBalanceInGbp), -Infinity)
   const minTime = transactions[transactions.length-1].time
   const maxTime = transactions[0].time
   return {

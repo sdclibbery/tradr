@@ -153,10 +153,13 @@ x Bot to backfill prices with historic data since 2017
   x Add epoch timestamp column to price data
   x Backfill column with a bot
  x Decorate transactions with amount and balance converted to GBP
- * Decorate transactions with running total of transfers ("transferBalance")
- * Make a combined transferBalance history giving total transfers from all accounts in all target currencies
- * Make a combined balance history in all target currencies
- * Make a combined profitBalance in all target currencies and graph them
+ x Decorate and graph total balance and profit (ignores transfers) in GBP
+ * Final total balance is wrong (is this from the fixed EUR->GBP rate we assumed? - shouldn't be out by that much!)
+ * Graph return over holding GBP
+  * This is totalBalanceInGbp - totalTransfersInGbp :- IS? this the same as current totalProfitInGbp??
+ * Graph return over hodling BTC
+  * Need to calculate running totalBalanceInBtc - totalTransfersInBtc and then convert back to GBP
+ * Could graph profit from completed 'round trip' trades?
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency
