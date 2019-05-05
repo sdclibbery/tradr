@@ -12,10 +12,23 @@ exports.render = async (req, res, next) => {
       .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:parseFloat(balance), type:type, amount:parseFloat(amount)}})
   }
 
+  const priceAt = (base, quote, time) => {
+    if (base == quote) { return 1 }
+    if (base == 'EUR' && quote == 'GBP') { return 0.8 }
+    return 1000//await tracker.priceAt(`${base}-${quote}`, time)
+  }
 
-  const history = []
-//    const profit = balance - transferred
-
+  const date = Date.now()
+  const totalBalanceInGbp = balanceAt(statements, date, priceAt)
+  const totalTransferredInGbp = transferredBy(statements, date, priceAt)
+  const history = [
+    {
+      time:date,
+      totalBalanceInGbp:totalBalanceInGbp,
+      totalTransferredInGbp:totalTransferredInGbp,
+      totalProfitInGbp:totalBalanceInGbp-totalTransferredInGbp,
+    }
+  ]
 
   res.send(frame(`
     <h1>Account History</h1>
@@ -31,9 +44,9 @@ exports.render = async (req, res, next) => {
     </p>
     <h3>Statement</h3>
     <table>
-    <tr><th>Date</th><th>transaction</th><th>amountInGbp</th><th>totalBalanceInGbp</th><th>totalProfitInGbp</th></tr>
+    <tr><th>Date</th><th>totalBalanceInGbp</th><th>totalTransferredInGbp</th><th>totalProfitInGbp</th></tr>
     ${
-      history.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.type} ${t.amount} ${t.currency}</td><td>${t.amountInGbp}</td><td>${t.totalBalanceInGbp}</td><td>${t.totalProfitInGbp}</td></tr>`)
+      history.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.totalBalanceInGbp}</td><td>${t.totalTransferredInGbp}</td><td>${t.totalProfitInGbp}</td></tr>`)
     }
     </table>
     <script src="/account-extents.js"></script>
@@ -61,14 +74,13 @@ exports.render = async (req, res, next) => {
   `))
 }
 
-
-//-------------------
-
 const balanceAt = (statements, time, priceAt) => {
-// For each statement, find entry just before time and get balance
-// Convert each to GBP
-// Sum
-  return 0
+return Object.entries(statements)
+  .map(([k, statement]) => {
+    return [k, ((statement.find(t => t.time <= time) || {}).balance || 0)]
+  })
+  .map(([k, total]) => total * priceAt(k, 'GBP', time))
+  .reduce((a,x) => a+x, 0)
 }
 
 const transferredBy = (statements, time, priceAt) => {
@@ -85,6 +97,9 @@ const transferredBy = (statements, time, priceAt) => {
 }
 
 
+//-------------------
+
+
 assertSame = (actual, expected) => {
   if (JSON.stringify(actual) != JSON.stringify(expected)) {
     console.log('\nAccount history page test failed!!!')
@@ -98,22 +113,48 @@ const mockPriceAt = (base, quote, time) => base=='BTC' ? 10 : 1
 
 assertSame(balanceAt({}, 0, mockPriceAt), 0)
 assertSame(balanceAt({GBP:[]}, 0, mockPriceAt), 0)
-//assertSame(balanceAt({GBP:[{time:0, type:'transfer', amount:10, balance:0}]}, 0, mockPriceAt), 10)
+assertSame(balanceAt({GBP:[{time:0, type:'transfer', amount:10, balance:10}]}, 0, mockPriceAt), 10)
+assertSame(balanceAt({GBP:[
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
+]}, 0, mockPriceAt), 10)
+assertSame(balanceAt({GBP:[
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
+]}, 1, mockPriceAt), 20)
+assertSame(balanceAt({GBP:[
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
+]}, 0.5, mockPriceAt), 10)
+assertSame(balanceAt({BTC:[{time:0, type:'transfer', amount:10, balance:10}]}, 0, mockPriceAt), 100)
+assertSame(balanceAt({GBP:[{time:0, type:'match', amount:10, balance:10}]}, 0, mockPriceAt), 10)
+assertSame(balanceAt({
+  GBP:[{time:0, type:'transfer', amount:10, balance:10}],
+  BTC:[{time:0, type:'transfer', amount:10, balance:10}],
+}, 0, mockPriceAt), 110)
+assertSame(balanceAt({
+  GBP:[{time:0, type:'transfer', amount:10, balance:10}],
+  BTC:[{time:1, type:'transfer', amount:10, balance:10}],
+}, 0.5, mockPriceAt), 10)
 
 assertSame(transferredBy({}, 0, mockPriceAt), 0)
 assertSame(transferredBy({GBP:[]}, 0, mockPriceAt), 0)
-assertSame(transferredBy({GBP:[{time:0, type:'transfer', amount:10, balance:0}]}, 0, mockPriceAt), 10)
+assertSame(transferredBy({GBP:[{time:0, type:'transfer', amount:10, balance:10}]}, 0, mockPriceAt), 10)
 assertSame(transferredBy({GBP:[
-  {time:0, type:'transfer', amount:10, balance:0},
-  {time:1, type:'transfer', amount:10, balance:0},
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
 ]}, 0, mockPriceAt), 10)
 assertSame(transferredBy({GBP:[
-  {time:0, type:'transfer', amount:10, balance:0},
-  {time:1, type:'transfer', amount:10, balance:0},
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
 ]}, 1, mockPriceAt), 20)
-assertSame(transferredBy({GBP:[{time:0, type:'match', amount:10, balance:0}]}, 0, mockPriceAt), 0)
-assertSame(transferredBy({BTC:[{time:0, type:'transfer', amount:10, balance:0}]}, 0, mockPriceAt), 100)
+assertSame(transferredBy({GBP:[
+  {time:1, type:'transfer', amount:10, balance:20},
+  {time:0, type:'transfer', amount:10, balance:10},
+]}, 0.5, mockPriceAt), 10)
+assertSame(transferredBy({GBP:[{time:0, type:'match', amount:10, balance:10}]}, 0, mockPriceAt), 0)
+assertSame(transferredBy({BTC:[{time:0, type:'transfer', amount:10, balance:10}]}, 0, mockPriceAt), 100)
 assertSame(transferredBy({
-  GBP:[{time:0, type:'transfer', amount:10, balance:0}],
-  BTC:[{time:0, type:'transfer', amount:10, balance:0}],
+  GBP:[{time:0, type:'transfer', amount:10, balance:10}],
+  BTC:[{time:0, type:'transfer', amount:10, balance:10}],
 }, 0, mockPriceAt), 110)
