@@ -5,9 +5,9 @@ exports.render = async (req, res, next) => {
   const product = req.params.product
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
+  const orders = await require('../tracker').getOrdersForProduct(product)
   const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
   const price = exchange.latestPrice()
-  const orders = await require('../tracker').getOrdersForProduct(product)
 
   res.send(frame(`
     <style>input[type="number"] { width:80px }</style>
