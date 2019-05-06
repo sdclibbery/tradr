@@ -154,9 +154,9 @@ x Bot to backfill prices with historic data since 2017
   x Backfill column with a bot
  x Decorate transactions with amount and balance converted to GBP
  x Decorate and graph total balance and profit (ignores transfers) in GBP
- * Final total balance is wrong (is this from the fixed EUR->GBP rate we assumed? - shouldn't be out by that much!)
  * Graph return over holding GBP
-  * This is totalBalanceInGbp - totalTransfersInGbp :- IS? this the same as current totalProfitInGbp??
+  x This is totalBalanceInGbp - totalTransfersInGbp
+  * Rewrite using correct algorithm
  * Graph return over hodling BTC
   * Need to calculate running totalBalanceInBtc - totalTransfersInBtc and then convert back to GBP
  * Could graph profit from completed 'round trip' trades?
