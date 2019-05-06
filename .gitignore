@@ -3,3 +3,4 @@ package-lock.json
 gdax-account-credentials.js
 *.log
 *.sqlite
+*.sqlite-journal

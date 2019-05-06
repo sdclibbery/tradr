@@ -27,19 +27,20 @@ exports.render = async (req, res, next) => {
     return total
   }
 
-  //?? HOW is total transferred so high??
-  //Do at multiple historic times; weekly
-  const date = Date.now()
-  const totalBalanceInGbp = await convertAndSum(balanceAt(statements, date), date)
-  const totalTransferredInGbp = await convertAndSum(transferredBy(statements, date), date)
-  const history = [
-    {
-      time:date,
+  const fullHistory = []
+  for (w = 0; w <= 104; w++) {
+    const date = new Date()
+    date.setDate(date.getDate() - 7*w)
+    const totalBalanceInGbp = await convertAndSum(balanceAt(statements, date), date)
+    const totalTransferredInGbp = await convertAndSum(transferredBy(statements, date), date)
+    fullHistory.push({
+      time:date.getTime(),
       totalBalanceInGbp:totalBalanceInGbp,
       totalTransferredInGbp:totalTransferredInGbp,
       totalProfitInGbp:totalBalanceInGbp-totalTransferredInGbp,
-    }
-  ]
+    })
+  }
+  const history = fullHistory.filter(t => t.totalBalanceInGbp)
 
   res.send(frame(`
     <h1>Account History</h1>
@@ -55,10 +56,8 @@ exports.render = async (req, res, next) => {
     </p>
     <h3>Statement</h3>
     <table>
-    <tr><th>Date</th><th>totalBalanceInGbp</th><th>totalTransferredInGbp</th><th>totalProfitInGbp</th></tr>
-    ${
-      history.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.totalBalanceInGbp}</td><td>${t.totalTransferredInGbp}</td><td>${t.totalProfitInGbp}</td></tr>`)
-    }
+      <tr><th>Date</th><th>totalBalanceInGbp</th><th>totalTransferredInGbp</th><th>totalProfitInGbp</th></tr>
+      ${history.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.totalBalanceInGbp}</td><td>${t.totalTransferredInGbp}</td><td>${t.totalProfitInGbp}</td></tr>`)}
     </table>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>

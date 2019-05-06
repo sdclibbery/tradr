@@ -154,21 +154,21 @@ x Bot to backfill prices with historic data since 2017
   x Backfill column with a bot
  x Decorate transactions with amount and balance converted to GBP
  x Decorate and graph total balance and profit (ignores transfers) in GBP
- * Graph return over holding GBP
+ x Graph return over holding GBP
   x This is totalBalanceInGbp - totalTransfersInGbp
-  * Rewrite using correct algorithm
+  x Rewrite using correct algorithm
+ * Show orders
+ * Don't need table??
  * Graph return over hodling BTC
   * Need to calculate running totalBalanceInBtc - totalTransfersInBtc and then convert back to GBP
- * Could graph profit from completed 'round trip' trades?
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
-* Switch from EUR to GBP as primary quote currency
+* Switch from EUR to GBP as primary quote currency across the board
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Some kind of notification when orders fill
-* Account history page show orders
-* Revamp trade page to allow graphical setup of trades
-* Highlight non-empty accounts on status page
 * Set correct close time for orders, not just the time we checked and found they'd been closed
+* Highlight non-empty accounts on status page
+* Revamp trade page to allow graphical setup of trades
 
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
