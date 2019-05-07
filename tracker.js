@@ -66,6 +66,10 @@ exports.priceAt = async (product, epochTimeStamp) => {
   )
 }
 
+exports.pricesOf = async (product) => {
+  return await db.all(`SELECT * FROM Prices WHERE product=$product;`, {$product:product})
+}
+
 exports.trackOrder = async (order) => {
   await db.run(
     `INSERT INTO Orders (id, exchange, product, status, created, side, orderPrice, priceAtCreation, amount, creator, reason)

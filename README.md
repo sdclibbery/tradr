@@ -157,12 +157,14 @@ x Bot to backfill prices with historic data since 2017
  x Graph return over holding GBP
   x This is totalBalanceInGbp - totalTransfersInGbp
   x Rewrite using correct algorithm
- * Don't need table??
- * Indicate orders on graph
- * Graph BTC price
- * Also calc and graph fiat transfers and profit against them
- * Graph return over hodling BTC
-  * Need to calculate running totalBalanceInBtc - totalTransfersInBtc and then convert back to GBP
+ x Graph BTC price
+ * Split into profit and balance Graphs
+  * Separate extents for each
+  * Scale BTC price graph properly
+ * Make balance graph into a portfolio graph showing all accounts
+ * Indicate orders on profit graph
+ * ?Also calc and graph fiat-only transfers and profit against them
+ * ?Graph return over hodling BTC
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board

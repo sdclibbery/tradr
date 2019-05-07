@@ -42,10 +42,14 @@ exports.render = async (req, res, next) => {
   }
   const history = fullHistory.filter(t => t.totalBalanceInGbp)
 
+  const btcPriceHistory = (await tracker.pricesOf('BTC-GBP'))
+    .map(({at, price}) => {return {time:Date.parse(at), price:parseFloat(price)}})
+    .sort((l,r) => l.time - r.time)
+
   res.send(frame(`
     <h1>Account History</h1>
-    <h3>In Eur</h3>
-    <canvas id="balances-eur" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
+    <h3>Profit</h3>
+    <canvas id="profits-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <p>
       <span id="TOTAL">Total</span>
       <span id="EUR">EUR</span>
@@ -54,6 +58,8 @@ exports.render = async (req, res, next) => {
       <span id="ETH">ETH</span>
       <span id="LTC">LTC</span>
     </p>
+    <h3>Total</h3>
+    <canvas id="balances-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>
     <script src="/draw-balances.js"></script>
@@ -69,12 +75,22 @@ exports.render = async (req, res, next) => {
       Object.entries(colours).map(([k,v]) => document.getElementById(k).style='color:'+v)
 
       const history = ${JSON.stringify(history)}
-      const canvas = document.getElementById('balances-eur')
-      const extents = accountExtents(canvas, history)
-      extents.background()
-      drawBalances(canvas, extents, history, t => t.totalBalanceInGbp, colours.GBP)
-      drawBalances(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
-      drawLabels(canvas, extents)
+      const btcPriceHistory = ${JSON.stringify(btcPriceHistory)}
+      {
+        const canvas = document.getElementById('profits-gbp')
+        const extents = accountExtents(canvas, history)
+        extents.background()
+        drawPrices(canvas, extents, btcPriceHistory, t => t.price/5, colours.BTC)
+        drawBalances(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
+        drawLabels(canvas, extents)
+      }
+      {
+        const canvas = document.getElementById('balances-gbp')
+        const extents = accountExtents(canvas, history)
+        extents.background()
+        drawBalances(canvas, extents, history, t => t.totalBalanceInGbp, colours.GBP)
+        drawLabels(canvas, extents)
+      }
     </script>
   `))
 }
