@@ -54,11 +54,6 @@ exports.render = async (req, res, next) => {
       <span id="ETH">ETH</span>
       <span id="LTC">LTC</span>
     </p>
-    <h3>Statement</h3>
-    <table>
-      <tr><th>Date</th><th>totalBalanceInGbp</th><th>totalTransferredInGbp</th><th>totalProfitInGbp</th></tr>
-      ${history.map(t => `<tr><td>${(new Date(t.time)).toUTCString()}</td><td>${t.totalBalanceInGbp}</td><td>${t.totalTransferredInGbp}</td><td>${t.totalProfitInGbp}</td></tr>`)}
-    </table>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>
     <script src="/draw-balances.js"></script>
