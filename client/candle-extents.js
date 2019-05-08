@@ -11,7 +11,7 @@ candleExtents = (canvas, candles, scale) => {
   return {
     minPrice: minPrice,
     maxPrice: maxPrice,
-    range: maxAmount-minAmount,
+    range: maxPrice-minPrice,
     minTime: minTime,
     maxTime: maxTime,
     toX: (t) => canvas.width - canvas.width*(maxTime-t)/(maxTime-minTime),
