@@ -28,9 +28,9 @@ exports.render = async (req, res, next) => {
   }
 
   const fullHistory = []
-  for (w = 0; w <= 104; w++) {
+  for (w = 0; w <= 104*2; w++) {
     const date = new Date()
-    date.setDate(date.getDate() - 7*w)
+    date.setDate(date.getDate() - 7*w/2)
     const totalBalanceInGbp = await convertAndSum(balanceAt(statements, date), date)
     const totalTransferredInGbp = await convertAndSum(transferredBy(statements, date), date)
     fullHistory.push({
@@ -50,6 +50,8 @@ exports.render = async (req, res, next) => {
     <h1>Account History</h1>
     <h3>Profit</h3>
     <canvas id="profits-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
+    <h3>Portfolio</h3>
+    <canvas id="balances-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <p>
       <span id="TOTAL">Total</span>
       <span id="EUR">EUR</span>
@@ -58,8 +60,6 @@ exports.render = async (req, res, next) => {
       <span id="ETH">ETH</span>
       <span id="LTC">LTC</span>
     </p>
-    <h3>Total</h3>
-    <canvas id="balances-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <script src="/account-extents.js"></script>
     <script src="/draw-labels.js"></script>
     <script src="/draw-balances.js"></script>
@@ -78,17 +78,18 @@ exports.render = async (req, res, next) => {
       const btcPriceHistory = ${JSON.stringify(btcPriceHistory)}
       {
         const canvas = document.getElementById('profits-gbp')
-        const extents = accountExtents(canvas, history)
+        const extents = accountExtents(canvas, history, t => t.totalProfitInGbp)
+        const btcPriceExtents = accountExtents(canvas, btcPriceHistory, t => t.price)
         extents.background()
-        drawPrices(canvas, extents, btcPriceHistory, t => t.price/5, colours.BTC)
+        drawPrices(canvas, extents, btcPriceHistory, t => t.price*extents.range/btcPriceExtents.maxPrice + extents.minPrice, colours.BTC+'40')
         drawBalances(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
         drawLabels(canvas, extents)
       }
       {
         const canvas = document.getElementById('balances-gbp')
-        const extents = accountExtents(canvas, history)
+        const extents = accountExtents(canvas, history, t => t.totalBalanceInGbp)
         extents.background()
-        drawBalances(canvas, extents, history, t => t.totalBalanceInGbp, colours.GBP)
+        drawBalances(canvas, extents, history, t => t.totalBalanceInGbp, colours.TOTAL)
         drawLabels(canvas, extents)
       }
     </script>
