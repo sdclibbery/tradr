@@ -28,9 +28,9 @@ exports.render = async (req, res, next) => {
   }
 
   const fullHistory = []
-  for (w = 0; w <= 104*2; w++) {
+  for (d = 0; d <= 365*2; d++) {
     const date = new Date()
-    date.setDate(date.getDate() - 7*w/2)
+    date.setDate(date.getDate() - d)
     const totalBalanceInGbp = await convertAndSum(balanceAt(statements, date), date)
     const totalTransferredInGbp = await convertAndSum(transferredBy(statements, date), date)
     fullHistory.push({

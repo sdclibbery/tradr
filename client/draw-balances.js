@@ -7,14 +7,12 @@ drawBalances = (canvas, extents, transactions, getValue, color) => {
   const manhattanLine = (t1, t2) => {
     ctx.shadowBlur = 0
     ctx.strokeStyle = color
-    ctx.lineWidth = 3
+    ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(toX(t1.time), toY(getValue(t1)))
     ctx.lineTo(toX(t1.time), toY(getValue(t2)))
     ctx.lineTo(toX(t2.time), toY(getValue(t2)))
     ctx.stroke()
-    ctx.fillStyle = color
-    ctx.fillRect(toX(t2.time)-2, toY(getValue(t2))-2, 5, 5)
   }
 
   transactions.map((t, i) => {
