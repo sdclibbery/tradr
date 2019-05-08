@@ -48,9 +48,9 @@ exports.render = async (req, res, next) => {
 
   res.send(frame(`
     <h1>Account History</h1>
-    <h3>Profit</h3>
+    <h3>Profit against fiat in GBP</h3>
     <canvas id="profits-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
-    <h3>Portfolio</h3>
+    <h3>Portfolio in GBP</h3>
     <canvas id="balances-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <p>
       <span id="TOTAL">Total</span>

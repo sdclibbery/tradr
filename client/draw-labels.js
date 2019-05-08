@@ -18,11 +18,11 @@ drawLabels = (canvas, extents) => {
     ctx.fillText(p, 0, toY(p))
     ctx.textAlign = 'right'
     ctx.fillText(p, canvas.width, toY(p))
-    division(0, toY(p), canvas.width, toY(p))
+    division(0, toY(p), canvas.width, toY(p), Math.abs(p)/extents.range<0.01)
   }
 
-  const division = (x1, y1, x2, y2) => {
-    ctx.strokeStyle = '#00000040'
+  const division = (x1, y1, x2, y2, strong) => {
+    ctx.strokeStyle = strong ? '#00000080' : '#00000040'
     ctx.lineWidth = 0.5
     ctx.beginPath()
     ctx.moveTo(x1, y1)
@@ -30,7 +30,7 @@ drawLabels = (canvas, extents) => {
     ctx.stroke()
   }
 
-  const timeLabel = (time, label, align) => {
+  const timeLabel = (time, label, align, strong) => {
     ctx.fillStyle = '#ffffffe0'
     ctx.shadowColor = '#000000e0'
     ctx.shadowBlur = 6
@@ -38,7 +38,7 @@ drawLabels = (canvas, extents) => {
     ctx.textBaseline = 'bottom'
     ctx.textAlign = align
     ctx.fillText(label, toX(time), canvas.height)
-    division(toX(time), 0, toX(time), canvas.height)
+    division(toX(time), 0, toX(time), canvas.height, strong)
   }
 
   const timeRange = maxTime - minTime
@@ -50,7 +50,7 @@ drawLabels = (canvas, extents) => {
   const thisYear = new Date().getFullYear()
   for (let y = thisYear; y > thisYear-5; y--) {
     const t = (new Date(0).setFullYear(y))
-    timeLabel(t, y.toFixed(0), 'center')
+    timeLabel(t, y.toFixed(0), 'center', true)
   }
 
   const months = ['', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -59,7 +59,7 @@ drawLabels = (canvas, extents) => {
     const d = new Date(0)
     d.setYear(thisYear)
     const t = d.setMonth(m)
-    timeLabel(t, months[(m+24)%12], 'center')
+    timeLabel(t, months[(m+24)%12], 'center', false)
   }
 
   const aDay = 24*60*60*1000
@@ -74,7 +74,7 @@ drawLabels = (canvas, extents) => {
       d.setMinutes(0)
       d.setHours(0)
       const t = d.setDate(days)
-      timeLabel(t, ((days+24)%24)+'/'+(d.getMonth()+1), 'center')
+      timeLabel(t, ((days+24)%24)+'/'+(d.getMonth()+1), 'center', false)
     }
   }
 
@@ -88,7 +88,7 @@ drawLabels = (canvas, extents) => {
       d.setMinutes(0)
       d.setSeconds(0)
       const t = d.setHours(h)
-      timeLabel(t, hour+':00', 'center')
+      timeLabel(t, hour+':00', 'center', false)
     }
   }
 
