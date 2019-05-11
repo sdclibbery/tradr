@@ -161,16 +161,17 @@ x Bot to backfill prices with historic data since 2017
  x Split into profit and balance Graphs
   x Separate extents for each
   x Scale BTC price graph properly
- * Indicate orders on profit graph
+ x Indicate orders on profit graph
  * Make balance graph into a portfolio graph showing all accounts
   * Include total fiat vs total crypto as a long/short measure
- * Also profit against btc hodl graph (convert transfers into BTC at time of transfer, then convert back at 'now')
+ * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
  * ?Also calc and graph fiat-only transfers and profit against them?
- * ?Graph return over hodling BTC?
- * ?Store off balance data to avoid slow fetch??
+* Candle opacity from volume
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
+* Manual trading pot screen
+* ?Store off balance history data to avoid slow fetch??
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * Some kind of notification when orders fill
 * Set correct close time for orders, not just the time we checked and found they'd been closed

@@ -46,6 +46,10 @@ exports.render = async (req, res, next) => {
     .map(({at, price}) => {return {time:Date.parse(at), price:parseFloat(price)}})
     .sort((l,r) => l.time - r.time)
 
+  const orders = (await tracker.getFilledOrders())
+    .map(({product, created, orderPrice, priceAtCreation, closeTime}) => {return {product, created:Date.parse(created), filled:Date.parse(closeTime), orderPrice:parseFloat(orderPrice), priceAtCreation:parseFloat(priceAtCreation)}})
+    .filter(({orderPrice, priceAtCreation}) => Math.abs(1 - orderPrice/priceAtCreation)>0.01)
+
   res.send(frame(`
     <h1>Account History</h1>
     <h3>Profit against fiat in GBP</h3>
@@ -76,11 +80,13 @@ exports.render = async (req, res, next) => {
 
       const history = ${JSON.stringify(history)}
       const btcPriceHistory = ${JSON.stringify(btcPriceHistory)}
+      const orders = ${JSON.stringify(orders)}
       {
         const canvas = document.getElementById('profits-gbp')
         const extents = accountExtents(canvas, history, t => t.totalProfitInGbp)
         const btcPriceExtents = accountExtents(canvas, btcPriceHistory, t => t.price)
         extents.background()
+        drawOrders(canvas, extents, orders, colours)
         drawPrices(canvas, extents, btcPriceHistory, t => t.price*extents.range/btcPriceExtents.maxPrice + extents.minPrice, colours.BTC+'40')
         drawBalances(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
         drawLabels(canvas, extents)

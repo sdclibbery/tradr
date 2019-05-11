@@ -44,3 +44,17 @@ drawPrices = (canvas, extents, data, getValue, color) => {
     }
   })
 }
+
+drawOrders = (canvas, extents, orders, colours) => {
+  const ctx = canvas.getContext('2d')
+
+  const toX = extents.toX
+  const toY = extents.toY
+
+  orders.map(({product, created, filled}) => {
+    const baseCurrency = product.split('-')[0]
+    const quoteCurrency = product.split('-')[1]
+    ctx.fillStyle = colours[baseCurrency] + '10'
+    ctx.fillRect(toX(created), 0, toX(filled)-toX(created), canvas.height)
+  })
+}
