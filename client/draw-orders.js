@@ -7,8 +7,8 @@ drawOrders = (canvas, orders, extents) => {
 
   const orderBar = (o) => {
     const color = ({filled:'#0000e0', open:'#d0c000'}[o.status]) || '#d000d0'
-    ctx.fillStyle = color+'20'
-    ctx.strokeStyle = color+'40'
+    ctx.fillStyle = color+'10'
+    ctx.strokeStyle = color+'20'
     ctx.lineWidth = 4
     ctx.shadowBlur = 0
     const defaultEndTime = (o.status == 'open') ? new Date() : o.created

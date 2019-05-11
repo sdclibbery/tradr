@@ -9,15 +9,18 @@ drawCandles = (canvas, candles, granularity, extents) => {
   const toX = extents.toX
   const toY = extents.toY
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
+  const toHex = function (x) { var hex = Number(x).toString(16); if (hex.length < 2) { hex = "0" + hex; } return hex; }
 
   const volumeBar = (x, volume) => {
     const height = canvas.height*0.5*volume/extents.maxVolume
-    ctx.fillStyle = volume >= extents.meanVolume ? '#808080' : '#b0b0b0'
+    ctx.fillStyle = volume >= extents.meanVolume ? '#808080a0' : '#b0b0b0a0'
     ctx.fillRect(x, canvas.height - height, barW, height)
   }
 
   const candleBar = (x, c) => {
-    ctx.fillStyle = (c.close >= c.open) ? 'green' : 'red'
+    const strength = toHex(Math.floor(255*Math.sqrt(c.volume/extents.maxVolume)))
+    const opacity = toHex(192+Math.floor(63*c.volume/extents.maxVolume))
+    ctx.fillStyle = ((c.close >= c.open) ? `#00${strength}00` : `#${strength}0000`) + opacity
     ctx.fillRect(x+barW/2, Math.min(toY(c.low), toY(c.high)), 1, Math.abs(toY(c.low)-toY(c.high)))
     ctx.fillRect(x, Math.min(toY(c.open), toY(c.close)), barW, Math.max(Math.abs(toY(c.open)-toY(c.close)), 1))
   }
