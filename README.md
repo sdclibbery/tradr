@@ -162,22 +162,29 @@ x Bot to backfill prices with historic data since 2017
   x Separate extents for each
   x Scale BTC price graph properly
  x Indicate orders on profit graph
- * Make balance graph into a portfolio graph showing all accounts
-  * Include total fiat vs total crypto as a long/short measure
- * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
- * ?Also calc and graph fiat-only transfers and profit against them?
-* Candle opacity from volume
+x Candle opacity from volume
 * Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
-* Manual trading pot screen
-* ?Store off balance history data to avoid slow fetch??
-* Add optional stop loss to buy-then-sell etc (including support on trade page)
+* Spread bot
+ * Requires price volatility (ie recent orders include both spread edges) and >1% spread
+ * Place limit order at one spread edge
+ * Track spread edge but not over aggressively
+ * If order fills, track the other spread edge
+ * Pull out if next order becomes unprofitable
+* ?Store off balance history data to avoid slow fetch for account history page??
 * Some kind of notification when orders fill
 * Set correct close time for orders, not just the time we checked and found they'd been closed
 * Highlight non-empty accounts on status page
 * Revamp trade page to allow graphical setup of trades
 
+* Manual trading pot screen
+* Add optional stop loss to buy-then-sell etc (including support on trade page)
+* More account history work
+ * Make balance graph into a portfolio graph showing all accounts
+  * Include total fiat vs total crypto as a long/short measure
+ * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
+ * ?Also calc and graph fiat-only transfers and profit against them?
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
  x TDD the logic for snapshot and updates to track the order well and then spread correctly
