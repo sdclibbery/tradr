@@ -163,7 +163,7 @@ x Bot to backfill prices with historic data since 2017
   x Scale BTC price graph properly
  x Indicate orders on profit graph
 x Candle opacity from volume
-* Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
+x Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 * Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
 * Spread bot
@@ -195,7 +195,6 @@ x Candle opacity from volume
 * Allow buy-then-sell bot to have multiple exits?
 * Augment order info on the product pages with tracked info including expected profit
 * Fix old datetime formats in Balances.at table
-* Remove balance fix-up bot and tracker.setBalanceValues
 * Can leave notes on orders explaining the reasoning behind them
 * Can leave dated notes on each product page
 * Set product alerts that show on the home & product page when triggered

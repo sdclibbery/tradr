@@ -4,7 +4,6 @@ const basicAuth = require('express-basic-auth')
 const bcrypt = require('bcrypt')
 const request = require('request')
 const recorder = require('./recorder')
-require('./gdax-exchange/gdax-transfers')
 
 const port = 8001
 const app = express()
