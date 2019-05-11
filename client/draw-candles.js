@@ -13,14 +13,18 @@ drawCandles = (canvas, candles, granularity, extents) => {
 
   const volumeBar = (x, volume) => {
     const height = canvas.height*0.5*volume/extents.maxVolume
+    ctx.shadowBlur = 0
     ctx.fillStyle = volume >= extents.meanVolume ? '#808080a0' : '#b0b0b0a0'
     ctx.fillRect(x, canvas.height - height, barW, height)
   }
 
   const candleBar = (x, c) => {
-    const strength = toHex(Math.floor(255*Math.sqrt(c.volume/extents.maxVolume)))
-    const opacity = toHex(192+Math.floor(63*c.volume/extents.maxVolume))
+    const volumeFraction = c.volume/extents.maxVolume
+    const strength = toHex(128+Math.floor(127*volumeFraction))
+    const opacity = toHex(Math.floor(255*Math.pow(volumeFraction, 0.6)))
     ctx.fillStyle = ((c.close >= c.open) ? `#00${strength}00` : `#${strength}0000`) + opacity
+    ctx.shadowColor = ctx.fillStyle
+    ctx.shadowBlur = Math.floor(volumeFraction*3)
     ctx.fillRect(x+barW/2, Math.min(toY(c.low), toY(c.high)), 1, Math.abs(toY(c.low)-toY(c.high)))
     ctx.fillRect(x, Math.min(toY(c.open), toY(c.close)), barW, Math.max(Math.abs(toY(c.open)-toY(c.close)), 1))
   }
