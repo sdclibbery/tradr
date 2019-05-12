@@ -8,6 +8,7 @@ const products = [
   'LTC-EUR', 'LTC-GBP', 'LTC-BTC',
 ]
 const prices = { products }
+prices['EUR-GBP'] = 0.87 // Needs to be got from somewhere
 
 const connect = () => {
   console.log(`${new Date()} Connecting to WebSocket for price feed.`)

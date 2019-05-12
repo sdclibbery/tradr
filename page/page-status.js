@@ -31,7 +31,7 @@ exports.render = async (req, res, next) => {
       <input type="submit" value="Place order">
     </form>
     <h3>Prices</h3>
-    <table>${Object.entries(data.prices).filter(([k,v]) => k!=='at').map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table>
+    <table>${Object.entries(data.prices).filter(([k,v]) => !['at','products'].includes(k)).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table>
     At: ${new Date(data.prices.at).toLocaleString()}
   `))
 }

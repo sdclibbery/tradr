@@ -20,13 +20,13 @@ const decorate = (accounts) => {
   decorated.totalValueInGbp = accountsWithValuesInGbp
         .filter(({valueInGbp}) => valueInGbp)
         .reduce((s, a) => s + a.valueInGbp, 0)
-  decorated.btcGbpPrice = latestPriceOf('BTC-GBP')
+  decorated.btcGbpPrice = prices['BTC-GBP']
   decorated.totalValueInBtc = decorated.totalValueInGbp / decorated.btcGbpPrice
   return decorated
 }
 
 const decorateWithValue = (accounts) => {
-  const btcGbpPrice = latestPriceOf('BTC-GBP')
+  const btcGbpPrice = prices['BTC-GBP']
   return accounts.map((account) => {
     const price = getPriceAgainstGbp(account.currency)
     account.valueInGbp = (account.balance == 0) ? 0 : account.balance * price
@@ -37,10 +37,5 @@ const decorateWithValue = (accounts) => {
 
 const getPriceAgainstGbp = (currency) => {
   if (currency == 'GBP') { return 1 }
-  if (currency == 'EUR') { return 1/1.15 }
-  return latestPriceOf(`${currency}-GBP`)
-}
-
-const latestPriceOf = (account) => {
-  return prices[account]
+  return prices[`${currency}-GBP`]
 }
