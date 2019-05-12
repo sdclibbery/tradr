@@ -1,7 +1,6 @@
 const prices = require('./gdax-prices').prices
 const tracker = require('../tracker')
 
-const gbpToEurRate = 1.14
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
 
 exports.fetcher = (authedClient, log, catchApiError, handleError) => {
@@ -16,30 +15,30 @@ exports.fetcher = (authedClient, log, catchApiError, handleError) => {
 
 const decorate = (accounts) => {
   const decorated = {}
-  const accountsWithValuesInEur = decorateWithValue(accounts)
-  decorated.accounts = accountsWithValuesInEur
-  decorated.totalValueInEur = accountsWithValuesInEur
-        .filter(({valueInEur}) => valueInEur)
-        .reduce((s, a) => s + a.valueInEur, 0)
-  decorated.btcEurPrice = latestPriceOf('BTC-EUR')
-  decorated.totalValueInBtc = decorated.totalValueInEur / decorated.btcEurPrice
+  const accountsWithValuesInGbp = decorateWithValue(accounts)
+  decorated.accounts = accountsWithValuesInGbp
+  decorated.totalValueInGbp = accountsWithValuesInGbp
+        .filter(({valueInGbp}) => valueInGbp)
+        .reduce((s, a) => s + a.valueInGbp, 0)
+  decorated.btcGbpPrice = latestPriceOf('BTC-GBP')
+  decorated.totalValueInBtc = decorated.totalValueInGbp / decorated.btcGbpPrice
   return decorated
 }
 
 const decorateWithValue = (accounts) => {
-  const btcEurPrice = latestPriceOf('BTC-EUR')
+  const btcGbpPrice = latestPriceOf('BTC-GBP')
   return accounts.map((account) => {
-    const price = getPriceAgainstEur(account.currency)
-    account.valueInEur = (account.balance == 0) ? 0 : account.balance * price
-    account.valueInBtc = account.valueInEur / btcEurPrice
+    const price = getPriceAgainstGbp(account.currency)
+    account.valueInGbp = (account.balance == 0) ? 0 : account.balance * price
+    account.valueInBtc = account.valueInGbp / btcGbpPrice
     return account
   })
 }
 
-const getPriceAgainstEur = (currency) => {
-  if (currency == 'GBP') { return gbpToEurRate }
-  if (currency == 'EUR') { return 1 }
-  return latestPriceOf(`${currency}-EUR`)
+const getPriceAgainstGbp = (currency) => {
+  if (currency == 'GBP') { return 1 }
+  if (currency == 'EUR') { return 1/1.15 }
+  return latestPriceOf(`${currency}-GBP`)
 }
 
 const latestPriceOf = (account) => {

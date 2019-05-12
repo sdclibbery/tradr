@@ -14,7 +14,7 @@ exports.render = async (req, res, next) => {
 
   const priceAt = async (base, quote, date) => {
     if (base == quote) { return Promise.resolve(1) }
-    if (base == 'EUR' && quote == 'GBP') { return Promise.resolve(0.8) }
+    if (base == 'EUR' && quote == 'GBP') { return Promise.resolve(1/1.15) }
     return (await tracker.priceAt(`${base}-${quote}`, date)).price
   }
   const convertAndSum = async (results, date) => {

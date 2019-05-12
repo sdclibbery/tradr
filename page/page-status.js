@@ -12,22 +12,22 @@ exports.render = async (req, res, next) => {
     <h1>${os.hostname()} GDAX status</h1>
     <h3>Accounts</h3>
     ${formatAccounts(data.accounts)}
-    <p>Equivalent totals: ${dp(data.totalValueInEur, 2)} EUR, ${dp(data.totalValueInBtc, 4)} BTC</p>
+    <p>Equivalent totals: ${dp(data.totalValueInGbp, 2)} GBP, ${dp(data.totalValueInBtc, 4)} BTC</p>
     <h3>Orders</h3>
     ${formatOrders(data.orders)}
     <h3>Trade</h3>
     <h4>Limit Sell</h4>
     <form style="display:inline" action="/trade/limit/sell" method="post">
-      <input type="text" name="product" value="BTC-EUR">
+      <input type="text" name="product" value="BTC-GBP">
       <input type="text" name="amountOfBase" value="0.01">
-      <input type="text" name="price" value="${exchange.roundQuote(data.btcEurPrice + 0.01)}">
+      <input type="text" name="price" value="${exchange.roundQuote(data.btcGbpPrice + 0.01)}">
       <input type="submit" value="Place order">
     </form>
     <h4>Limit Buy</h4>
     <form style="display:inline" action="/trade/limit/buy" method="post">
-      <input type="text" name="product" value="BTC-EUR">
+      <input type="text" name="product" value="BTC-GBP">
       <input type="text" name="amountOfBase" value="0.01">
-      <input type="text" name="price" value="${exchange.roundQuote(data.btcEurPrice - 0.01)}">
+      <input type="text" name="price" value="${exchange.roundQuote(data.btcGbpPrice - 0.01)}">
       <input type="submit" value="Place order">
     </form>
     <h3>Prices</h3>
@@ -37,7 +37,7 @@ exports.render = async (req, res, next) => {
 }
 const formatAccounts = (accounts) => {
   const rows = accounts
-    .map(a => `<tr>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp4(a.valueInEur) + ' EUR')} </tr>`)
+    .map(a => `<tr>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp4(a.valueInGbp) + ' GBP')} </tr>`)
     .join('\n')
   return '<table><tr><th>Balance</th><th>Available</th><th>Value</th></tr>\n'+rows+'</table>'
 }

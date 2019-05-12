@@ -167,7 +167,9 @@ x Remove balances and transfers tables from DB, and tracker.js etc, and gdax-tra
 x Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
  x Home page
+ * Accounts service
  * Status page
+* Get GBP-EUR price for accounts service and account-history page from prices data, but hardcode there for now
 * Show current profit on status page
 * Highlight non-empty accounts on status page
 * ?Store off balance history data to avoid slow fetch for account history page??
@@ -179,6 +181,7 @@ x Tidy price batch tracking into recorder.js
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
 * Some kind of notification when orders fill
+* Get/track proper GBP-EUR price for accounts service and account-history page
 
 * Revamp trade page to allow graphical setup of trades
 * Manual trading pot screen
