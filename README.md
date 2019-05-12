@@ -166,6 +166,8 @@ x Candle opacity from volume
 x Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
 x Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
+ x Home page
+ * Status page
 * Show current profit on status page
 * Highlight non-empty accounts on status page
 * ?Store off balance history data to avoid slow fetch for account history page??
