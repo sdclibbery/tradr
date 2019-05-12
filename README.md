@@ -164,20 +164,21 @@ x Bot to backfill prices with historic data since 2017
  x Indicate orders on profit graph
 x Candle opacity from volume
 x Remove balances and transfers tables from DB, and tracker.js etc, and gdax-transfers/gdax-accounts etc
-* Tidy price batch tracking into recorder.js
+x Tidy price batch tracking into recorder.js
 * Switch from EUR to GBP as primary quote currency across the board
-* Spread bot
+* Show current profit on status page
+* Highlight non-empty accounts on status page
+* ?Store off balance history data to avoid slow fetch for account history page??
+* Set correct close time for orders, not just the time we checked and found they'd been closed
+* Spread bot (bot-spreader.js)
  * Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
- * Track spread edge but not over aggressively
+ * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
-* ?Store off balance history data to avoid slow fetch for account history page??
 * Some kind of notification when orders fill
-* Set correct close time for orders, not just the time we checked and found they'd been closed
-* Highlight non-empty accounts on status page
-* Revamp trade page to allow graphical setup of trades
 
+* Revamp trade page to allow graphical setup of trades
 * Manual trading pot screen
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * More account history work

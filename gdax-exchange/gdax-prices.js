@@ -7,7 +7,7 @@ const products = [
   'ETH-EUR', 'ETH-GBP', 'ETH-BTC',
   'LTC-EUR', 'LTC-GBP', 'LTC-BTC',
 ]
-const prices = {}
+const prices = { products }
 
 const connect = () => {
   console.log(`${new Date()} Connecting to WebSocket for price feed.`)
@@ -44,24 +44,5 @@ setInterval(() => {
     closeWebSocket = connect()
   }
 }, 60000)
-
-const batch = () => {
-  console.log(`${new Date()} Tracking prices`)
-  products.forEach(product => {
-    const price = prices[product]
-    if (!!price) {
-      console.log(`${new Date()} Tracking price of ${product}: ${price}`)
-      const date = new Date(prices.at)
-      tracker.trackPrice({
-        $at: date.toUTCString(),
-        $product: product,
-        $price: price,
-        $epochTimeStamp:(date.getTime()),
-      }).catch(console.log)
-    }
-  })
-}
-setInterval(batch, 24*60*60*1000)
-setTimeout(batch, 40*1000)
 
 exports.prices = prices
