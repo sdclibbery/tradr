@@ -9,6 +9,7 @@ exports.render = async (req, res, next) => {
     data = await fetchData(exchange)
   } catch (e) { next(e); return }
   res.send(frame(`
+    <style>.grayed { color:#c0c0c0; font-size:0.5em }</style>
     <h1>${os.hostname()} GDAX status</h1>
     <h3>Accounts</h3>
     ${formatAccounts(data.accounts)}
@@ -37,7 +38,7 @@ exports.render = async (req, res, next) => {
 }
 const formatAccounts = (accounts) => {
   const rows = accounts
-    .map(a => `<tr>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp4(a.valueInGbp) + ' GBP')} </tr>`)
+    .map(a => `<tr ${!parseFloat(a.balance) ? 'class="grayed"' : ''}>${td(dp4(a.balance) + a.currency)} ${td(dp4(a.available) + a.currency)} ${td(dp4(a.valueInGbp) + ' GBP')} </tr>`)
     .join('\n')
   return '<table><tr><th>Balance</th><th>Available</th><th>Value</th></tr>\n'+rows+'</table>'
 }
