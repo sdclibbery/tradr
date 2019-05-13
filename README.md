@@ -170,9 +170,9 @@ x Switch from EUR to GBP as primary quote currency across the board
  x Accounts service
  x Status page
 x Get GBP-EUR price for accounts service and ~account-history~ page from prices data, but hardcode there for now
-* Highlight non-empty accounts on status page
-* Show current profit on account history
-* Show amount of fiat transferred in on history page
+x Highlight non-empty accounts on status page
+x Show current profit on account history
+x Show amount of fiat transferred in on history page
 * gdax-prices: track live EUR-GBP price - https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
 * Have historical EUR-GBP prices in the DB, and update account history page to use it
 * ?Store off balance history data to avoid slow fetch for account history page??

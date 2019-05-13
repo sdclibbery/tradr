@@ -1,6 +1,7 @@
 const frame =  require('./frame').apply
 const tracker = require('../tracker');
 
+const dp = (x, dp) => (isNaN(x)) ? '?' : Number.parseFloat(x).toFixed(dp)
 exports.render = async (req, res, next) => {
   const GdaxExchange = require('../gdax-exchange');
   exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
@@ -9,20 +10,19 @@ exports.render = async (req, res, next) => {
   for (idx in accounts) {
     const account = accounts[idx]
     statements[account.currency] = (await exchange.accountHistory(account.id))
-      .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:parseFloat(balance), type:type, amount:parseFloat(amount)}})
+      .map(({created_at, balance, type, amount}) => {return {time:Date.parse(created_at), balance:parseFloat(balance), type:type, amount:parseFloat(amount), currency:account.currency}})
   }
 
-  const priceAt = async (base, quote, date) => {
-    if (base == quote) { return Promise.resolve(1) }
-    if (base == 'EUR' && quote == 'GBP') { return Promise.resolve(1/1.15) }
-    return (await tracker.priceAt(`${base}-${quote}`, date)).price
-  }
   const convertAndSum = async (results, date) => {
+    const priceAt = async (base, quote, date) => {
+      if (base == quote) { return Promise.resolve(1) }
+      if (base == 'EUR' && quote == 'GBP') { return Promise.resolve(1/1.15) }
+      return (await tracker.priceAt(`${base}-${quote}`, date)).price
+    }
     let total = 0
     for (idx in results) {
       const [k,v] = results[idx]
-      const price = await priceAt(k, 'GBP', date)
-      total += v * price
+      total += v * (await priceAt(k, 'GBP', date))
     }
     return total
   }
@@ -37,10 +37,30 @@ exports.render = async (req, res, next) => {
       time:date.getTime(),
       totalBalanceInGbp:totalBalanceInGbp,
       totalTransferredInGbp:totalTransferredInGbp,
-      totalProfitInGbp:totalBalanceInGbp-totalTransferredInGbp,
+      totalProfitInGbp:totalBalanceInGbp - totalTransferredInGbp,
     })
   }
   const history = fullHistory.filter(t => t.totalBalanceInGbp)
+
+  const convertAndSumNow = (results) => {
+    const pricesNow = exchange.allPrices()
+    const priceNow = (base, quote) => {
+      if (base == quote) { return 1 }
+      if (base == 'EUR' && quote == 'GBP') { return 1/1.15 }
+      return parseFloat(pricesNow[`${base}-${quote}`])
+    }
+    let total = 0
+    for (idx in results) {
+      const [k,v] = results[idx]
+      total += v * priceNow(k, 'GBP')
+    }
+    return total
+  }
+  const dateNow = new Date()
+  const totalBalanceNowInGbp = convertAndSumNow(balanceAt(statements, dateNow))
+  const totalTransferredNowInGbp = convertAndSumNow(transferredBy(statements, dateNow))
+  const totalProfitNowInGbp = totalBalanceNowInGbp - totalTransferredNowInGbp
+  const totalFiatTransfersNowInGbp = convertAndSumNow(fiatTransferredBy(statements, dateNow))
 
   const btcPriceHistory = (await tracker.pricesOf('BTC-GBP'))
     .map(({at, price}) => {return {time:Date.parse(at), price:parseFloat(price)}})
@@ -54,6 +74,9 @@ exports.render = async (req, res, next) => {
     <h1>Account History</h1>
     <h3>Profit against fiat in GBP</h3>
     <canvas id="profits-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
+    <p>Total portfolio now: ${dp(totalBalanceNowInGbp, 2)} GBP</p>
+    <p>Total profit now: ${dp(totalProfitNowInGbp, 2)} GBP</p>
+    <p>Total fiat transfers now: ${dp(totalFiatTransfersNowInGbp, 2)} GBP</p>
     <h3>Portfolio in GBP</h3>
     <canvas id="balances-gbp" width="1500" height="500" style="width:96vw; height:32vw;"></canvas>
     <p>
@@ -120,6 +143,17 @@ const transferredBy = (statements, time) => {
     })
 }
 
+const fiatTransferredBy = (statements, time) => {
+  return Object.entries(statements)
+    .map(([k, statement]) => {
+      return [k, statement
+        .filter(t => t.type == 'transfer')
+        .filter(t => ['GBP','EUR','USD'].includes(t.currency))
+        .filter(t => t.time <= time)
+        .map(t => t.amount)
+        .reduce((a,x) => a+x, 0)]
+    })
+}
 
 //-------------------
 
