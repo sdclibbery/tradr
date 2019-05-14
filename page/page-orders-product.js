@@ -1,11 +1,11 @@
 const frame =  require('./frame').minimal
-const GdaxExchange = require('../gdax-exchange');
+const coinbasepro = require('../coinbasepro-exchange');
 
 exports.render = async (req, res, next) => {
   const product = req.params.product
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
-  const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
+  const exchange = coinbasepro.createExchange({product: product}, { debug: () => {}, error: console.log, })
   const orders = await exchange.orders()
   const formattedOrders = orders
     .filter(o => o.product == product)

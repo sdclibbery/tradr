@@ -1,12 +1,12 @@
 const frame =  require('./frame').apply
-const GdaxExchange = require('../gdax-exchange');
+const coinbasepro = require('../coinbasepro-exchange');
 
 exports.render = async (req, res, next) => {
   const product = req.params.product
   const baseCurrency = product.split('-')[0]
   const quoteCurrency = product.split('-')[1]
   const orders = await require('../tracker').getOrdersForProduct(product)
-  const exchange = GdaxExchange.createExchange({product: product}, { debug: () => {}, error: console.log, })
+  const exchange = coinbasepro.createExchange({product: product}, { debug: () => {}, error: console.log, })
   const price = exchange.latestPrice()
 
   res.send(frame(`

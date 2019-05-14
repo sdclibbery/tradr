@@ -2,7 +2,7 @@ const framework = require('./framework')
 const {ema} = require('../exponential-moving-average')
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'coinbasepro product' },
 ])
 .then(async ({ options, logger, exchange }) => {
   const makeEmaChangeBot = (ema, transactionFilter, name) => {

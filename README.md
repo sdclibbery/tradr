@@ -173,7 +173,9 @@ x Get GBP-EUR price for accounts service and ~account-history~ page from prices 
 x Highlight non-empty accounts on status page
 x Show current profit on account history
 x Show amount of fiat transferred in on history page
-* check about gdax-node -> coinbasepro-node package transition
+x Use coinbase-pro lib not GDAX
+x Rename everything from GDAX to CoinbasePro
+* Bots should default to GBP not EUR (eg observer, what else?)
 * Spread bot (bot-spreader.js)
  * Use lib order book class
  * Also track recent trade history

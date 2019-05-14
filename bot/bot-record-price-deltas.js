@@ -1,4 +1,4 @@
-const GdaxExchange = require('./gdax-exchange')
+const coinbasepro = require('./coinbasepro-exchange')
 
 const options = {
   product: 'BTC-EUR',
@@ -9,7 +9,7 @@ const logger = {
   warn: () => {},
   error: () => {},
 }
-const exchange = GdaxExchange.createExchange(options, logger)
+const exchange = coinbasepro.createExchange(options, logger)
 
 const bot = async () => {
   const baseCurrency = options.product.split('-')[0]

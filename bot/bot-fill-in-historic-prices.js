@@ -2,7 +2,7 @@ const framework = require('./framework')
 const tracker = require('../tracker')
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, description: 'GDAX product' },
+  { name: 'product', alias: 'p', type: String, description: 'coinbasepro product' },
 ])
 .then(async ({ options, logger, exchange }) => {
   const baseCurrency = options.product.split('-')[0]

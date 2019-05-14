@@ -1,6 +1,6 @@
 const coinbasePro = require('coinbase-pro')
 const tracker = require('../tracker')
-const credentials = require('../gdax-account-credentials')
+const credentials = require('../coinbasepro-account-credentials')
 
 const products = [
   'BTC-EUR', 'BTC-GBP', 'BTC-USD',

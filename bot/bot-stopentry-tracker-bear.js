@@ -1,7 +1,7 @@
 const framework = require('./framework');
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'coinbasepro product' },
   { name: 'amount', alias: 'a', type: Number, description: 'amount to bot with in quote currency, eg in EUR for BTC-EUR' },
   { name: 'stopentry', alias: 's', type: Number, defaultValue: 1, description: 'percentage offset for stopentry exit order' },
 ])

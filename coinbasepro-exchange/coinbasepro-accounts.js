@@ -1,4 +1,4 @@
-const prices = require('./gdax-prices').prices
+const prices = require('./coinbasepro-prices').prices
 const tracker = require('../tracker')
 
 const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)

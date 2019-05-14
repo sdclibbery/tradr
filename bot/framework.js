@@ -2,7 +2,7 @@ if (process.framework) {
   Object.keys(process.framework).map(k => exports[k] = process.framework[k])
   return
 }
-const GdaxExchange = require('../gdax-exchange');
+const coinbasepro = require('../coinbasepro-exchange');
 const LoggerFactory = require('../logger')
 const commandLineArgs = require('command-line-args')
 const logger = LoggerFactory.createLogger(`${process.argv[1]}.log`)
@@ -26,14 +26,14 @@ exports.init = async (optionDefinitions) => {
       return `--${o.name} -${o.alias} : ${o.description}${showRequirements ? '. '+requirements : ''}`
     }
     let usage = optionDefinitions.reduce((u,o) => `${u}\n${usageForOption(o)}.`, '')
-    const msg = `${new Date()} GDAX bot.\nCalled with: ${JSON.stringify(options)}\nUsage: ${usage}`
+    const msg = `${new Date()} coinbasepro bot.\nCalled with: ${JSON.stringify(options)}\nUsage: ${usage}`
     console.log(msg)
     logger.sync.info(msg)
     process.exit()
   }
 
-  await GdaxExchange.ready(options.product)
-  const exchange = GdaxExchange.createExchange(options, logger)
+  await coinbasepro.ready(options.product)
+  const exchange = coinbasepro.createExchange(options, logger)
   return {
     options: options,
     logger: logger,

@@ -1,9 +1,9 @@
 const coinbasePro = require('coinbase-pro')
-const prices = require('./gdax-exchange/gdax-prices').prices
-const accounts = require('./gdax-exchange/gdax-accounts').fetcher
-const candles = require('./gdax-exchange/gdax-candles').fetcher
+const prices = require('./coinbasepro-exchange/coinbasepro-prices').prices
+const accounts = require('./coinbasepro-exchange/coinbasepro-accounts').fetcher
+const candles = require('./coinbasepro-exchange/coinbasepro-candles').fetcher
 const tracker = require('./tracker')
-const credentials = require('./gdax-account-credentials') // NOTE the bot only requires 'trading' permissions from CoinbasePro API key and should not be given more
+const credentials = require('./coinbasepro-account-credentials') // NOTE the bot only requires 'trading' permissions from CoinbasePro API key and should not be given more
 
 const client = new coinbasePro.PublicClient()
 let products

@@ -1,11 +1,11 @@
 const frame =  require('./frame').apply
 const os =  require('os')
-const GdaxExchange = require('../gdax-exchange');
+const coinbasepro = require('../coinbasepro-exchange');
 
 exports.render = async (req, res, next) => {
   let exchange, data
   try {
-    exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
+    exchange = coinbasepro.createExchange({}, { debug: () => {}, error: console.log, })
     data = await fetchData(exchange)
   } catch (e) { next(e); return }
   res.send(frame(`

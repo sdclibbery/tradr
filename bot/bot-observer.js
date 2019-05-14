@@ -1,7 +1,7 @@
 const framework = require('./framework');
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'GDAX product' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'coinbasepro product' },
 ])
 .then(async ({ options, logger, exchange }) => {
   const baseCurrency = options.product.split('-')[0]

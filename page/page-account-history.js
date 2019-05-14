@@ -3,8 +3,8 @@ const tracker = require('../tracker');
 
 const dp = (x, dp) => (isNaN(x)) ? '?' : Number.parseFloat(x).toFixed(dp)
 exports.render = async (req, res, next) => {
-  const GdaxExchange = require('../gdax-exchange');
-  exchange = GdaxExchange.createExchange({}, { debug: () => {}, error: console.log, })
+  const coinbasepro = require('../coinbasepro-exchange');
+  exchange = coinbasepro.createExchange({}, { debug: () => {}, error: console.log, })
   const accounts = (await exchange.accounts()).accounts.filter(a => a.balance > 0)
   let statements = {}
   for (idx in accounts) {
