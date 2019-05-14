@@ -1,11 +1,11 @@
-const gdax = require('gdax')
+const coinbasePro = require('coinbase-pro')
 const prices = require('./gdax-exchange/gdax-prices').prices
 const accounts = require('./gdax-exchange/gdax-accounts').fetcher
 const candles = require('./gdax-exchange/gdax-candles').fetcher
 const tracker = require('./tracker')
-const credentials = require('./gdax-account-credentials') // NOTE the bot only requires 'trading' permissions from GDAX API key and should not be given more
+const credentials = require('./gdax-account-credentials') // NOTE the bot only requires 'trading' permissions from CoinbasePro API key and should not be given more
 
-const client = new gdax.PublicClient()
+const client = new coinbasePro.PublicClient()
 let products
 client.getProducts()
   .then(ps => {
@@ -35,15 +35,15 @@ exports.createExchange = (options, logger) => {
     return response
   }
 
-  const authedClient = new gdax.AuthenticatedClient(credentials.key, credentials.secret, credentials.passphrase, 'https://api.pro.coinbase.com')
-  const websocket = new gdax.WebsocketClient([options.product])
+  const authedClient = new coinbasePro.AuthenticatedClient(credentials.key, credentials.secret, credentials.passphrase, 'https://api.pro.coinbase.com')
+  const websocket = new coinbasePro.WebsocketClient([options.product])
   websocket.on('error', log('websocket error'))
 
   logger.debug(options)
 
   const handleError = (context) => {
     return ({message, status, reject_reason, ...data}) => {
-      logger.error('GDAX API Error', context, JSON.stringify(message, null, 2), JSON.stringify(status, null, 2), JSON.stringify(reject_reason, null, 2), JSON.stringify(data, null, 2))
+      logger.error('CoinbasePro API Error', context, JSON.stringify(message, null, 2), JSON.stringify(status, null, 2), JSON.stringify(reject_reason, null, 2), JSON.stringify(data, null, 2))
       throw new Error(message || reject_reason)
     }
   }
@@ -57,7 +57,7 @@ exports.createExchange = (options, logger) => {
     try {
       await tracker.trackOrder({
         $id: data.id,
-        $exchange: 'GDAX',
+        $exchange: 'CoinbasePro',
         $product: data.product_id,
         $status: 'open',
         $created: data.created_at,
@@ -94,7 +94,7 @@ exports.createExchange = (options, logger) => {
       let transactions = []
       do {
         data = await exchange.accountHistoryPage(accountId, data.before || 1)
-                .then(log('GDAX: getAccountHistory page'))
+                .then(log('CoinbasePro: getAccountHistory page'))
                 .then(catchApiError)
                 .catch(handleError('accountHistory'))
         transactions = data.concat(transactions)
@@ -118,14 +118,14 @@ exports.createExchange = (options, logger) => {
 
     transfersForAccount: async (accountId) => {
       return authedClient.getAccountTransfers(accountId)
-        .then(log('GDAX: getAccountTransfers'))
+        .then(log('CoinbasePro: getAccountTransfers'))
         .then(catchApiError)
         .catch(handleError('transfersForAccount'))
     },
 
     orders: async () => {
       return authedClient.getOrders()
-        .then(log('GDAX: getOrders'))
+        .then(log('CoinbasePro: getOrders'))
         .then(catchApiError)
         .then(async os => {
           tracker.updateLiveOrders(os.map(o => o.id), exchange.orderStatus)
@@ -139,7 +139,7 @@ exports.createExchange = (options, logger) => {
 
     order: async (side, amountOfBaseCurrency, price, product, creator, reason) => {
       await exports.ready()
-      logger.debug(`GDAX: ${side}ing ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
+      logger.debug(`CoinbasePro: ${side}ing ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'limit',
         side: side,
@@ -147,7 +147,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, exchange.baseDp),
         product_id: product || options.product,
       })
-      .then(log(`GDAX: order: ${side}, ${amountOfBaseCurrency}, ${price}`))
+      .then(log(`CoinbasePro: order: ${side}, ${amountOfBaseCurrency}, ${price}`))
       .then(catchApiError)
       .then(trackOrder(creator, reason))
       .catch(handleError(`order: ${side}, ${amountOfBaseCurrency}, ${price}`))
@@ -165,7 +165,7 @@ exports.createExchange = (options, logger) => {
       await exports.ready()
       const baseInfo = amountOfBaseCurrency ? `${exchange.formatBase(amountOfBaseCurrency)}` : ''
       const quoteInfo = amountOfQuoteCurrency ? `${exchange.formatQuote(amountOfQuoteCurrency)}` : ''
-      logger.debug(`GDAX: ${side}ing ${baseInfo}${quoteInfo} at market price`)
+      logger.debug(`CoinbasePro: ${side}ing ${baseInfo}${quoteInfo} at market price`)
       return authedClient.placeOrder({
         type: 'market',
         side: side,
@@ -173,7 +173,7 @@ exports.createExchange = (options, logger) => {
         funds: amountOfQuoteCurrency && dp(amountOfQuoteCurrency, exchange.quoteDp),
         product_id: options.product,
       })
-      .then(log(`GDAX: orderNow: placeOrder(${side}, ${amountOfBaseCurrency}, ${amountOfQuoteCurrency})`))
+      .then(log(`CoinbasePro: orderNow: placeOrder(${side}, ${amountOfBaseCurrency}, ${amountOfQuoteCurrency})`))
       .then(catchApiError)
       .then(trackOrder(creator, reason))
       .then(({price, size, id}) => { return {id:id, price:price, size:size}})
@@ -190,7 +190,7 @@ exports.createExchange = (options, logger) => {
 
     stopLoss: async (price, amountOfBaseCurrency, creator, reason) => {
       await exports.ready()
-      logger.debug(`GDAX: setting stoploss for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
+      logger.debug(`CoinbasePro: setting stoploss for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
         side: 'sell',
@@ -199,7 +199,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, exchange.baseDp),
         product_id: options.product,
       })
-      .then(log(`GDAX: stopLoss(${price}, ${amountOfBaseCurrency})`))
+      .then(log(`CoinbasePro: stopLoss(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
       .catch(handleError(`stopLoss(${price}, ${amountOfBaseCurrency})`))
@@ -207,7 +207,7 @@ exports.createExchange = (options, logger) => {
 
     stopEntry: async (price, amountOfBaseCurrency, creator, reason) => {
       await exports.ready()
-      logger.debug(`GDAX: setting stopentry for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
+      logger.debug(`CoinbasePro: setting stopentry for ${exchange.formatBase(amountOfBaseCurrency)} at ${exchange.formatQuote(price)}`)
       return authedClient.placeOrder({
         type: 'market',
         side: 'buy',
@@ -216,7 +216,7 @@ exports.createExchange = (options, logger) => {
         size: dp(amountOfBaseCurrency, exchange.baseDp),
         product_id: options.product,
       })
-      .then(log(`GDAX: stopEntry(${price}, ${amountOfBaseCurrency})`))
+      .then(log(`CoinbasePro: stopEntry(${price}, ${amountOfBaseCurrency})`))
       .then(catchApiError)
       .then(({id}) => id)
       .catch(handleError(`stopEntry(${price}, ${amountOfBaseCurrency})`))
@@ -256,11 +256,11 @@ exports.createExchange = (options, logger) => {
     },
 
     waitForOrderFill: async (id) => {
-      logger.debug(`GDAX: waitForOrderFill ${id}`)
+      logger.debug(`CoinbasePro: waitForOrderFill ${id}`)
       return new Promise((resolve, reject) => {
         websocket.on('message', function listener (data) {
           if (data.order_id === id) {
-            logger.debug(`GDAX: waitForOrderFill: `, data)
+            logger.debug(`CoinbasePro: waitForOrderFill: `, data)
             if (data.type === 'done') {
               websocket.removeListener('message', listener)
               logger.debug('waitForOrderFill - DONE: ', data)
@@ -273,7 +273,7 @@ exports.createExchange = (options, logger) => {
 
     orderStatus: async (id) => {
       return authedClient.getOrder(id)
-        .then(log('GDAX: orderStatus'))
+        .then(log('CoinbasePro: orderStatus'))
         .then(catchApiError)
         .then(({done_reason, executed_value, price}) => ({
           filled: (done_reason === 'filled'),
@@ -284,9 +284,9 @@ exports.createExchange = (options, logger) => {
     },
 
     cancelOrder: async (id) => {
-      logger.debug(`GDAX: cancelling order ${id}`)
+      logger.debug(`CoinbasePro: cancelling order ${id}`)
       return authedClient.cancelOrder(id)
-        .then(log(`GDAX: cancelOrder(${id})`))
+        .then(log(`CoinbasePro: cancelOrder(${id})`))
         .then(catchApiError)
         .then(async () => await tracker.trackOrderCancellation(id))
         .then(() => {cancelled:true})

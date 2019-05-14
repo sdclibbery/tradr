@@ -1,4 +1,4 @@
-const gdax = require('gdax')
+const coinbasePro = require('coinbase-pro')
 const tracker = require('../tracker')
 const credentials = require('../gdax-account-credentials')
 
@@ -12,7 +12,7 @@ prices['EUR-GBP'] = 0.87 // Needs to be got from somewhere
 
 const connect = () => {
   console.log(`${new Date()} Connecting to WebSocket for price feed.`)
-  let websocketTicker = new gdax.WebsocketClient(
+  let websocketTicker = new coinbasePro.WebsocketClient(
     products,
     'wss://ws-feed.pro.coinbase.com',
     credentials,

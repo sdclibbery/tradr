@@ -6,7 +6,7 @@ const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
 exports.fetcher = (authedClient, log, catchApiError, handleError) => {
   return async () => {
     return authedClient.getAccounts()
-      .then(log('GDAX: getAccounts'))
+      .then(log('CoinbasePro: getAccounts'))
       .then(catchApiError)
       .then(decorate)
       .catch(handleError('accounts'))

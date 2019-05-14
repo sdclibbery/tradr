@@ -1,5 +1,3 @@
-const gdax = require('gdax')
-
 exports.fetcher = (product, authedClient, log, catchApiError, handleError) => {
   return async ({startTime, count, granularity}) => {
     granularity = granularity || 60
@@ -7,7 +5,7 @@ exports.fetcher = (product, authedClient, log, catchApiError, handleError) => {
     start = startTime || new Date(Date.now() - count*granularity*1000)
     end = new Date(start.getTime() + count*granularity*1000)
     return authedClient.getProductHistoricRates(product, { start: start.toISOString(), end: end.toISOString(), granularity: granularity })
-//        .then(log(`GDAX: getProductHistoricRates`))
+//        .then(log(`CoinbasePro: getProductHistoricRates`))
       .then(catchApiError)
       .then(cs => fillInCandleGaps(cs, granularity))
       .then(cs => cs.map(candle => {

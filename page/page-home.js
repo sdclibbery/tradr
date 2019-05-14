@@ -5,7 +5,7 @@ exports.render = (req, res) => {
   res.send(frame(`
     <h1>${os.hostname()} tradr </h1>
     <p>
-      <a href="status">GDAX status</a>
+      <a href="status">CoinbasePro status</a>
     </p>
     <p>
       <a href="account/history">Accounts history</a>

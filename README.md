@@ -173,17 +173,20 @@ x Get GBP-EUR price for accounts service and ~account-history~ page from prices 
 x Highlight non-empty accounts on status page
 x Show current profit on account history
 x Show amount of fiat transferred in on history page
-* gdax-prices: track live EUR-GBP price - https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
-* Have historical EUR-GBP prices in the DB, and update account history page to use it
-* ?Store off balance history data to avoid slow fetch for account history page??
-* Set correct close time for orders, not just the time we checked and found they'd been closed
+* check about gdax-node -> coinbasepro-node package transition
 * Spread bot (bot-spreader.js)
+ * Use lib order book class
+ * Also track recent trade history
  * Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
 * Some kind of notification when orders fill
+* Set correct close time for orders, not just the time we checked and found they'd been closed
+* gdax-prices: track live EUR-GBP price - https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+* Have historical EUR-GBP prices in the DB, and update account history page to use it
+* ?Store off balance history data to avoid slow fetch for account history page??
 
 * Revamp trade page to allow graphical setup of trades
 * Manual trading pot screen

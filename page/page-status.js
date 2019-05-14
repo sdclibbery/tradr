@@ -10,7 +10,7 @@ exports.render = async (req, res, next) => {
   } catch (e) { next(e); return }
   res.send(frame(`
     <style>.grayed { color:#c0c0c0; font-size:0.5em }</style>
-    <h1>${os.hostname()} GDAX status</h1>
+    <h1>${os.hostname()} CoinbasePro status</h1>
     <h3>Accounts</h3>
     ${formatAccounts(data.accounts)}
     <p>Equivalent totals: ${dp(data.totalValueInGbp, 2)} GBP, ${dp(data.totalValueInBtc, 4)} BTC</p>

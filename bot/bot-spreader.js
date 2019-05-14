@@ -1,5 +1,5 @@
 const assert = require('assert')
-const gdax = require('gdax')
+const coinbasePro = require('coinbasePro')
 const commandLineArgs = require('command-line-args')
 const loggerFactory = require('../logger')
 
@@ -59,7 +59,7 @@ let websocket
 let spread
 const connect = () => {
   logger.info(`BOT: Connecting to WebSocket for level2 feed on ${options.product}.`)
-  websocket = new gdax.WebsocketClient(
+  websocket = new coinbasePro.WebsocketClient(
     [ options.product ],
     'wss://ws-feed.pro.coinbase.com',
     null,
