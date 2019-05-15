@@ -2,6 +2,7 @@ const assert = require('assert')
 const coinbasePro = require('coinbase-pro')
 const commandLineArgs = require('command-line-args')
 const loggerFactory = require('../logger')
+const credentials = require('../coinbasepro-account-credentials')
 
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 optionDefinitions = [
@@ -19,7 +20,12 @@ const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
 
 const client = new coinbasePro.PublicClient()
-const orderbookSync = new coinbasePro.OrderbookSync([product])
+const orderbookSync = new coinbasePro.OrderbookSync(
+  [product],
+  'https://api.pro.coinbase.com',
+  'wss://ws-feed.pro.coinbase.com',
+  credentials
+)
 const orderBook = orderbookSync.books[product]
 const spread = {ask:0, bid:0}
 orderbookSync.on('message', () => {
@@ -28,8 +34,7 @@ orderbookSync.on('message', () => {
   const maxBid = orderBook._bids.max()
   if (!minAsk) {return}
   if (!maxBid) {return}
-  if (minAsk.price == spread.ask) {return}
-  if (maxBid.price == spread.bid) {return}
+  if (minAsk.price == spread.ask && maxBid.price == spread.bid) {return}
   spread.ask = minAsk.price
   spread.bid = maxBid.price
   logger.info(`${spread.ask}  ${spread.bid}`)
