@@ -22,8 +22,7 @@ const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync([product])
 const orderBook = orderbookSync.books[product]
 setInterval(() => {
-  book = orderBook.state()
-  logger.info(`${book.asks[0].price}  ${book.bids[0].price}`)
+  logger.info(`${orderBook._asks.min().price}  ${orderBook._bids.max().price}`)
   client.getProductTrades(product).then((recent) => {
     logger.info(`${JSON.stringify(recent[0], null, 2)}`)
   })
