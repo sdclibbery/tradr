@@ -28,6 +28,7 @@ exports.render = async (req, res, next) => {
     <script src="/candle-extents.js"></script>
     <script src="/draw-candles.js"></script>
     <script src="/draw-candle-analysis.js"></script>
+    <script src="/draw-logarithmic-trendline.js"></script>
     <script src="/draw-orders.js"></script>
     <script src="/draw-order-book.js"></script>
     <script src="/draw-labels.js"></script>
@@ -45,6 +46,7 @@ exports.render = async (req, res, next) => {
           extents = candleExtents(canvas, candles, scale)
           extents.background()
           drawCandleAnalysis(canvas, candles, granularity, extents)
+          drawLogarithmicTrendline(canvas, extents)
           drawOrders(canvas, orders, extents)
           if (book) { drawOrderBook(canvas, book, extents) }
           drawCandles(canvas, candles, granularity, extents)

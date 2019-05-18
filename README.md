@@ -175,15 +175,21 @@ x Show current profit on account history
 x Show amount of fiat transferred in on history page
 x Use coinbase-pro lib not GDAX
 x Rename everything from GDAX to CoinbasePro
-* Bots should default to GBP not EUR (eg observer, what else?)
+* Try a logarithmic trend line
+ * pow(10,(2.66167155005961*log(days) - 17.9183761889864))
+ * 'days' = days since 2011-Jan-13
 * Spread bot (bot-spreader.js)
- * Use lib order book class
+ x Use lib order book class
  * Also track recent trade history
  * Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
+* Bots should default to GBP not EUR (eg observer, what else?)
+* Make balance graph into a portfolio graph showing all accounts
+ * Include total fiat vs total crypto as a long/short measure
+* Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
 * Some kind of notification when orders fill
 * Set correct close time for orders, not just the time we checked and found they'd been closed
 * gdax-prices: track live EUR-GBP price - https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
@@ -194,9 +200,6 @@ x Rename everything from GDAX to CoinbasePro
 * Manual trading pot screen
 * Add optional stop loss to buy-then-sell etc (including support on trade page)
 * More account history work
- * Make balance graph into a portfolio graph showing all accounts
-  * Include total fiat vs total crypto as a long/short measure
- * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
  * ?Also calc and graph fiat-only transfers and profit against them?
 * Sim'd spread bot that posts at bid & ask prices
  x Use https://docs.pro.coinbase.com/#the-level2-channel and hack up a test bot
