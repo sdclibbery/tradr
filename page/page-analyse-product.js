@@ -46,7 +46,7 @@ exports.render = async (req, res, next) => {
           extents = candleExtents(canvas, candles, scale)
           extents.background()
           drawCandleAnalysis(canvas, candles, granularity, extents)
-          drawLogarithmicTrendline(canvas, extents)
+          ${product=='BTC-GBP' ? 'drawLogarithmicTrendline(canvas, extents)' : ''}
           drawOrders(canvas, orders, extents)
           if (book) { drawOrderBook(canvas, book, extents) }
           drawCandles(canvas, candles, granularity, extents)

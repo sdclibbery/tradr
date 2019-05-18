@@ -60,6 +60,7 @@ exports.render = async (req, res, next) => {
     <script src="/candle-extents.js"></script>
     <script src="/draw-orders.js"></script>
     <script src="/draw-labels.js"></script>
+    <script src="/draw-logarithmic-trendline.js"></script>
     <script>
     const orders = ${JSON.stringify(orders)}
       candleGraph = (granularity) => {
@@ -67,6 +68,7 @@ exports.render = async (req, res, next) => {
         fetchCandles('${product}', granularity).then(candles => {
           const extents = candleExtents(canvas, candles, 'normal')
           extents.background()
+          ${product=='BTC-GBP' ? 'drawLogarithmicTrendline(canvas, extents)' : ''}
           drawOrders(canvas, orders, extents)
           drawCandles(canvas, candles, granularity, extents)
           drawLabels(canvas, extents)
