@@ -8,11 +8,7 @@ drawOrderBook = (canvas, book, extents) => {
   let maxVolume = 0
 
   const drawBucket = ({lo, hi, volume, type}) => {
-    switch (type) {
-      case 'bid': ctx.fillStyle = '#00a00040'; break;
-      case 'ask': ctx.fillStyle = '#a0000040'; break;
-      default: ctx.fillStyle = '#00a0a040'; break;
-    }
+    ctx.fillStyle = (type == 'bid') ? '#00a00040' : '#a0000040'
     const w = volume*canvas.width/5/maxVolume
     ctx.fillRect(canvas.width-w, toY(lo), w, toY(hi)-toY(lo))
   }

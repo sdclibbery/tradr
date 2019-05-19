@@ -110,15 +110,15 @@ exports.render = async (req, res, next) => {
         const btcPriceExtents = accountExtents(canvas, btcPriceHistory, t => t.price)
         extents.background()
         drawOrders(canvas, extents, orders, colours)
-        drawPrices(canvas, extents, btcPriceHistory, t => t.price*extents.range/btcPriceExtents.maxPrice + extents.minPrice, colours.BTC+'40')
-        drawBalances(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
+        drawBalanceLine(canvas, extents, btcPriceHistory, t => t.price*extents.range/btcPriceExtents.maxPrice + extents.minPrice, colours.BTC+'40')
+        drawBalanceLine(canvas, extents, history, t => t.totalProfitInGbp, colours.GBP)
         drawLabels(canvas, extents)
       }
       {
         const canvas = document.getElementById('balances-gbp')
         const extents = accountExtents(canvas, history, t => t.totalBalanceInGbp)
         extents.background()
-        drawBalances(canvas, extents, history, t => t.totalBalanceInGbp, colours.TOTAL)
+        drawBalanceLine(canvas, extents, history, t => t.totalBalanceInGbp, colours.TOTAL)
         drawLabels(canvas, extents)
       }
     </script>

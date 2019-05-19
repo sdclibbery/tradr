@@ -1,46 +1,16 @@
-drawBalances = (canvas, extents, transactions, getValue, color) => {
+drawBalanceLine = (canvas, extents, transactions, getValue, color) => {
   const ctx = canvas.getContext('2d')
 
   const toX = extents.toX
   const toY = extents.toY
 
-  const manhattanLine = (t1, t2) => {
-    ctx.moveTo(toX(t1.time), toY(getValue(t1)))
-    ctx.lineTo(toX(t1.time), toY(getValue(t2)))
-    ctx.lineTo(toX(t2.time), toY(getValue(t2)))
-  }
-
   ctx.shadowBlur = 0
   ctx.strokeStyle = color
   ctx.lineWidth = 2
   ctx.beginPath()
-  transactions.map((t, i) => {
-    if (i > 0) {
-      manhattanLine(transactions[i-1], t)
-    }
-  })
-  ctx.stroke()
-}
-
-drawPrices = (canvas, extents, data, getValue, color) => {
-  const ctx = canvas.getContext('2d')
-
-  const toX = extents.toX
-  const toY = extents.toY
-
-  const line = (t1, t2) => {
-    ctx.moveTo(toX(t1.time), toY(getValue(t1)))
-    ctx.lineTo(toX(t2.time), toY(getValue(t2)))
-  }
-
-  ctx.shadowBlur = 0
-  ctx.strokeStyle = color
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  data.map((t, i) => {
-    if (i > 0) {
-      line(data[i-1], t)
-    }
+  ctx.moveTo(toX(extents.minTime), toY(getValue(extents.minTime)))
+  transactions.map(t => {
+    ctx.lineTo(toX(t.time), toY(getValue(t)))
   })
   ctx.stroke()
 }
