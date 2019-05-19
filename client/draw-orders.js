@@ -9,8 +9,6 @@ drawOrders = (canvas, orders, extents) => {
     const color = ({filled:'#0000e0', open:'#d0c000'}[o.status]) || '#d000d0'
     ctx.fillStyle = color+'10'
     ctx.strokeStyle = color+'20'
-    ctx.lineWidth = 4
-    ctx.shadowBlur = 0
     const defaultEndTime = (o.status == 'open') ? new Date() : o.created
     const x1 = toX(new Date(o.created))
     const x2 = toX(new Date(o.closeTime || defaultEndTime))
@@ -20,5 +18,7 @@ drawOrders = (canvas, orders, extents) => {
     ctx.strokeRect(x1, y1, x2-x1, y2-y1)
   }
 
+  ctx.lineWidth = 4
+  ctx.shadowBlur = 0
   orders.forEach(orderBar)
 }

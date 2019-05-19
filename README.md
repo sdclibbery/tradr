@@ -175,9 +175,9 @@ x Show current profit on account history
 x Show amount of fiat transferred in on history page
 x Use coinbase-pro lib not GDAX
 x Rename everything from GDAX to CoinbasePro
-* Try a logarithmic trend line
- * pow(10,(2.66167155005961*log(days) - 17.9183761889864))
- * 'days' = days since 2011-Jan-13
+x Try a logarithmic trend line
+ x  pow(10,(2.66167155005961*log(days) - 17.9183761889864))
+ x 'days' = days since 2011-Jan-13
 * Spread bot (bot-spreader.js)
  x Use lib order book class
  * Also track recent trade history
@@ -186,6 +186,8 @@ x Rename everything from GDAX to CoinbasePro
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
+* Optimise canvas drawing
+* Check historical validity of current trendline parameters: draw graph of price history with trendline
 * Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure

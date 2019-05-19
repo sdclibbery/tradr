@@ -9,11 +9,6 @@ drawLabels = (canvas, extents) => {
   const dp = (x, dp) => Number.parseFloat(x).toFixed(dp)
 
   const priceLabel = (p) => {
-    ctx.textAlign = 'right'
-    ctx.textBaseline = 'middle'
-    ctx.fillStyle = '#ffffffa0'
-    ctx.shadowColor = '#000000d0'
-    ctx.shadowBlur = 6
     ctx.textAlign = 'left'
     ctx.fillText(p, 0, toY(p))
     ctx.textAlign = 'right'
@@ -23,7 +18,6 @@ drawLabels = (canvas, extents) => {
 
   const division = (x1, y1, x2, y2, strong) => {
     ctx.strokeStyle = strong ? '#00000080' : '#00000040'
-    ctx.lineWidth = 0.5
     ctx.beginPath()
     ctx.moveTo(x1, y1)
     ctx.lineTo(x2, y2)
@@ -31,16 +25,17 @@ drawLabels = (canvas, extents) => {
   }
 
   const timeLabel = (time, label, align, strong) => {
-    ctx.fillStyle = '#ffffffe0'
-    ctx.shadowColor = '#000000e0'
-    ctx.shadowBlur = 6
-    ctx.font = '26px helvetica,arial bold'
-    ctx.textBaseline = 'bottom'
     ctx.textAlign = align
     ctx.fillText(label, toX(time), canvas.height)
     division(toX(time), 0, toX(time), canvas.height, strong)
   }
 
+  ctx.lineWidth = 0.5
+  ctx.fillStyle = '#ffffffe0'
+  ctx.shadowColor = '#000000e0'
+  ctx.shadowBlur = 6
+  ctx.font = '26px helvetica,arial bold'
+  ctx.textBaseline = 'bottom'
   const timeRange = maxTime - minTime
   const days = Math.floor(timeRange/1000/60/60/24)
   const weeks = Math.floor(days/7)
@@ -92,6 +87,11 @@ drawLabels = (canvas, extents) => {
     }
   }
 
+  ctx.textAlign = 'right'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#ffffffa0'
+  ctx.shadowColor = '#000000d0'
+  ctx.shadowBlur = 6
   const range = maxPrice-minPrice
   const logRange = Math.floor(Math.log10(range))
   let interval = Math.pow(10, logRange)

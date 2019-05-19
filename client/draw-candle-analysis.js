@@ -5,22 +5,22 @@ drawCandleAnalysis = (canvas, candles, granularity, extents) => {
   const toY = extents.toY
 
   const line = (s, e) => {
+    ctx.moveTo(s.x, s.y)
+    ctx.lineTo(e.x, e.y)
+  }
+
+  const lines = (ls) => {
     ctx.shadowBlur = 0
     ctx.strokeStyle = '#30303028'
     ctx.lineWidth = 4
     ctx.beginPath()
-    ctx.moveTo(s.x, s.y)
-    ctx.lineTo(e.x, e.y)
-    ctx.stroke()
-  }
-
-  const lines = (ls) => {
     ls
      .map(({x,y}) => { return {x:toX(x), y:toY(y)} })
      .forEach((from, idx, h) => {
       const to = h[idx+1]
       if (to) { line(from, to) }
     })
+    ctx.stroke()
   }
 
   ctx.shadowColor = 'white'
