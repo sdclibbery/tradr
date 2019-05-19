@@ -28,16 +28,22 @@ const orderbookSync = new coinbasePro.OrderbookSync(
 )
 const orderBook = orderbookSync.books[product]
 const spread = {ask:0, bid:0}
-orderbookSync.on('message', () => {
+const recent = []
+orderbookSync.on('message', (m) => {
+  if (m.type == 'match') {
+    recent.unshift(parseFloat(m.price))
+    if (recent.length > 20) { recent.pop() }
+  }
   if (!orderBook._asks) {return}
   const minAsk = orderBook._asks.min()
   const maxBid = orderBook._bids.max()
   if (!minAsk) {return}
   if (!maxBid) {return}
-  if (minAsk.price == spread.ask && maxBid.price == spread.bid) {return}
-  spread.ask = minAsk.price
-  spread.bid = maxBid.price
-  logger.info(`${spread.ask}  ${spread.bid}`)
-  // Can check for width of spread here
+  const ask = parseFloat(minAsk.price)
+  const bid = parseFloat(maxBid.price)
+  if (spread.ask === ask && spread.bid === bid) {return}
+  spread.ask = ask
+  spread.bid = bid
+console.log(`${spread.ask} - ${spread.bid}  (${recent[0]})  ${recent.length}`)
   // Need to efficiently also get and sync recent trades through a websocket interface
 })
