@@ -19,6 +19,7 @@ const product = options.product
 const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
 
+logger.info(`Spreader starting for ${product}`)
 const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
   [product],
@@ -44,6 +45,6 @@ orderbookSync.on('message', (m) => {
   if (spread.ask === ask && spread.bid === bid) {return}
   spread.ask = ask
   spread.bid = bid
-console.log(`${spread.ask} - ${spread.bid}  (${recent[0]})  ${recent.length}`)
-  // Need to efficiently also get and sync recent trades through a websocket interface
+  logger.debug(`New spread: ${spread.ask} - ${spread.bid}  (${recent[0]})  ${recent.length}`)
+  // Requires price volatility (ie recent orders include both spread edges) and >1% spread
 })
