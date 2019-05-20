@@ -5,10 +5,9 @@ var path = require('path'),
 var Logger = function (logFilePath, writer) {
   logFilePath = path.normalize(logFilePath)
   this.stream = fs.createWriteStream(logFilePath, {flags: 'a', encoding: 'utf8', mode: 0666})
-  this.stream.write("\n")
   this.write = (text) => {
     console.log(text)
-    writer(this.stream, text)
+    writer(this.stream, text + "\n")
   }
 }
 
@@ -24,10 +23,10 @@ Logger.prototype.format = (level, values) => {
   return [level, ' [', new Date(), '] ', content].join('')
 }
 
-Logger.prototype.debug = function (...args) { this.write(this.format('debug', args) + "\n") }
-Logger.prototype.info = function (...args) { this.write(this.format('info', args) + "\n") }
-Logger.prototype.warn = function (...args) { this.write(this.format('warn', args) + "\n") }
-Logger.prototype.error = function (...args) { this.write(this.format('error', args) + "\n") }
+Logger.prototype.debug = function (...args) { this.write(this.format('debug', args)) }
+Logger.prototype.info = function (...args) { this.write(this.format('info', args)) }
+Logger.prototype.warn = function (...args) { this.write("\n" + this.format('warn', args) + "\n") }
+Logger.prototype.error = function (...args) { this.write("\n" + this.format('error', args) + "\n") }
 
 exports.Logger = Logger
 exports.createLogger = (logFilePath) => {

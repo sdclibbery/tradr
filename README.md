@@ -180,14 +180,14 @@ x Try a logarithmic trend line
  x 'days' = days since 2011-Jan-13
 * Spread bot (bot-spreader.js)
  x Use lib order book class
- * Also track recent trade history
+ x Also track recent trade history
  * Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
 x Optimise canvas drawing
-* Check historical validity of current trendline parameters: draw graph of price history with trendline
+* Check historical validity of current trendline parameters: draw graph of full price history with trendline
 * Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
