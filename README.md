@@ -188,8 +188,8 @@ x Try a logarithmic trend line
  * Pull out if next order becomes unprofitable
 x Optimise canvas drawing
 * Check historical validity of current trendline parameters: draw graph of full price history with trendline
- * Add page to homepage
- * Longer price history
+ x Add page to homepage
+ * Longer price history - need more gbp-usd data
 * Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure

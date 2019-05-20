@@ -32,7 +32,7 @@ framework.init([
   const lines = require('fs')
     .readFileSync(`../data/${baseCurrency.toLowerCase()}_${targetCurrency}_daily_historic.csv`, {encoding:'utf8'})
     .split(/\r?\n/)
-  const cutoff = new Date('2017-01-01')
+  const cutoff = new Date('2013-04-28')
   for (i in lines) {
     const l = lines[i]
     const time = l.split(',')[0]
