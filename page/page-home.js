@@ -8,6 +8,9 @@ exports.render = (req, res) => {
       <a href="status">CoinbasePro status</a>
     </p>
     <p>
+      <a href="trendline">BTC Trendline</a>
+    </p>
+    <p>
       <a href="account/history">Accounts history</a>
     </p>
     <p>
