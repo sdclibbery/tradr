@@ -178,6 +178,11 @@ x Rename everything from GDAX to CoinbasePro
 x Try a logarithmic trend line
  x  pow(10,(2.66167155005961*log(days) - 17.9183761889864))
  x 'days' = days since 2011-Jan-13
+x Optimise canvas drawing
+x Check historical validity of current trendline parameters: draw graph of full price history with trendline
+ x Add page to homepage
+ x Longer price history - need more gbp-usd data
+ * Get even longer price history: at least 2011
 * Spread bot (bot-spreader.js)
  x Use lib order book class
  x Also track recent trade history
@@ -186,10 +191,7 @@ x Try a logarithmic trend line
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
-x Optimise canvas drawing
-* Check historical validity of current trendline parameters: draw graph of full price history with trendline
- x Add page to homepage
- * Longer price history - need more gbp-usd data
+ * Could consider using a speread depth; eg what is the spread ignoring the first 0.5BTC on each side?
 * Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
