@@ -2,7 +2,6 @@ const assert = require('assert')
 const coinbasePro = require('coinbase-pro')
 const commandLineArgs = require('command-line-args')
 const loggerFactory = require('../logger')
-const credentials = require('../coinbasepro-account-credentials')
 
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 optionDefinitions = [
@@ -28,8 +27,8 @@ const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
   [product],
   'https://api.pro.coinbase.com',
-  'wss://ws-feed.pro.coinbase.com',
-  credentials
+  'wss://ws-feed.pro.coinbase.com'
+
 )
 const orderBook = orderbookSync.books[product]
 const spread = {ask:0, bid:0}
@@ -49,6 +48,6 @@ orderbookSync.on('message', (m) => {
   if (spread.ask === ask && spread.bid === bid) {return}
   spread.ask = ask
   spread.bid = bid
-  process.stdout.write(`${green}${dp2(spread.ask)}${reset} - ${red}${dp2(spread.bid)}${reset}   `+
-    `(${dp2(recent[0])} ${dp2(recent[1])} ${dp2(recent[2])}})           \r`)
+  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}) \t`+
+    `${dp2(recent[0])} ${dp2(recent[1])} ${dp2(recent[2])} ${dp2(recent[3])} ${dp2(recent[4])}           \r`)
 })
