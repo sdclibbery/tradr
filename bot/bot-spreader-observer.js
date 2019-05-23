@@ -22,6 +22,7 @@ const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 const red   = "\033[1;31m"
 const green = "\033[0;32m"
 const reset = "\033[0;0m"
+const fmtRecent = r => (!r)?'-':`${r.side=='buy'?red:green}${dp2(r.price)}${reset}`
 logger.info(`Spreader starting for ${product}`)
 const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
@@ -35,7 +36,7 @@ const spread = {ask:0, bid:0}
 const recent = []
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
-    recent.unshift(parseFloat(m.price))
+    recent.unshift({price:parseFloat(m.price), side:m.side})
     if (recent.length > 20) { recent.pop() }
   }
   if (!orderBook._asks) {return}
@@ -49,5 +50,5 @@ orderbookSync.on('message', (m) => {
   spread.ask = ask
   spread.bid = bid
   process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}) \t`+
-    `${dp2(recent[0])} ${dp2(recent[1])} ${dp2(recent[2])} ${dp2(recent[3])} ${dp2(recent[4])}           \r`)
+    `${fmtRecent(recent[0])} ${fmtRecent(recent[1])} ${fmtRecent(recent[2])} ${fmtRecent(recent[3])} ${fmtRecent(recent[4])}           \r`)
 })
