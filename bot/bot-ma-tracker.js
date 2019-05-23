@@ -2,7 +2,7 @@ const framework = require('./framework')
 const {ema} = require('../exponential-moving-average')
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'coinbasepro product' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'close', alias: 'c', type: Number, defaultValue: 20, description: 'number of minutes to average together for the close moving average (up to 300)' },
   { name: 'far', alias: 'f', type: Number, defaultValue: 30, description: 'number of minutes to average together for the far moving average (up to 300)' },
 ])

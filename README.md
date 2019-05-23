@@ -182,17 +182,18 @@ x Optimise canvas drawing
 x Check historical validity of current trendline parameters: draw graph of full price history with trendline
  x Add page to homepage
  x Longer price history - need more gbp-usd data
- * Get even longer price history: at least 2011
+ x Get even longer price history: at least 2011
+* Bots should default to GBP not EUR (eg observer, what else?)
 * Spread bot (bot-spreader.js)
  x Use lib order book class
  x Also track recent trade history
+ * Make spread observer bot that just displays current spread and most recent orders (colour coded?)
  * Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
  * Pull out if next order becomes unprofitable
  * Could consider using a speread depth; eg what is the spread ignoring the first 0.5BTC on each side?
-* Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
 * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')

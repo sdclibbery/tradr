@@ -1,7 +1,7 @@
 const framework = require('./framework');
 
 framework.init([
-  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-EUR', description: 'coinbasepro product' },
+  { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'amount', alias: 'a', type: String, description: "amount to sell with units, eg '0.01_BTC' or '100_EUR'" },
 ])
 .then(async ({ options, logger, exchange }) => {
