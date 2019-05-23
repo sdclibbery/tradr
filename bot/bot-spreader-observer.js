@@ -50,5 +50,5 @@ orderbookSync.on('message', (m) => {
   spread.ask = ask
   spread.bid = bid
   process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}) \t`+
-    `${fmtRecent(recent[0])} ${fmtRecent(recent[1])} ${fmtRecent(recent[2])} ${fmtRecent(recent[3])} ${fmtRecent(recent[4])}           \r`)
+    `${fmtRecent(recent[0])} ${fmtRecent(recent[1])} ${fmtRecent(recent[2])}  \r`)
 })
