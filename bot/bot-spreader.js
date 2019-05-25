@@ -6,6 +6,7 @@ const credentials = require('../coinbasepro-account-credentials')
 
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 optionDefinitions = [
+  { name: 'amount', alias: 'a', type: Number, defaultValue: '20', description: 'amount to bot with in quote currency (eg GBP)' },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' },
 ]
@@ -18,8 +19,15 @@ try {
 const product = options.product
 const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
+const amount = parseFloat(options.amount)
+const minSpreadToTrade = amount*0.01
 
-logger.info(`Spreader starting for ${product}`)
+const dp2 = (x) => Number.parseFloat(x).toFixed(2)
+const red   = "\033[1;31m"
+const green = "\033[0;32m"
+const reset = "\033[0;0m"
+const fmtRecent = r => (!r)?'-':`${r.side=='buy'?red:green}${dp2(r.price)}${reset}`
+logger.info(`BOT: Spreader starting for ${product} with ${amount}${quoteCurrency}; min spread to trade ${minSpreadToTrade}${quoteCurrency}`)
 const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
   [product],
@@ -32,8 +40,8 @@ const spread = {ask:0, bid:0}
 const recent = []
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
-    recent.unshift(parseFloat(m.price))
-    if (recent.length > 20) { recent.pop() }
+    recent.unshift({price:parseFloat(m.price), side:m.side})
+    if (recent.length > 10) { recent.pop() }
   }
   if (!orderBook._asks) {return}
   const minAsk = orderBook._asks.min()
@@ -45,6 +53,25 @@ orderbookSync.on('message', (m) => {
   if (spread.ask === ask && spread.bid === bid) {return}
   spread.ask = ask
   spread.bid = bid
-  logger.debug(`New spread: ${spread.ask} - ${spread.bid}  (${recent[0]})  ${recent.length}`)
-  // Requires price volatility (ie recent orders include both spread edges) and >1% spread
+  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}) \t`+
+    `${fmtRecent(recent[0])} ${recent.map(r => r&&(r.side=='buy'?red+'▼':green+'▲')).join('')}${reset}  \r`)
+  // Requires price volatility (ie recent orders include both spread edges) and spread > 1% of trade amount
+  if (recent.length < 2) {return}
+  if (!recent.some(r => r&&r.side=='buy')) {return}
+  if (!recent.some(r => r&&r.side=='sell')) {return}
+  if ((spread.ask - spread.bid) < minSpreadToTrade) {return}
+  process.stdout.write('\n')
+  logger.info(`bottable: ${spread.ask - spread.bid} ${recent[0].price}`)
 })
+const oldSpread = {ask:0, bid:0}
+setInterval(() => {
+  // Watchdog; if either spread edge stays same for too long, resync
+  if (oldSpread.ask == spread.ask || oldSpread.bid == spread.bid) {
+    logger.warn('BOT: resyncing')
+    orderBook._asks.clear()
+    orderBook._bids.clear()
+    orderbookSync.loadOrderbook(product)
+  }
+  oldSpread.ask = spread.ask
+  oldSpread.bid = spread.bid
+}, 10000)

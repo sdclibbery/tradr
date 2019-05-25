@@ -23,7 +23,7 @@ const red   = "\033[1;31m"
 const green = "\033[0;32m"
 const reset = "\033[0;0m"
 const fmtRecent = r => (!r)?'-':`${r.side=='buy'?red:green}${dp2(r.price)}${reset}`
-logger.info(`Spreader starting for ${product}`)
+logger.info(`BOT: Spreader starting for ${product}`)
 const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
   [product],
