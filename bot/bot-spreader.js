@@ -2,7 +2,8 @@ const assert = require('assert')
 const coinbasePro = require('coinbase-pro')
 const commandLineArgs = require('command-line-args')
 const loggerFactory = require('../logger')
-const credentials = require('../coinbasepro-account-credentials')
+let credentials
+try { credentials = require('../coinbasepro-account-credentials') } catch (e) {}
 
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 optionDefinitions = [

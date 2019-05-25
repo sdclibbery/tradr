@@ -187,8 +187,8 @@ x Check historical validity of current trendline parameters: draw graph of full 
 * Spread bot (bot-spreader.js)
  x Use lib order book class
  x Also track recent trade history
- * Make spread observer bot that just displays current spread and most recent orders (colour coded?)
- * Requires price volatility (ie recent orders include both spread edges) and >1% spread
+ x Fix desyncing
+ x Requires price volatility (ie recent orders include both spread edges) and >1% spread
  * Place limit order at one spread edge
  * Track spread edge but not over aggressively (dont want to close the spread with an order race)
  * If order fills, track the other spread edge
