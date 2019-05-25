@@ -36,9 +36,27 @@ const orderbookSync = new coinbasePro.OrderbookSync(
   credentials
 )
 const orderBook = orderbookSync.books[product]
+// Monkey patch to fix the desync issue (https://github.com/coinbase/coinbase-pro-node/issues/308)
+const oldOrderBookStateMethod = orderBook.state
+orderBook.state = function (book) {
+  if (book) {
+    this._asks.clear()
+    this._bids.clear()
+  }
+  oldOrderBookStateMethod.call(this, book)
+}
+// End of monkey patch
 const spread = {ask:0, bid:0}
 const recent = []
+const lastHeartbeat = undefined
 orderbookSync.on('message', (m) => {
+  if (m.type == 'heartbeat' && lastHeartbeat <= m.sequence) {
+    logger.warn('BOT: resyncing ${lastHeartbeat} != ${m.sequence}')
+    orderBook._asks.clear()
+    orderBook._bids.clear()
+    orderbookSync.loadOrderbook(product)
+    lastHeartbeat = m.sequence
+  }
   if (m.type == 'match') {
     recent.unshift({price:parseFloat(m.price), side:m.side})
     if (recent.length > 10) { recent.pop() }
@@ -63,15 +81,3 @@ orderbookSync.on('message', (m) => {
   process.stdout.write('\n')
   logger.info(`bottable: ${spread.ask - spread.bid} ${recent[0].price}`)
 })
-const oldSpread = {ask:0, bid:0}
-setInterval(() => {
-  // Watchdog; if either spread edge stays same for too long, resync
-  if (oldSpread.ask == spread.ask || oldSpread.bid == spread.bid) {
-    logger.warn('BOT: resyncing')
-    orderBook._asks.clear()
-    orderBook._bids.clear()
-    orderbookSync.loadOrderbook(product)
-  }
-  oldSpread.ask = spread.ask
-  oldSpread.bid = spread.bid
-}, 10000)
