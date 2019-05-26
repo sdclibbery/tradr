@@ -7,7 +7,7 @@ try { credentials = require('../coinbasepro-account-credentials') } catch (e) {}
 
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 optionDefinitions = [
-  { name: 'amount', alias: 'a', type: Number, defaultValue: '20', description: 'amount to bot with in quote currency (eg GBP)' },
+  { name: 'amount', alias: 'a', type: Number, defaultValue: 0.003, description: 'amount to bot with in base currency (eg BTC)' },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' },
 ]
@@ -20,15 +20,12 @@ try {
 const product = options.product
 const baseCurrency = options.product.split('-')[0]
 const quoteCurrency = options.product.split('-')[1]
-const amount = parseFloat(options.amount)
-const minSpreadToTrade = amount*0.01
 
 const dp2 = (x) => Number.parseFloat(x).toFixed(2)
 const red   = "\033[1;31m"
 const green = "\033[0;32m"
 const reset = "\033[0;0m"
 const fmtRecent = r => (!r)?'-':`${r.side=='buy'?red:green}${dp2(r.price)}${reset}`
-logger.info(`BOT: Spreader starting for ${product} with ${amount}${quoteCurrency}; min spread to trade ${minSpreadToTrade}${quoteCurrency}`)
 const client = new coinbasePro.PublicClient()
 const orderbookSync = new coinbasePro.OrderbookSync(
   [product],
@@ -49,18 +46,14 @@ orderBook.state = function (book) {
 // End of monkey patch
 const spread = {ask:0, bid:0}
 const recent = []
-const lastHeartbeat = undefined
+const amountInBase = () => parseFloat(options.amount)
+const amountInQuote = () => recent[0]&&options.amount*recent[0].price
+const minSpreadToTrade = () => amountInQuote()*0.01
+logger.info(`BOT: Spreader starting for ${product} with ${amountInBase()}${baseCurrency}`)
 orderbookSync.on('message', (m) => {
-  if (m.type == 'heartbeat' && lastHeartbeat <= m.sequence) {
-    logger.warn('BOT: resyncing ${lastHeartbeat} != ${m.sequence}')
-    orderBook._asks.clear()
-    orderBook._bids.clear()
-    orderbookSync.loadOrderbook(product)
-    lastHeartbeat = m.sequence
-  }
   if (m.type == 'match') {
     recent.unshift({price:parseFloat(m.price), side:m.side})
-    if (recent.length > 10) { recent.pop() }
+    if (recent.length > 5) { recent.pop() }
   }
   if (!orderBook._asks) {return}
   const minAsk = orderBook._asks.min()
@@ -78,7 +71,8 @@ orderbookSync.on('message', (m) => {
   if (recent.length < 2) {return}
   if (!recent.some(r => r&&r.side=='buy')) {return}
   if (!recent.some(r => r&&r.side=='sell')) {return}
-  if ((spread.ask - spread.bid) < minSpreadToTrade) {return}
+  if ((spread.ask - spread.bid) < minSpreadToTrade()) {return}
   process.stdout.write('\n')
-  logger.info(`bottable: ${spread.ask - spread.bid} ${recent[0].price}`)
+  // Do something...
+  logger.info(`bottable: ${dp2(spread.ask - spread.bid)} ${dp2(recent[0].price)}`)
 })
