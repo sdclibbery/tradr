@@ -11,6 +11,7 @@ logger.debug = () => {}
 optionDefinitions = [
   { name: 'amount', alias: 'a', type: Number, defaultValue: 0.002, description: 'amount to bot with in base currency (eg BTC)' },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
+  { name: 'single', alias: 's', type: Boolean, defaultValue: false, description: 'single shot: stop after first completion' },
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' },
 ]
 let options
@@ -54,7 +55,7 @@ const recent = []
 const amountInBase = () => parseFloat(options.amount)/2
 const amountInQuote = () => recent[0]&&options.amount*recent[0].price
 const minSpreadToTrade = () => Math.ceil(amountInQuote())*0.2
-const minProfit = () => Math.ceil(amountInQuote())*0.01
+const minProfit = () => Math.ceil(amountInQuote())*0.05
 logger.info(`BOT: Spreader starting for ${product} with ${amountInBase()}${baseCurrency}`)
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
@@ -144,6 +145,11 @@ orderbookSync.on('message', (m) => {
   if (!recent.some(r => r && r.side=='sell')) {return}
   if ((spread.ask - spread.bid) < minSpreadToTrade()) {return}
   // Place new orders
+  if (options.single && !!orders.buyPrice && !!orders.sellPrice) {
+    logger.info('BOT: single shot complete')
+    orderbookSync.disconnect()
+    return
+  }
   if (!orders.buy.price && !orders.sell.price) {
     orders.buyLimit = Infinity
     orders.sellLimit = 0

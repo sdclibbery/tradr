@@ -192,6 +192,8 @@ x Check historical validity of current trendline parameters: draw graph of full 
  x Place limit orders at spread edges
  x Track spread edges but not over aggressively and never at a loss
  x Get error when cancelling or getting status when an order has filled- less verbose error reporting in exchange itself
+ x Option to run only once and then stop
+ * !! Seems like its practically impossible to make a profit after fees: Work this out properly
  * Profit reporting using actual reported fees
  * Fee gets rounded up to 1p; this should set profit limits...
   * Calculate proper min profit given actual min fees of 1p per trade
