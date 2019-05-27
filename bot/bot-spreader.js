@@ -9,7 +9,7 @@ try { credentials = require('../coinbasepro-account-credentials') } catch (e) {}
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 logger.debug = () => {}
 optionDefinitions = [
-  { name: 'amount', alias: 'a', type: Number, defaultValue: 0.004, description: 'amount to bot with in base currency (eg BTC)' },
+  { name: 'amount', alias: 'a', type: Number, defaultValue: 0.002, description: 'amount to bot with in base currency (eg BTC)' },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' },
 ]
@@ -51,10 +51,10 @@ orderBook.state = function (book) {
 const spread = {ask:0, bid:0}
 const orders = {buy:{}, sell:{}}
 const recent = []
-const amountInBase = () => parseFloat(options.amount)
+const amountInBase = () => parseFloat(options.amount)/2
 const amountInQuote = () => recent[0]&&options.amount*recent[0].price
-const minSpreadToTrade = () => amountInQuote()*0.1
-const minProfit = () => amountInQuote()*0.02
+const minSpreadToTrade = () => Math.ceil(amountInQuote())*0.2
+const minProfit = () => Math.ceil(amountInQuote())*0.01
 logger.info(`BOT: Spreader starting for ${product} with ${amountInBase()}${baseCurrency}`)
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
@@ -63,16 +63,30 @@ orderbookSync.on('message', (m) => {
       exchange.orderStatus(orders.buy.id).then(({filled, price}) => {
         if (filled) {
           orders.buy = {}
-          orders.sellLimit = price + minProfit() // Set limit on how far the other side can track to avoid making a loss
-          logger.info(`BOT: buy order filled at ${dp2(price)}; set sell limit to ${dp2(orders.sellLimit)}`)
+          orders.sellLimit = parseFloat(price) + minProfit() // Set limit on how far the other side can track to avoid making a loss
+          orders.buyPrice = parseFloat(price)
+          orders.buyFees = orders.buyPrice*amountInBase()*0.0015
+          logger.info(`BOT: buy filled ${dp2(parseFloat(price))}; sell limit > ${dp2(orders.sellLimit)}`)
+          if (!orders.sell.price) { // Both filled
+            const made = orders.sellPrice*amountInBase() - orders.buyPrice*amountInBase()
+            const fees = orders.buyFees + orders.sellFees
+            logger.info(`Both filled ${dp2(orders.sellPrice)}-${dp2(orders.buyPrice)}, made ${dp2(made)}, fees ${dp2(fees)}\n profit ${dp2(made-fees)}${quoteCurrency}`)
+          }
         }
       }).catch(e => {})
     } else if (orders.sell.id == m.maker_order_id) {
       exchange.orderStatus(orders.sell.id).then(({filled, price}) => {
         if (filled) {
           orders.sell = {}
-          orders.buyLimit = price - minProfit() // Set limit on how far the other side can track to avoid making a loss
-          logger.info(`BOT: sell order filled at ${dp2(price)}; set buy limit to ${dp2(orders.buyLimit)}`)
+          orders.buyLimit = parseFloat(price) - minProfit() // Set limit on how far the other side can track to avoid making a loss
+          orders.sellPrice = parseFloat(price)
+          orders.sellFees = orders.sellPrice*amountInBase()*0.0015
+          logger.info(`BOT: sell filled ${dp2(parseFloat(price))}; buy limit < ${dp2(orders.buyLimit)}`)
+          if (!orders.buy.price) { // Both filled
+            const made = orders.sellPrice*amountInBase() - orders.buyPrice*amountInBase()
+            const fees = orders.buyFees + orders.sellFees
+            logger.info(`Both filled ${dp2(orders.sellPrice)}-${dp2(orders.buyPrice)}, made ${dp2(made)}, fees ${dp2(fees)}\n profit ${dp2(made-fees)}${quoteCurrency}`)
+          }
         }
       }).catch(e => {})
     } else {
@@ -102,14 +116,14 @@ orderbookSync.on('message', (m) => {
   const buy = () => {
     orders.buy = { price: buyPrice() }
     exchange
-      .buy(amountInBase()/2, orders.buy.price, 'spreader bot', `buy with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
+      .buy(amountInBase(), orders.buy.price, 'spreader bot', `buy with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.buy.id = id)
       .catch(e => {})
   }
   const sell = () => {
     orders.sell = { price: sellPrice() }
     exchange
-      .sell(amountInBase()/2, orders.sell.price, 'spreader bot', `sell with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
+      .sell(amountInBase(), orders.sell.price, 'spreader bot', `sell with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.sell.id = id)
       .catch(e => {})
   }
