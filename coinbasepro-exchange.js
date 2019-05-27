@@ -26,7 +26,7 @@ exports.ready = async (product) => {
   }
 }
 
-exports.createExchange = (options, logger) => {
+exports.createExchange = (options, logger, websocketToUse) => {
   const baseCurrency = options.product && options.product.split('-')[0]
   const quoteCurrency = options.product && options.product.split('-')[1]
 
@@ -36,7 +36,7 @@ exports.createExchange = (options, logger) => {
   }
 
   const authedClient = new coinbasePro.AuthenticatedClient(credentials.key, credentials.secret, credentials.passphrase, 'https://api.pro.coinbase.com')
-  const websocket = new coinbasePro.WebsocketClient([options.product])
+  const websocket = websocketToUse ? websocketToUse : (new coinbasePro.WebsocketClient([options.product]))
   websocket.on('error', log('websocket error'))
 
   logger.debug(options)

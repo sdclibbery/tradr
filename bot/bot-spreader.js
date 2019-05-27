@@ -66,15 +66,15 @@ orderbookSync.on('message', (m) => {
           orders.sellLimit = price + minProfit() // Set limit on how far the other side can track to avoid making a loss
           logger.info(`BOT: buy order filled at ${dp2(price)}; set sell limit to ${dp2(orders.sellLimit)}`)
         }
-      }).catch(logger.error)
+      }).catch(e => logger.error(JSON.stringify(e)))
     } else if (orders.sell.id == m.maker_order_id) {
       exchange.orderStatus(orders.sell.id).then(({filled, price}) => {
         if (filled) {
           orders.sell = {}
           orders.buyLimit = price - minProfit() // Set limit on how far the other side can track to avoid making a loss
-          logger.info(`BOT: sell order filled at ${dp2(price)}; set sell limit to ${dp2(orders.buyLimit)}`)
+          logger.info(`BOT: sell order filled at ${dp2(price)}; set buy limit to ${dp2(orders.buyLimit)}`)
         }
-      }).catch(logger.error)
+      }).catch(e => logger.error(JSON.stringify(e)))
     } else {
       // Remember recent trades
       recent.unshift({price:parseFloat(m.price), side:m.side})
@@ -92,34 +92,36 @@ orderbookSync.on('message', (m) => {
   if (spread.ask === ask && spread.bid === bid) {return}
   spread.ask = ask
   spread.bid = bid
-  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}) \t`+
-    `${fmtRecent(recent[0])} ${recent.map(r => r&&(r.side=='buy'?red+'▼':green+'▲')).join('')}${reset}  \r`)
+  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)})`+
+    ` \t${fmtRecent(recent[0])} ${recent.map(r => r&&(r.side=='buy'?red+'▼':green+'▲')).join('')}${reset}`+
+    ` \t${dp2(orders.buy.price)}-${dp2(orders.sell.price)} ${dp2(orders.buyLimit)}-${dp2(orders.sellLimit)}`+
+    `     \r`)
   // Helpers for buying and selling
-  const buyPrice = () => spread.bid + exchange.quoteStep
-  const sellPrice = () => spread.ask - exchange.quoteStep
+  const buyPrice = () => spread.bid// + exchange.quoteStep
+  const sellPrice = () => spread.ask// - exchange.quoteStep
   const buy = () => {
     orders.buy = { price: buyPrice() }
     exchange
       .buy(amountInBase()/2, orders.buy.price, 'spreader bot', `buy with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.buy.id = id)
-      .catch(logger.error)
+      .catch(e => logger.error(JSON.stringify(e)))
   }
   const sell = () => {
     orders.sell = { price: sellPrice() }
     exchange
       .sell(amountInBase()/2, orders.sell.price, 'spreader bot', `sell with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.sell.id = id)
-      .catch(logger.error)
+      .catch(e => logger.error(JSON.stringify(e)))
   }
   // Track any existing orders against spread edges
   if (orders.buy.id && orders.buy.price != buyPrice() && buyPrice() <= orders.buyLimit) {
     logger.info(`BOT: moving buy from ${dp2(orders.buy.price)} to ${dp2(buyPrice())}`)
-    exchange.cancelOrder(orders.buy.id).then(buy).catch(logger.error)
+    exchange.cancelOrder(orders.buy.id).then(buy).catch(e => logger.error(JSON.stringify(e)))
     orders.buy.id = undefined
   }
   if (orders.sell.id && orders.sell.price != sellPrice() && sellPrice() >= orders.sellLimit) {
     logger.info(`BOT: moving sell from ${dp2(orders.sell.price)} to ${dp2(sellPrice())}`)
-    exchange.cancelOrder(orders.sell.id).then(sell).catch(logger.error)
+    exchange.cancelOrder(orders.sell.id).then(sell).catch(e => logger.error(JSON.stringify(e)))
     orders.sell.id = undefined
   }
   // Before placing new orders, require price volatility (ie recent orders include both spread edges) and spread > 1% of trade amount

@@ -189,11 +189,13 @@ x Check historical validity of current trendline parameters: draw graph of full 
  x Also track recent trade history
  x Fix desyncing
  x Requires price volatility (ie recent orders include both spread edges) and >1% spread
- * Place limit order at one spread edge
- * Track spread edge but not over aggressively (dont want to close the spread with an order race)
- * If order fills, track the other spread edge
- * Pull out if next order becomes unprofitable
- * Could consider using a speread depth; eg what is the spread ignoring the first 0.5BTC on each side?
+ x Place limit orders at spread edges
+ x Track spread edges but not over aggressively and never at a loss
+ * Get error when cancelling or getting status when an order has filled
+ * Profit reporting
+ * Not restarting a new pair of trades correctly when both filled?
+ * Better restrictions? Want up/down volatility but DONT want concerted, rapid price movement in one direction
+ * Could consider using a spread depth; eg what is the spread ignoring the first 0.5BTC on each side?
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
 * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
