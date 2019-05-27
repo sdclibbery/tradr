@@ -191,9 +191,10 @@ x Check historical validity of current trendline parameters: draw graph of full 
  x Requires price volatility (ie recent orders include both spread edges) and >1% spread
  x Place limit orders at spread edges
  x Track spread edges but not over aggressively and never at a loss
- * Get error when cancelling or getting status when an order has filled
+ x Get error when cancelling or getting status when an order has filled- less verbose error reporting in exchange itself
+ * Fee gets rounded up to 1p; this should set profit limits...
+  * Calculate proper min profit given actual min fees of 1p per trade
  * Profit reporting
- * Not restarting a new pair of trades correctly when both filled?
  * Better restrictions? Want up/down volatility but DONT want concerted, rapid price movement in one direction
  * Could consider using a spread depth; eg what is the spread ignoring the first 0.5BTC on each side?
 * Make balance graph into a portfolio graph showing all accounts

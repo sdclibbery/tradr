@@ -9,7 +9,7 @@ try { credentials = require('../coinbasepro-account-credentials') } catch (e) {}
 const logger = loggerFactory.createLogger(`${process.argv[1]}.log`)
 logger.debug = () => {}
 optionDefinitions = [
-  { name: 'amount', alias: 'a', type: Number, defaultValue: 0.002, description: 'amount to bot with in base currency (eg BTC)' },
+  { name: 'amount', alias: 'a', type: Number, defaultValue: 0.004, description: 'amount to bot with in base currency (eg BTC)' },
   { name: 'product', alias: 'p', type: String, defaultValue: 'BTC-GBP', description: 'coinbasepro product' },
   { name: 'help', alias: 'h', type: Boolean, defaultValue: false, description: 'Show this help' },
 ]
@@ -54,7 +54,7 @@ const recent = []
 const amountInBase = () => parseFloat(options.amount)
 const amountInQuote = () => recent[0]&&options.amount*recent[0].price
 const minSpreadToTrade = () => amountInQuote()*0.1
-const minProfit = () => amountInQuote()*0.01
+const minProfit = () => amountInQuote()*0.02
 logger.info(`BOT: Spreader starting for ${product} with ${amountInBase()}${baseCurrency}`)
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
@@ -66,7 +66,7 @@ orderbookSync.on('message', (m) => {
           orders.sellLimit = price + minProfit() // Set limit on how far the other side can track to avoid making a loss
           logger.info(`BOT: buy order filled at ${dp2(price)}; set sell limit to ${dp2(orders.sellLimit)}`)
         }
-      }).catch(e => logger.error(JSON.stringify(e)))
+      }).catch(e => {})
     } else if (orders.sell.id == m.maker_order_id) {
       exchange.orderStatus(orders.sell.id).then(({filled, price}) => {
         if (filled) {
@@ -74,7 +74,7 @@ orderbookSync.on('message', (m) => {
           orders.buyLimit = price - minProfit() // Set limit on how far the other side can track to avoid making a loss
           logger.info(`BOT: sell order filled at ${dp2(price)}; set buy limit to ${dp2(orders.buyLimit)}`)
         }
-      }).catch(e => logger.error(JSON.stringify(e)))
+      }).catch(e => {})
     } else {
       // Remember recent trades
       recent.unshift({price:parseFloat(m.price), side:m.side})
@@ -104,24 +104,24 @@ orderbookSync.on('message', (m) => {
     exchange
       .buy(amountInBase()/2, orders.buy.price, 'spreader bot', `buy with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.buy.id = id)
-      .catch(e => logger.error(JSON.stringify(e)))
+      .catch(e => {})
   }
   const sell = () => {
     orders.sell = { price: sellPrice() }
     exchange
       .sell(amountInBase()/2, orders.sell.price, 'spreader bot', `sell with spread ${dp2(spread.bid)} - ${dp2(spread.ask)}`)
       .then(({id}) => orders.sell.id = id)
-      .catch(e => logger.error(JSON.stringify(e)))
+      .catch(e => {})
   }
   // Track any existing orders against spread edges
   if (orders.buy.id && orders.buy.price != buyPrice() && buyPrice() <= orders.buyLimit) {
     logger.info(`BOT: moving buy from ${dp2(orders.buy.price)} to ${dp2(buyPrice())}`)
-    exchange.cancelOrder(orders.buy.id).then(buy).catch(e => logger.error(JSON.stringify(e)))
+    exchange.cancelOrder(orders.buy.id).then(buy).catch(e => {})
     orders.buy.id = undefined
   }
   if (orders.sell.id && orders.sell.price != sellPrice() && sellPrice() >= orders.sellLimit) {
     logger.info(`BOT: moving sell from ${dp2(orders.sell.price)} to ${dp2(sellPrice())}`)
-    exchange.cancelOrder(orders.sell.id).then(sell).catch(e => logger.error(JSON.stringify(e)))
+    exchange.cancelOrder(orders.sell.id).then(sell).catch(e => {})
     orders.sell.id = undefined
   }
   // Before placing new orders, require price volatility (ie recent orders include both spread edges) and spread > 1% of trade amount

@@ -43,7 +43,8 @@ exports.createExchange = (options, logger, websocketToUse) => {
 
   const handleError = (context) => {
     return ({message, status, reject_reason, ...data}) => {
-      logger.error('CoinbasePro API Error', context, JSON.stringify(message, null, 2), JSON.stringify(status, null, 2), JSON.stringify(reject_reason, null, 2), JSON.stringify(data, null, 2))
+      logger.error('CoinbasePro API Error', context, message, status, reject_reason)
+      logger.debug('CoinbasePro API Error', context, JSON.stringify(message, null, 2), JSON.stringify(status, null, 2), JSON.stringify(reject_reason, null, 2), JSON.stringify(data, null, 2))
       throw new Error(message || reject_reason)
     }
   }
