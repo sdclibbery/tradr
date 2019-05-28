@@ -194,7 +194,7 @@ x Spread bot (bot-spreader.js)
  x Option to run only once and then stop
  ! Working but not going to make much money
     Because the spread needed to make a profit is too high.
- * Swap to BigNumbers
+* Try an arbitrage observer bot based on price feed, for GBP/BTC/ETH
 * Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
