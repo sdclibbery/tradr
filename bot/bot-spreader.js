@@ -49,13 +49,14 @@ orderBook.state = function (book) {
   oldOrderBookStateMethod.call(this, book)
 }
 // End of monkey patch
+const feeOnOneTrade = 0.0015
 const spread = {ask:0, bid:0}
 const orders = {buy:{}, sell:{}}
 const recent = []
 const amountInBase = () => parseFloat(options.amount)/2
 const amountInQuote = () => recent[0]&&options.amount*recent[0].price
-const minSpreadToTrade = () => Math.ceil(amountInQuote())*0.2
-const minProfit = () => Math.ceil(amountInQuote())*0.05
+const minSpreadForProfit = () => recent[0]?(recent[0].price*feeOnOneTrade*2):Infinity
+const minSpreadToTrade = () => minSpreadForProfit()*2
 logger.info(`BOT: Spreader starting for ${product} with ${amountInBase()}${baseCurrency}`)
 orderbookSync.on('message', (m) => {
   if (m.type == 'match') {
@@ -64,9 +65,9 @@ orderbookSync.on('message', (m) => {
       exchange.orderStatus(orders.buy.id).then(({filled, price}) => {
         if (filled) {
           orders.buy = {}
-          orders.sellLimit = parseFloat(price) + minProfit() // Set limit on how far the other side can track to avoid making a loss
+          orders.sellLimit = parseFloat(price) + minSpreadForProfit() // Set limit on how far the other side can track to avoid making a loss
           orders.buyPrice = parseFloat(price)
-          orders.buyFees = orders.buyPrice*amountInBase()*0.0015
+          orders.buyFees = orders.buyPrice*amountInBase()*feeOnOneTrade
           logger.info(`BOT: buy filled ${dp2(parseFloat(price))}; sell limit > ${dp2(orders.sellLimit)}`)
           if (!orders.sell.price) { // Both filled
             const made = orders.sellPrice*amountInBase() - orders.buyPrice*amountInBase()
@@ -79,9 +80,9 @@ orderbookSync.on('message', (m) => {
       exchange.orderStatus(orders.sell.id).then(({filled, price}) => {
         if (filled) {
           orders.sell = {}
-          orders.buyLimit = parseFloat(price) - minProfit() // Set limit on how far the other side can track to avoid making a loss
+          orders.buyLimit = parseFloat(price) - minSpreadForProfit() // Set limit on how far the other side can track to avoid making a loss
           orders.sellPrice = parseFloat(price)
-          orders.sellFees = orders.sellPrice*amountInBase()*0.0015
+          orders.sellFees = orders.sellPrice*amountInBase()*feeOnOneTrade
           logger.info(`BOT: sell filled ${dp2(parseFloat(price))}; buy limit < ${dp2(orders.buyLimit)}`)
           if (!orders.buy.price) { // Both filled
             const made = orders.sellPrice*amountInBase() - orders.buyPrice*amountInBase()
@@ -107,9 +108,9 @@ orderbookSync.on('message', (m) => {
   if (spread.ask === ask && spread.bid === bid) {return}
   spread.ask = ask
   spread.bid = bid
-  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)})`+
-    ` \t${fmtRecent(recent[0])} ${recent.map(r => r&&(r.side=='buy'?red+'▼':green+'▲')).join('')}${reset}`+
-    ` \t${dp2(orders.buy.price)}-${dp2(orders.sell.price)} ${dp2(orders.buyLimit)}-${dp2(orders.sellLimit)}`+
+  process.stdout.write(`${green}${dp2(spread.bid)}${reset} - ${red}${dp2(spread.ask)}${reset} (${dp2(spread.ask - spread.bid)}/${dp2(minSpreadToTrade())})`+
+    `  \t${fmtRecent(recent[0])} ${recent.map(r => r&&(r.side=='buy'?red+'▼':green+'▲')).join('')}${reset}`+
+    `  \t${dp2(orders.buy.price)}-${dp2(orders.sell.price)} ${dp2(orders.buyLimit)}-${dp2(orders.sellLimit)}`+
     `     \r`)
   // Helpers for buying and selling
   const buyPrice = () => spread.bid// + exchange.quoteStep
@@ -143,7 +144,7 @@ orderbookSync.on('message', (m) => {
   if (recent.length < 2) {return}
   if (!recent.some(r => r && r.side=='buy')) {return}
   if (!recent.some(r => r && r.side=='sell')) {return}
-  if ((spread.ask - spread.bid) < minSpreadToTrade()) {return}
+  if ((spread.ask - spread.bid) < minSpreadToTrade() * 2) {return}
   // Place new orders
   if (options.single && !!orders.buyPrice && !!orders.sellPrice) {
     logger.info('BOT: single shot complete')

@@ -183,8 +183,7 @@ x Check historical validity of current trendline parameters: draw graph of full 
  x Add page to homepage
  x Longer price history - need more gbp-usd data
  x Get even longer price history: at least 2011
-* Bots should default to GBP not EUR (eg observer, what else?)
-* Spread bot (bot-spreader.js)
+x Spread bot (bot-spreader.js)
  x Use lib order book class
  x Also track recent trade history
  x Fix desyncing
@@ -193,17 +192,10 @@ x Check historical validity of current trendline parameters: draw graph of full 
  x Track spread edges but not over aggressively and never at a loss
  x Get error when cancelling or getting status when an order has filled- less verbose error reporting in exchange itself
  x Option to run only once and then stop
- * !! Seems like its practically impossible to make a profit after fees: Work this out properly
- * Profit reporting using actual reported fees
- * Fee gets rounded up to 1p; this should set profit limits...
-  * Calculate proper min profit given actual min fees of 1p per trade
+ ! Working but not going to make much money
+    Because the spread needed to make a profit is too high.
  * Swap to BigNumbers
- * Better status reporting of current orders (colour coding etc)
- * Better restrictions?
-  * Want up/down volatility but DONT want concerted, rapid price movement in one direction?
-  * Dont trade if spread end trades are large volume?
- * Can back out if neither order has filled and price is moving steadily
- * Could consider using a spread depth; eg what is the spread ignoring the first 0.5BTC on each side?
+* Bots should default to GBP not EUR (eg observer, what else?)
 * Make balance graph into a portfolio graph showing all accounts
  * Include total fiat vs total crypto as a long/short measure
 * Also graph profit against btc hodl (convert transfers into BTC at time of transfer, then convert back at 'now')
@@ -248,6 +240,16 @@ x Check historical validity of current trendline parameters: draw graph of full 
 * Show TA indicators: RSI, NVT
 * Bot log pages live update
 * Show EMAs
+* Speader bot todo
+ * Profit reporting using actual reported fees
+ * Fee gets rounded up to 1p; this should set profit limits...
+  * Calculate proper min profit given actual min fees of 1p per trade
+ * Better status reporting of current orders (colour coding etc)
+ * Better restrictions?
+  * Want up/down volatility but DONT want concerted, rapid price movement in one direction?
+  * Dont trade if spread end trades are large volume?
+ * Can back out if neither order has filled and price is moving steadily
+ * Could consider using a spread depth; eg what is the spread ignoring the first 0.5BTC on each side?
 
 * Hack up a moving average bots
  x Basic tracking of averages from candles
@@ -311,13 +313,7 @@ Run this bot automatically from monitor?
 * Persistant state to allow for process/box restart
  Given the use of async, how is this possible? Itd need to include the progress through the function..??
 * Make a bot that transacts whenever 2 moving averages cross
-* Write a bot to exploit spread on markets with a high spread (BCH-EUR or BTC-GBP probably)
-  * Monitor the spread; if its large, eg >0.5% of value
-  * Then place buy AND sell orders at the edges of the spread
-  * And re-place them as they fill
-  * Cancel/move any as the spread moves; cancel altogether if spread closes
-  * Have limits and stop if only one side keeps filling?
-  * Make a bot that evaluates slowly against the *log*!! BTC channel
+* Make a bot that evaluates slowly against the *log*!! BTC channel
 * Update readme with cmd line instructions
 * Possible tweak to the stoploss bot: exit anyway after making x% profit; don't wait for the stoploss - cmd line arg controls
   * Could even do this graduated; so exit 25% at 1% profit etc
